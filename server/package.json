@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev --transpile-only -r tsconfig-paths/register --inspect --ignore-watch node_modules src/index.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "migration:run": "ts-node-dev ./node_modules/typeorm/cli.js migration:run -d src/model/database/dataSource.ts"
+    "migration:run": "ts-node-dev ./node_modules/typeorm/cli.js migration:run -d src/models/database/dataSource.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -15,7 +15,6 @@
     "express": "^4.18.1",
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^9.0.0",
-    "multer": "^1.4.5-lts.1",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.1.6",
     "tsyringe": "^4.7.0",
@@ -25,7 +24,6 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/express": "^4.17.13",
     "@types/jsonwebtoken": "^9.0.2",
-    "@types/multer": "^1.4.7",
     "@typescript-eslint/eslint-plugin": "^5.59.5",
     "@typescript-eslint/parser": "^5.59.5",
     "eslint": "^8.40.0",

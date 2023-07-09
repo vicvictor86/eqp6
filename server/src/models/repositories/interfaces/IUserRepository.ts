@@ -1,5 +1,5 @@
 import { ICreateUserDTO } from 'dtos/ICreateUserDTO';
-import { User } from 'model/User';
+import { User } from '@models/User';
 
 export interface IUsersRepository {
   findById(id: string): Promise<User | null>;
