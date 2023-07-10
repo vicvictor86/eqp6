@@ -18,7 +18,7 @@ export function ensureAuthenticated(
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    throw new Error('JSONwebtoken required');
+    throw new AppError('JSONwebtoken required');
   }
 
   const [, token] = authHeader.split(' ');

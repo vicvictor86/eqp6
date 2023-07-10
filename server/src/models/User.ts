@@ -25,8 +25,8 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ name: 'avatar' })
-  avatar: string;
+  @Column({ name: 'avatar', type: 'varchar' })
+  avatar: string | undefined;
 
   @Column()
   bio: string;
