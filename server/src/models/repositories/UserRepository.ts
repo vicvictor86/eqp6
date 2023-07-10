@@ -1,7 +1,7 @@
 import { connectionSource } from '@models/database/dataSource';
 import { User } from '@models/User';
 
-import { ICreateUserDTO } from 'dtos/ICreateUserDTO';
+import { ICreateUserDTO } from '@models/dtos/ICreateUserDTO';
 import { IUsersRepository } from './interfaces/IUserRepository';
 
 const usersRepository = connectionSource.getRepository(User);

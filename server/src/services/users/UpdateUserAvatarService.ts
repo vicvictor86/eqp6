@@ -1,11 +1,13 @@
 import path from 'path';
 import fs from 'fs';
-
 import { inject, injectable } from 'tsyringe';
+
+import { uploadConfig } from '@config/upload';
+
 import { IUsersRepository } from '@models/repositories/interfaces/IUserRepository';
 import { User } from '@models/User';
-import { uploadConfig } from '@config/upload';
-import { AppError } from 'errors/AppError';
+
+import { AppError } from '@shared/errors/AppError';
 
 interface Request {
   userId: string;

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { userRouter } from './user.routes';
 import { sessionsRouter } from './sessions.routes';
 

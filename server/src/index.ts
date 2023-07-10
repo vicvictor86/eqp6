@@ -6,11 +6,12 @@ import 'express-async-errors';
 
 import '@models/database/dataSource';
 
-import { AppError } from 'errors/AppError';
 import { uploadConfig } from '@config/upload';
 
+import { AppError } from '@shared/errors/AppError';
+import '@shared/container';
+
 import routes from './routes';
-import './container';
 
 const app = express();
 

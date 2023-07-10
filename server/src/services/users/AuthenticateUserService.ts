@@ -5,11 +5,11 @@ import { inject, injectable } from 'tsyringe';
 import { authConfig } from '@config/auth';
 
 import { IUsersRepository } from '@models/repositories/interfaces/IUserRepository';
+
 import { User } from '@models/User';
+import { ICreateLoginSessionsDTO } from '@models/dtos/ICreateLoginSessionsDTO';
 
-import { ICreateLoginSessionsDTO } from 'dtos/ICreateLoginSessionsDTO';
-
-import { AppError } from 'errors/AppError';
+import { AppError } from '@shared/errors/AppError';
 
 interface Response {
   user: User;

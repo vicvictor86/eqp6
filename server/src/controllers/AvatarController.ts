@@ -1,7 +1,8 @@
 import { instanceToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
-import UpdateUserAvatarService from 'services/users/UpdateUserAvatarService';
 import { container } from 'tsyringe';
+
+import UpdateUserAvatarService from '../services/users/UpdateUserAvatarService';
 
 export default class AvatarController {
   public async update(request: Request, response: Response): Promise<Response> {
