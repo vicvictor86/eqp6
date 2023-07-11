@@ -8,7 +8,6 @@
 
 #root {
   background-color: #622AB0;
-  overflow: hidden;
 }
 
 .Form,
@@ -29,16 +28,17 @@
   max-width: 600px;
 }
 
-.Form {
+.FormRegis {
+  overflow-y: auto;
   border-radius: 17px;
   background-color: #AF70FD;
   max-width: 500px;
   width: 100%;
-  max-height: 512px;
-  display: flex;
-  margin: 17vh 50px;
+  margin: 50px;
   text-align: center;
   position: relative;
+  min-height: 70vh;
+  scroll-behavior: smooth;
 }
 
 .Container {
@@ -55,7 +55,11 @@
   width: 100%;
 }
 
-.Button {
+
+input:focus-visible {
+  outline: none;
+}
+.ButtonRegis {
   align-self: center;
   background-color: #FFF;
   width: 90%;
@@ -67,55 +71,16 @@
   line-height: normal;
   border-radius: 32px;
   border: none;
+  margin-bottom: 25px;
 }
-
-.AppName {
-  color: #FFF;
-  font-family: Tahu !;
-  font-size: 50px;
-  font-style: normal;
-  font-weight: 400;
-  margin-bottom: 30px;
-  margin-top: 40px;
-  line-height: normal;
-  font-family: Tahu;
-}
-
-.InputPadrao {
-  border: solid white 2px;
-  background-color: transparent;
-  border-radius: 8px;
-  margin-bottom: 14px;
-  width: 90%;
-  height: 64px;
-  font-size: 20px;
-  color: white;
-  padding: 15px 8px 8px 12px;
-}
-
-input:focus-visible {
-  outline: none;
-}
-
-.LabelPadrao {
-  color: #FFF;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  width: 90%;
-  text-align: left;
-}
-
-.ToRegistro {
+.ToRegistroRegis{
   color: #FFF;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  position: absolute;
-  bottom: 20px;
   width: 100%;
+  margin-bottom: 10px;
 }
 a{
   color: white;
@@ -127,21 +92,32 @@ a{
 
 }
 @media (max-width:556px) {
-  .Form{
+  .FormRegis{
     border-radius: 0px;
     margin: 0px;
     height: 100vh;
     width: 100vw;
     max-height: 100vh;
+    min-width: 100vw;
+
   }
   .AppName{
-    margin-top: 90px;
-    margin-bottom: 50px;
+    margin-top: 80px;
+    margin-bottom: 20px;
   }
-  .Button{
+  .ButtonRegis{
     margin-top: 40px;
   }
-  .ToRegistro{
+  .ToRegistroRegis{
     bottom: 30px;
   }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+} 
+
+::-webkit-scrollbar-thumb {   
+  border-radius: 20px;
+background-color: var(--color3);   
 }
