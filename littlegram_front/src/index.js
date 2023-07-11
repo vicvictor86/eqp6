@@ -9,6 +9,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import Register from './views/register/Register';
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(
 //   <React.StrictMode>
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     Component:Login
+  },
+  {
+    path: "/register",
+    Component:Register
   },
 ]);
 

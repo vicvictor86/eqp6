@@ -1,8 +1,9 @@
 import './Login.css';
-import LoginSVG from "./login.svg"
+import LoginSVG from "../../assets/imgs/login.svg"
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 console.log("awd")
-function App() {
+function Login() {
   // "variaveis"
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -44,7 +45,7 @@ function App() {
           }} />
           <label className='LabelPadrao' style={{ color: senhaError ? '#FF2E2E' : 'white' }} >senha</label>
 
-          <input className='InputPadrao' style={{ marginBottom: 5, border: senhaError ? '#FF2E2E 2px solid' : 'white 2px solid', background: senhaError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} type='password' value={senha} onChange={(event) => {
+          <input className='InputPadrao' style={{ marginBottom: senhaError || emailError ? 5 : 15, border: senhaError ? '#FF2E2E 2px solid' : 'white 2px solid', background: senhaError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} type='password' value={senha} onChange={(event) => {
             setSenha(event.target.value);
           }} />
 
@@ -54,7 +55,7 @@ function App() {
           <button className='Button' onClick={logar}>Avançar</button>
 
           <div className='ToRegistro'>
-            não tem uma conta? <a href=''>Registre-se</a>
+            não tem uma conta? <Link to="/register">Registre-se</Link>
           </div>
         </div>
       </div>
@@ -62,4 +63,4 @@ function App() {
   );
 }
 
-export default App;
+export default Login;
