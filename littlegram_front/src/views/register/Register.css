@@ -55,10 +55,33 @@
   width: 100%;
 }
 
+.InputImage {
+  background: white;
+  padding: 24px;
+  width: 250px;
+  height: 64px;
+  border-radius: 32px;
+  color: #000;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin: auto;
+}
+
+.InputImageDiv {
+  display: inline-flex;
+  width: 90%;
+  text-align: center;
+  justify-content: center;
+  
+
+}
 
 input:focus-visible {
   outline: none;
 }
+
 .ButtonRegis {
   align-self: center;
   background-color: #FFF;
@@ -73,26 +96,30 @@ input:focus-visible {
   border: none;
   margin-bottom: 25px;
 }
-.ToRegistroRegis{
+
+.ToRegistroRegis {
   color: #FFF;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
-a{
+
+a {
   color: white;
 }
+
 @media (max-width:1000px) {
-  .Image{
+  .Image {
     display: none;
   }
 
 }
+
 @media (max-width:556px) {
-  .FormRegis{
+  .FormRegis {
     border-radius: 0px;
     margin: 0px;
     height: 100vh;
@@ -101,23 +128,26 @@ a{
     min-width: 100vw;
 
   }
-  .AppName{
+
+  .AppName {
     margin-top: 80px;
     margin-bottom: 20px;
   }
-  .ButtonRegis{
+
+  .ButtonRegis {
     margin-top: 40px;
   }
-  .ToRegistroRegis{
+
+  .ToRegistroRegis {
     bottom: 30px;
   }
 }
 
 ::-webkit-scrollbar {
   width: 5px;
-} 
+}
 
-::-webkit-scrollbar-thumb {   
+::-webkit-scrollbar-thumb {
   border-radius: 20px;
-background-color: var(--color3);   
+  background-color: var(--color3);
 }

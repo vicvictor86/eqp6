@@ -12,6 +12,11 @@ function Register() {
   const [confirm_senha, setConfSenha] = useState('');
   const [username, setUsername] = useState('');
 
+  const [image, setImage] = useState({
+    file: null,
+})
+
+
   const [nomeError, setNomeError] = useState(false);
   const [sobreNomeError, setsobreNomeError] = useState(false);
   const [emailError, setEmailError] = useState(false);
@@ -19,6 +24,8 @@ function Register() {
   const [usernameError, setUsernameError] = useState(false);
 
   const [confirmSenhaError, setConfirmSenhaError] = useState(false);
+  const [imageError, setImageError] = useState(false)
+
   const [cadastradoError, setCadastradoError] = useState(false)
 
   const isEmail = (email) => {
@@ -28,16 +35,17 @@ function Register() {
   function registrar() {
 
     setNomeError(nome == "" ? true : false)
-    setUsernameError(nome == "" ? true : false)
+    setUsernameError(username == "" ? true : false)
 
     setsobreNomeError(sobrenome == "" ? true : false)
     setEmailError(email == "" || !isEmail(email) ? true : false)
     setSenhaError(senha == "" || (senha != confirm_senha) ? true : false)
     setConfirmSenhaError(confirm_senha == "" || (senha != confirm_senha) ? true : false)
     setCadastradoError(false)
+    setImageError(image.file == "" || image.file == null ? true : false)
 
-
-    if (username != "" && nome != "" && sobrenome != "" && email != "" && senha != "" && confirm_senha != "" && (senha == confirm_senha) && isEmail(email)) {
+  
+    if (image.file != "" && username != "" && nome != "" && sobrenome != "" && email != "" && senha != "" && confirm_senha != "" && (senha == confirm_senha) && isEmail(email)) {
       console.log(nome)
       console.log(sobrenome)
 
@@ -63,7 +71,19 @@ function Register() {
       </div>
       <div className="FormRegis">
         <div style={{ display: 'inline-block', height: 'auto' }}>
-          <h3 className='AppName'>Littlegram</h3>
+          <h3 className='AppName'>LittleGram</h3>
+          <div className='InputImageDiv'>
+            <img src={image.file} style={{ width: 130, height: 130, background: 'white', borderRadius: '50%',  }} accept="image/*"/>
+            <label for='imageInput' className='InputImage' style={{ color: imageError ? '#FF2E2E' : 'black' }} >Adicionar Imagem</label>
+
+            <input id='imageInput' className='' style={{ display: 'none' }} type='file' onChange={(event) => {
+                 setImage({
+                  file: URL.createObjectURL(event.target.files[0])
+              })
+            
+            }} />
+          </div>
+
 
           <label className='LabelPadrao' style={{ color: nomeError ? '#FF2E2E' : 'white' }} >nome</label>
 

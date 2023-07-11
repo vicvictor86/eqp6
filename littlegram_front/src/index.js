@@ -10,12 +10,6 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Register from './views/register/Register';
-// const root = ReactDOM.createRoot(document.getElementById('root'));
-// root.render(
-//   <React.StrictMode>
-//     <Login />
-//   </React.StrictMode>
-// );
 
 const router = createBrowserRouter([
   {
