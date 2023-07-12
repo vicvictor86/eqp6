@@ -4,6 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import { IUsersRepository } from '@models/repositories/interfaces/IUserRepository';
 import { ICreateUserDTO } from '@models/dtos/ICreateUserDTO';
 import { User } from '@models/User';
+import { AppError } from '@shared/errors/AppError';
 
 @injectable()
 export class CreateUserService {
@@ -19,7 +20,7 @@ export class CreateUserService {
     );
 
     if (userAlreadyExists) {
-      throw new Error('User already exists');
+      throw new AppError('User already exists');
     }
 
     const hashedPassword = await hash(data.password, 8);

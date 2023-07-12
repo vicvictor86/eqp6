@@ -19,7 +19,8 @@
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.1.6",
     "tsyringe": "^4.7.0",
-    "typeorm": "^0.3.16"
+    "typeorm": "^0.3.16",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
