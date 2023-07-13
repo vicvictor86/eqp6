@@ -10,6 +10,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Register from './views/register/Register';
+import DashBoard from './views/dashBoard/DashBoard';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     Component:Register
+  },
+  {
+    path: "/home",
+    Component:DashBoard
   },
 ]);
 

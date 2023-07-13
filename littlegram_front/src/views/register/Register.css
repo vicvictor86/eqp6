@@ -1,33 +1,3 @@
-:root {
-  --color1: #AF70FD;
-  --color2: #9C5FEA;
-  --color3: #894DD7;
-  --color4: #753CC3;
-  --color5: #622AB0;
-}
-
-#root {
-  background-color: #622AB0;
-}
-
-.Form,
-.Image {
-  display: flex;
-}
-
-.Image {
-  align-self: center;
-}
-
-.Tittle {
-  color: #FFF;
-  font-size: 48px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  max-width: 600px;
-}
-
 .FormRegis {
   overflow-y: auto;
   border-radius: 17px;
@@ -41,19 +11,6 @@
   scroll-behavior: smooth;
 }
 
-.Container {
-  display: flex;
-  justify-content: space-around;
-  height: 100vh;
-}
-
-.ContainerImage {
-  padding: 50px 60px;
-}
-
-.ContainerImage img {
-  width: 100%;
-}
 
 .InputImage {
   background: white;
@@ -76,10 +33,6 @@
   justify-content: center;
   
 
-}
-
-input:focus-visible {
-  outline: none;
 }
 
 .ButtonRegis {
@@ -127,15 +80,6 @@ a {
     max-height: 100vh;
     min-width: 100vw;
 
-  }
-
-  .AppName {
-    margin-top: 80px;
-    margin-bottom: 20px;
-  }
-
-  .ButtonRegis {
-    margin-top: 40px;
   }
 
   .ToRegistroRegis {

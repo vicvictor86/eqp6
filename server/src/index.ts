@@ -12,9 +12,10 @@ import { AppError } from '@shared/errors/AppError';
 import '@shared/container';
 
 import routes from './routes';
+const cors = require('cors');
 
 const app = express();
-
+app.use(cors())
 app.use(express.json());
 app.use('/files', express.static(uploadConfig.directory));
 app.use(routes);
@@ -36,3 +37,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(3333, () => console.log('server running on port 3333'));
+
+
