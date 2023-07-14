@@ -107,12 +107,15 @@ dist
 .vscode/
 
 #Upload of files
-tmp/*
-images/*
+images/uploads/*.png
+images/uploads/*.jpg
+images/uploads/*.gif
+images/uploads/*.jpeg
+images/uploads/*.svg
+images/uploads/*.webp
 !tmp/.gitkeep
 
 #Configs
-config/
 .vscode
 
 #Database

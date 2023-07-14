@@ -1,9 +1,11 @@
-import { hash } from 'bcryptjs';
 import { inject, injectable } from 'tsyringe';
 
-import { IUsersRepository } from '@models/repositories/interfaces/IUserRepository';
-import { ICreateUserDTO } from '@models/dtos/ICreateUserDTO';
 import { User } from '@models/User';
+import { ICreateUserDTO } from '@models/dtos/ICreateUserDTO';
+
+import { IUsersRepository } from '@models/repositories/interfaces/IUserRepository';
+import { IHashProvider } from '@models/providers/HashProvider/models/IHashProvider';
+
 import { AppError } from '@shared/errors/AppError';
 
 @injectable()
@@ -11,6 +13,9 @@ export class CreateUserService {
   constructor(
     @inject('UsersRepository')
     private userRepository: IUsersRepository,
+
+    @inject('HashProvider')
+    private hashProvider: IHashProvider,
   ) {}
 
   public async execute(data: ICreateUserDTO): Promise<User> {
@@ -20,10 +25,10 @@ export class CreateUserService {
     );
 
     if (userAlreadyExists) {
-      throw new AppError('User already exists');
+      throw new AppError('Username or email already exists');
     }
 
-    const hashedPassword = await hash(data.password, 8);
+    const hashedPassword = await this.hashProvider.generateHash(data.password);
 
     const user = await this.userRepository.create({
       ...data,

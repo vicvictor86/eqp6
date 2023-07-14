@@ -4,6 +4,10 @@ import 'dotenv/config';
 import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
 
+import { ZodError } from 'zod';
+
+import cors from 'cors';
+
 import '@models/database/dataSource';
 
 import { uploadConfig } from '@config/upload';
@@ -11,13 +15,13 @@ import { uploadConfig } from '@config/upload';
 import { AppError } from '@shared/errors/AppError';
 import '@shared/container';
 
-import { ZodError } from 'zod';
-import routes from './routes';
+import { routes } from './routes';
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
-app.use('/files', express.static(uploadConfig.directory));
+app.use('/files', express.static(uploadConfig.uploadsFolder));
 app.use(routes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -31,7 +35,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof ZodError) {
     return res.status(400).json({
       status: 'error',
-      message: err.format(),
+      message: err.issues,
     });
   }
 
