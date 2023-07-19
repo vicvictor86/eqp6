@@ -4,13 +4,33 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import config from '../../config'
-console.log(config.baseURL)
 const instance = axios.create({
   baseURL: config.baseURL,
   headers:{
     'Access-Control-Allow-Origin': '*'
   }
 });
+function validarSenha(senha) {
+  // Verifica se a senha tem pelo menos 8 caracteres
+  if (senha.length < 8) {
+    return false;
+  }
+
+  // Verifica se a senha contém pelo menos um caractere especial
+  const caractereEspecial = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\|]/;
+  if (!caractereEspecial.test(senha)) {
+    return false;
+  }
+
+  // Verifica se a senha contém pelo menos uma letra maiúscula
+  const letraMaiuscula = /[A-Z]/;
+  if (!letraMaiuscula.test(senha)) {
+    return false;
+  }
+
+  // Se todos os critérios forem atendidos, a senha é válida
+  return true;
+}
 function Login() {
   const navigate = useNavigate()
   // "variaveis"
@@ -29,9 +49,9 @@ function Login() {
   async function logar() {
 
     setEmailError(email === "" || !isEmail(email) ? true : false)
-    setSenhaError(senha === "" ? true : false)
+    setSenhaError(senha === "" || validarSenha(senha) ? true : false)
 
-    if (senha !== "" && email !== "" && isEmail(email)) {
+    if (senha !== "" && email !== "" && isEmail(email) && validarSenha(senha)) {
 
    
       instance.post('/sessions', {

@@ -11,6 +11,7 @@ import {
 } from "react-router-dom";
 import Register from './views/register/Register';
 import DashBoard from './views/dashBoard/DashBoard';
+import GerenciarFotos from './views/gerenciarFotos/GerenciarFotos'
 
 const router = createBrowserRouter([
   {
@@ -21,9 +22,14 @@ const router = createBrowserRouter([
     path: "/register",
     Component:Register
   },
+  
   {
     path: "/home",
     Component:DashBoard
+  },
+  {
+    path: "/photos",
+    Component:GerenciarFotos
   },
 ]);
 

@@ -1,10 +1,4 @@
-:root {
-  --color1: #AF70FD;
-  --color2: #9C5FEA;
-  --color3: #894DD7;
-  --color4: #753CC3;
-  --color5: #622AB0;
-}
+
 
 #root {
   background-color: #622AB0;
@@ -71,7 +65,6 @@
 
 .AppName {
   color: #FFF;
-  font-family: Tahu !;
   font-size: 50px;
   font-style: normal;
   font-weight: 400;

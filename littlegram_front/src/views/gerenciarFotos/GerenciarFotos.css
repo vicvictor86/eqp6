@@ -1,4 +1,4 @@
-.PostDashBoard{
+.PostFotos{
     max-width: 600px;
     width: 100%;
     border: 2px solid white;
@@ -6,7 +6,7 @@
 }
 
 @media (max-width:994px) {
-    .PostDashBoard{
+    .PostFotos{
         margin-left: 0px;
         margin-bottom: 0px;
     }

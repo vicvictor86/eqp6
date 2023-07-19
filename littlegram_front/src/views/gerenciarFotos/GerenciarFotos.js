@@ -1,4 +1,4 @@
-import './DashBoard.css';
+import './GerenciarFotos.css';
 
 import axios from 'axios';
 import config from '../../config'
@@ -11,7 +11,7 @@ const instance = axios.create({
   }
 });
 
-function DashBoard() {
+function GerenciarFotos() {
   const navigate = useNavigate()
 
   // if(localStorage.getItem('token') == null){
@@ -21,11 +21,11 @@ function DashBoard() {
 
     <div className="Container">
           <Menu />
-          <div className='PostDashBoard'>
+          <div className='PostFotos'>
 
           </div>
     </div>
   );
 }
 
-export default DashBoard;
+export default GerenciarFotos;
