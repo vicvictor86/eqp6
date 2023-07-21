@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 
 import { ICreateUserDTO } from '../../dtos/ICreateUserDTO';
-import { User } from '../../User';
+import { User } from '../../entities/User';
 
 import { IUsersRepository } from '../interfaces/IUserRepository';
 

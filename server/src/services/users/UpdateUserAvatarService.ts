@@ -1,9 +1,9 @@
 import { inject, injectable } from 'tsyringe';
 
 import { IUsersRepository } from '@models/repositories/interfaces/IUserRepository';
-import { User } from '@models/User';
+import { User } from '@models/entities/User';
 
-import { IStorageProvider } from '@shared/container/providers/StorageProvider/models/IStorageProvider';
+import { IStorageProvider } from '@shared/container/providers/DiskStorageProvider/models/IStorageProvider';
 
 import { AppError } from '@shared/errors/AppError';
 
@@ -18,7 +18,7 @@ export class UpdateUserAvatarService {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
-    @inject('StorageProvider')
+    @inject('DiskStorageProvider')
     private storageProvider: IStorageProvider,
   ) {}
 
@@ -30,10 +30,10 @@ export class UpdateUserAvatarService {
     }
 
     if (user.avatar) {
-      await this.storageProvider.deleteFile(user.avatar);
+      await this.storageProvider.deleteAvatarFile(user.avatar);
     }
 
-    const filename = await this.storageProvider.saveFile(avatarFilename);
+    const filename = await this.storageProvider.saveAvatarFile(avatarFilename);
     user.avatar = filename;
 
     await this.usersRepository.save(user);

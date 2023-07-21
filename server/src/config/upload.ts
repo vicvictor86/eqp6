@@ -8,7 +8,8 @@ interface IUploadConfig {
   driver: 'disk';
 
   tmpFolder: string;
-  uploadsFolder: string;
+  avatarFolder: string;
+  photosFolder: string;
 
   multer: {
     storage: StorageEngine;
@@ -23,7 +24,8 @@ export const uploadConfig = {
   driver: process.env.STORAGE_DRIVER || 'disk',
 
   tmpFolder,
-  uploadsFolder: path.resolve(tmpFolder, 'uploads'),
+  avatarFolder: path.resolve(tmpFolder, 'uploads', 'avatar'),
+  photosFolder: path.resolve(tmpFolder, 'uploads', 'photos'),
 
   multer: {
     storage: multer.diskStorage({

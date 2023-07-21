@@ -21,7 +21,8 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use('/files', express.static(uploadConfig.uploadsFolder));
+app.use('/files/avatar', express.static(uploadConfig.avatarFolder));
+app.use('/files/photos', express.static(uploadConfig.photosFolder));
 app.use(routes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

@@ -1,4 +1,4 @@
-import { FakeStorageProvider } from '@shared/container/providers/StorageProvider/fakes/FakeStorageProvider';
+import { FakeStorageProvider } from '@shared/container/providers/DiskStorageProvider/fakes/FakeStorageProvider';
 import { AppError } from '@shared/errors/AppError';
 
 import { FakeUsersRepository } from '../../../models/repositories/fakes/FakeUserRepository';
@@ -46,7 +46,7 @@ describe('UpdateUserAvatarService', () => {
   });
 
   it('should be able to delete and old avatar when updating to a new avatar', async () => {
-    const deleteFile = jest.spyOn(fakeStorageProvider, 'deleteFile');
+    const deleteFile = jest.spyOn(fakeStorageProvider, 'deleteAvatarFile');
 
     const user = await fakeUsersRepository.create({
       realName: 'test',

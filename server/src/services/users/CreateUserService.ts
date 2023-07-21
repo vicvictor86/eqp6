@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
-import { User } from '@models/User';
+import { User } from '@models/entities/User';
 import { ICreateUserDTO } from '@models/dtos/ICreateUserDTO';
 
 import { IUsersRepository } from '@models/repositories/interfaces/IUserRepository';

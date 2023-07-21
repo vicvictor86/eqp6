@@ -6,7 +6,7 @@ import { authConfig } from '@config/auth';
 import { IUsersRepository } from '@models/repositories/interfaces/IUserRepository';
 import { IHashProvider } from '@models/providers/HashProvider/models/IHashProvider';
 
-import { User } from '@models/User';
+import { User } from '@models/entities/User';
 import { ICreateLoginSessionsDTO } from '@models/dtos/ICreateLoginSessionsDTO';
 
 import { AppError } from '@shared/errors/AppError';
