@@ -1,5 +1,5 @@
 import { FakeHashProvider } from '@models/providers/HashProvider/fakes/FakeHashProvider';
-import { FakeUsersRepository } from '../../../models/repositories/fakes/FakeUserRepository';
+import { FakeUsersRepository } from '../../../models/repositories/fakes/FakeUsersRepository';
 
 import { AuthenticateUserService } from '../AuthenticateUserService';
 

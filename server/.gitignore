@@ -107,12 +107,12 @@ dist
 .vscode/
 
 #Upload of files
-images/*/*.png
-images/*/*.jpg
-images/*/*.gif
-images/*/*.jpeg
-images/*/*.svg
-images/*/*.webp
+images/**/*.png
+images/**/*.jpg
+images/**/*.gif
+images/**/*.jpeg
+images/**/*.svg
+images/**/*.webp
 
 #Configs
 .vscode

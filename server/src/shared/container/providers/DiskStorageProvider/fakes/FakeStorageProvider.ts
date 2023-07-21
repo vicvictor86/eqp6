@@ -32,4 +32,12 @@ export class FakeStorageProvider implements IStorageProvider {
 
     this.photosStorage.splice(findIndex, 1);
   }
+
+  public async deleteTmpFile(file: string): Promise<void> {
+    const findIndex = this.photosStorage.findIndex(
+      storageFile => storageFile === file,
+    );
+
+    this.photosStorage.splice(findIndex, 1);
+  }
 }

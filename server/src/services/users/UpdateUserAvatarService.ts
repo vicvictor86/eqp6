@@ -26,6 +26,7 @@ export class UpdateUserAvatarService {
     const user = await this.usersRepository.findById(userId);
 
     if (!user) {
+      await this.storageProvider.deleteTmpFile(avatarFilename);
       throw new AppError('Only authenticated users can change avatar.');
     }
 

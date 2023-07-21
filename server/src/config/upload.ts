@@ -10,6 +10,7 @@ interface IUploadConfig {
   tmpFolder: string;
   avatarFolder: string;
   photosFolder: string;
+  bytesSizeLimit: number;
 
   multer: {
     storage: StorageEngine;
@@ -26,6 +27,7 @@ export const uploadConfig = {
   tmpFolder,
   avatarFolder: path.resolve(tmpFolder, 'uploads', 'avatar'),
   photosFolder: path.resolve(tmpFolder, 'uploads', 'photos'),
+  bytesSizeLimit: 10000000,
 
   multer: {
     storage: multer.diskStorage({

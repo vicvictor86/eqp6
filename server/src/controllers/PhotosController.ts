@@ -16,11 +16,13 @@ export class PhotosController {
       path: request.file?.filename,
     });
 
+    const byteImageSize = request.file?.size;
     const createPhotoService = container.resolve(CreatePhotoService);
 
     const user = await createPhotoService.execute({
       userId,
       path,
+      byteImageSize,
     });
 
     return response.json(instanceToInstance(user));

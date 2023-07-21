@@ -1,4 +1,4 @@
-import { FakeUsersRepository } from '../../../models/repositories/fakes/FakeUserRepository';
+import { FakeUsersRepository } from '../../../models/repositories/fakes/FakeUsersRepository';
 import { ShowUserService } from '../ShowUserService';
 
 let fakeUsersRepository: FakeUsersRepository;
