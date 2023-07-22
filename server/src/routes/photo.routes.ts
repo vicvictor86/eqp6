@@ -15,5 +15,6 @@ photoRouter.post(
   uploadMiddleware.single('photo'),
   photoController.create,
 );
+photoRouter.get('/user/', ensureAuthenticated, photoController.getAllByUser);
 
 export { photoRouter };

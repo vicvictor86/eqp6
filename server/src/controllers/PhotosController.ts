@@ -2,6 +2,8 @@ import { instanceToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
 import { CreatePhotoService } from 'services/photos/CreatePhotoService';
 import { DeletePhotoService } from 'services/photos/DeletePhotoService';
+import { GetPhotosByUserService } from 'services/photos/GetPhotosByUserService ';
+import { GetPhotoService } from 'services/photos/GetPhotoService';
 import { container } from 'tsyringe';
 import { z } from 'zod';
 
@@ -49,6 +51,29 @@ export class PhotosController {
     });
 
     return response.json(instanceToInstance(user));
+  }
+
+  public async get(request: Request, response: Response): Promise<Response> {
+    const { id } = request.params;
+
+    const getPhotoService = container.resolve(GetPhotoService);
+
+    const photo = await getPhotoService.execute({ photoId: id });
+
+    return response.json(instanceToInstance(photo));
+  }
+
+  public async getAllByUser(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {
+    const userId = request.user.id;
+
+    const getPhotosByUserService = container.resolve(GetPhotosByUserService);
+
+    const photos = await getPhotosByUserService.execute(userId);
+
+    return response.json(photos);
   }
   // public async update(request: Request, response: Response): Promise<Response> {
   //   const { userId, avatarFilename } = updateUserAvatarSchema.parse({

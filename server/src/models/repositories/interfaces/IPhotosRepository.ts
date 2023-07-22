@@ -5,6 +5,7 @@ export interface IPhotosRepository {
   findById(id: string): Promise<Photo | null>;
   findByPath(path: string): Promise<Photo | null>;
   findByUserId(userId: string): Promise<Photo[] | null>;
+  findAllByUserId(userId: string): Promise<Photo[]>;
 
   all(): Promise<Photo[]>;
   create(data: ICreatePhotoDTO): Promise<Photo>;
