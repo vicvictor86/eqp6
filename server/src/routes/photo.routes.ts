@@ -8,6 +8,7 @@ import { uploadConfig } from '@config/upload';
 const photoRouter = Router();
 const photoController = new PhotosController();
 const uploadMiddleware = multer(uploadConfig.multer);
+
 photoRouter.delete('/', ensureAuthenticated, photoController.delete);
 photoRouter.post(
   '/',
@@ -15,5 +16,7 @@ photoRouter.post(
   uploadMiddleware.single('photo'),
   photoController.create,
 );
+
+photoRouter.get('/user/', ensureAuthenticated, photoController.show);
 
 export { photoRouter };
