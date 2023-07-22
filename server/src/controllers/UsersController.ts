@@ -3,7 +3,7 @@ import { instanceToInstance } from 'class-transformer';
 import { container } from 'tsyringe';
 import { z } from 'zod';
 
-import { AuthenticateUserService } from 'services/users/AuthenticateUserService';
+import { AuthenticateUserService } from '../services/users/AuthenticateUserService';
 import { CreateUserService } from '../services/users/CreateUserService';
 import { ShowUserService } from '../services/users/ShowUserService';
 

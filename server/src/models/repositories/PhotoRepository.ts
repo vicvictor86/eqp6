@@ -49,4 +49,7 @@ export const PhotosRepository: IPhotosRepository = photosRepository.extend({
   async all(): Promise<Photo[]> {
     return photosRepository.find();
   },
+  async delete(photo: Photo): Promise<void> {
+    photosRepository.delete(photo);
+  },
 });
