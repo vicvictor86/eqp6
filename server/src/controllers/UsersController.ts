@@ -1,16 +1,29 @@
 import { Request, Response } from 'express';
 import { instanceToInstance } from 'class-transformer';
 import { container } from 'tsyringe';
+import { z } from 'zod';
 
+import { AuthenticateUserService } from 'services/users/AuthenticateUserService';
 import { CreateUserService } from '../services/users/CreateUserService';
 import { ShowUserService } from '../services/users/ShowUserService';
+
+const createUserSchema = z.object({
+  realName: z.string(),
+  username: z.string(),
+  email: z.string().email(),
+  password: z.string(),
+  avatar: z.string().optional(),
+  bio: z.string().optional(),
+  isAdmin: z.boolean().optional(),
+});
 
 export class UsersController {
   async create(request: Request, response: Response) {
     const { realName, username, email, password, avatar, bio, isAdmin } =
-      request.body;
+      createUserSchema.parse(request.body);
 
     const createUserService = container.resolve(CreateUserService);
+    const authenticateUserService = container.resolve(AuthenticateUserService);
 
     const user = await createUserService.execute({
       realName,
@@ -22,7 +35,12 @@ export class UsersController {
       isAdmin: isAdmin || false,
     });
 
-    return response.status(200).json(instanceToInstance(user));
+    const { token } = await authenticateUserService.execute({
+      email,
+      password,
+    });
+
+    return response.status(200).json({ user: instanceToInstance(user), token });
   }
 
   async show(request: Request, response: Response) {

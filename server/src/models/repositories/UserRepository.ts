@@ -1,5 +1,5 @@
 import { connectionSource } from '@models/database/dataSource';
-import { User } from '@models/User';
+import { User } from '@models/entities/User';
 
 import { ICreateUserDTO } from '@models/dtos/ICreateUserDTO';
 import { IUsersRepository } from './interfaces/IUserRepository';

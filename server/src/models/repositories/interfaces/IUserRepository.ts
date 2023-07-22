@@ -1,9 +1,9 @@
 import { ICreateUserDTO } from '@models/dtos/ICreateUserDTO';
-import { User } from '@models/User';
+import { User } from '@models/entities/User';
 
 export interface IUsersRepository {
   findById(id: string): Promise<User | null>;
-  findByUsername(email: string): Promise<User | null>;
+  findByUsername(username: string): Promise<User | null>;
   findByEmail(email: string): Promise<User | null>;
   findByUsernameOrEmail(username: string, email: string): Promise<User | null>;
   all(): Promise<User[]>;

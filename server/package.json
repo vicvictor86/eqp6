@@ -6,11 +6,14 @@
   "scripts": {
     "dev": "ts-node-dev --transpile-only -r tsconfig-paths/register --inspect --ignore-watch node_modules src/index.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "migration:run": "ts-node-dev ./node_modules/typeorm/cli.js migration:run -d src/models/database/dataSource.ts"
+    "migration:run": "ts-node-dev ./node_modules/typeorm/cli.js migration:run -d src/models/database/dataSource.ts",
+    "test": "jest",
+    "test-coverage": "jest --collect-coverage"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-async-errors": "^3.1.1",
@@ -19,13 +22,18 @@
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.1.6",
     "tsyringe": "^4.7.0",
-    "typeorm": "^0.3.16"
+    "typeorm": "^0.3.16",
+    "uuid": "^9.0.0",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.13",
     "@types/express": "^4.17.13",
+    "@types/jest": "^29.5.3",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/multer": "^1.4.7",
+    "@types/uuid": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^5.59.5",
     "@typescript-eslint/parser": "^5.59.5",
     "eslint": "^8.40.0",
@@ -34,7 +42,9 @@
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^29.6.1",
     "prettier": "^2.8.8",
+    "ts-jest": "^29.1.1",
     "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.0.0",
     "typescript": "^4.7.3"

@@ -4,7 +4,7 @@ const connectionSource = new DataSource({
   type: 'sqlite',
   database: 'src/models/database/db.sqlite',
   migrations: ['src/models/database/migrations/*.ts'],
-  entities: ['src/models/*.ts'],
+  entities: ['src/models/entities/*.ts'],
 });
 
 connectionSource.initialize().then(() => {
