@@ -2,8 +2,7 @@ import { instanceToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
 import { CreatePhotoService } from 'services/photos/CreatePhotoService';
 import { DeletePhotoService } from 'services/photos/DeletePhotoService';
-import { GetPhotosByUserService } from 'services/photos/GetPhotosByUserService ';
-import { GetPhotoService } from 'services/photos/GetPhotoService';
+import { GetPhotosByUserService } from 'services/photos/GetPhotosByUserService';
 import { container } from 'tsyringe';
 import { z } from 'zod';
 
@@ -51,16 +50,6 @@ export class PhotosController {
       photoId,
       path,
     });
-
-    return response.json(instanceToInstance(photo));
-  }
-
-  public async get(request: Request, response: Response): Promise<Response> {
-    const { id } = request.params;
-
-    const getPhotoService = container.resolve(GetPhotoService);
-
-    const photo = await getPhotoService.execute({ photoId: id });
 
     return response.json(instanceToInstance(photo));
   }
