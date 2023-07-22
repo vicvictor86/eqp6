@@ -12,6 +12,7 @@ interface Request {
   userId: string;
 
   photoId: string;
+
   path: string;
 }
 
@@ -34,12 +35,15 @@ export class DeletePhotoService {
     if (!user) {
       throw new AppError('User not found');
     }
+
     const photo = await this.photosRepository.findById(photoId);
     if (!photo) {
       throw new AppError('Photo not found');
     }
+
     await this.diskStorageProvider.deletePhotoFile(path);
-    await this.photosRepository.delete(photo);
+    await this.photosRepository.delete(photo.id);
+
     return photo;
   }
 }

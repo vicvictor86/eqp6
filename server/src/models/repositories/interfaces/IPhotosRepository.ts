@@ -9,6 +9,6 @@ export interface IPhotosRepository {
 
   all(): Promise<Photo[]>;
   create(data: ICreatePhotoDTO): Promise<Photo>;
-  save(user: Photo): Promise<Photo>;
-  delete(photo: Photo): Promise<void>;
+  save(photo: Photo): Promise<Photo>;
+  delete(photoId: string): Promise<void>;
 }

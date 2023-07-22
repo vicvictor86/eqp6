@@ -48,4 +48,8 @@ export class FakePhotosRepository implements IPhotosRepository {
 
     return photo;
   }
+
+  public async delete(photoId: string): Promise<void> {
+    this.photos = this.photos.filter(photo => photo.id !== photoId);
+  }
 }
