@@ -1,9 +1,10 @@
 import { instanceToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
+
 import { CreatePhotoService } from 'services/photos/CreatePhotoService';
 import { DeletePhotoService } from 'services/photos/DeletePhotoService';
-import { GetPhotosByUserService } from 'services/photos/GetPhotosByUserService ';
-import { GetPhotoService } from 'services/photos/GetPhotoService';
+import { ShowPhotoService } from 'services/photos/ShowPhotoService';
+
 import { container } from 'tsyringe';
 import { z } from 'zod';
 
@@ -37,6 +38,16 @@ export class PhotosController {
     return response.json(instanceToInstance(photo));
   }
 
+  public async show(request: Request, response: Response): Promise<Response> {
+    const userId = request.user.id;
+
+    const showPhotoService = container.resolve(ShowPhotoService);
+
+    const photos = await showPhotoService.execute(userId);
+
+    return response.json(photos);
+  }
+
   public async delete(request: Request, response: Response): Promise<Response> {
     const { userId, photoId, path } = deletePhotoSchema.parse({
       userId: request.user.id,
@@ -54,42 +65,4 @@ export class PhotosController {
 
     return response.json(instanceToInstance(photo));
   }
-
-  public async get(request: Request, response: Response): Promise<Response> {
-    const { id } = request.params;
-
-    const getPhotoService = container.resolve(GetPhotoService);
-
-    const photo = await getPhotoService.execute({ photoId: id });
-
-    return response.json(instanceToInstance(photo));
-  }
-
-  public async getAllByUser(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
-    const userId = request.user.id;
-
-    const getPhotosByUserService = container.resolve(GetPhotosByUserService);
-
-    const photos = await getPhotosByUserService.execute(userId);
-
-    return response.json(photos);
-  }
-  // public async update(request: Request, response: Response): Promise<Response> {
-  //   const { userId, avatarFilename } = updateUserAvatarSchema.parse({
-  //     userId: request.user.id,
-  //     avatarFilename: request.file?.filename,
-  //   });
-
-  //   const updateUserAvatar = container.resolve(UpdateUserAvatarService);
-
-  //   const user = await updateUserAvatar.execute({
-  //     userId,
-  //     avatarFilename,
-  //   });
-
-  //   return response.json(instanceToInstance(user));
-  // }
 }

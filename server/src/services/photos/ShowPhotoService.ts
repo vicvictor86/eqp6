@@ -4,14 +4,14 @@ import { inject, injectable } from 'tsyringe';
 import { AppError } from '@shared/errors/AppError';
 
 @injectable()
-export class GetPhotosByUserService {
+export class ShowPhotoService {
   constructor(
     @inject('PhotosRepository')
     private photosRepository: IPhotosRepository,
   ) {}
 
   public async execute(userId: string): Promise<Photo[]> {
-    const photos = await this.photosRepository.findAllByUserId(userId);
+    const photos = await this.photosRepository.findByUserId(userId);
 
     if (!photos) {
       throw new AppError('No photos found for this user.');
