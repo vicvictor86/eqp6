@@ -1,7 +1,7 @@
 .PostFotos{
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     max-width: 600px;
     width: 100%;
@@ -46,7 +46,14 @@
 .BackSidePhoto{
     align-items: end;
     padding-top: 15px;
-    padding-bottom: 5px;
+    padding-bottom: 20px;
+}
+
+.Upload{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 20px;
 }
 
 .ButtonPhoto{
@@ -83,6 +90,40 @@
     padding: 15px;
 }
 
+.ButtonModal{
+    background-color: var(--color1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 50px;
+    color: white;
+    font-size: 23px;
+    font-style: normal;
+    font-weight: 440;
+    line-height: normal;
+    border-radius: 40px;
+    border: none;
+    padding: 15px;
+}
+
+.ButtonInputImage {
+    background: var(--color1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 230px;
+    height: 50px;
+    color: white;
+    font-size: 23px;
+    font-style: normal;
+    font-weight: 440;
+    line-height: normal;
+    border-radius: 40px;
+    border: none;
+    padding: 15px;
+  }
+
 .Image{
     display: flex;
     justify-content: center;
@@ -99,3 +140,4 @@
     border-radius: 20px;
     background-color: var(--color3);
   }
+  
