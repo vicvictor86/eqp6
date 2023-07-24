@@ -1,9 +1,10 @@
 import './Login.css';
 import LoginSVG from "../../assets/imgs/login.svg"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import config from '../../config'
+import { isNoAuth } from '../validators';
 const instance = axios.create({
   baseURL: config.baseURL,
   headers:{
@@ -46,10 +47,13 @@ function Login() {
     const emailRegex = /^([a-zA-Z][^<>\"!@[\]#$%¨&*()~^:;ç,\-´`=+{}º\|/\\?]{1,})@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     return emailRegex.test(String(email).toLowerCase())
   }
+  useEffect(() => {
+    isNoAuth(navigate)
+  })
   async function logar() {
 
     setEmailError(email === "" || !isEmail(email) ? true : false)
-    setSenhaError(senha === "" || validarSenha(senha) ? true : false)
+    setSenhaError(senha === "" || !validarSenha(senha) ? true : false)
 
     if (senha !== "" && email !== "" && isEmail(email) && validarSenha(senha)) {
 
@@ -62,8 +66,11 @@ function Login() {
         console.log(response.data)
         if(response.status === 200){
           setUserInvalid(false)
+          localStorage.setItem('username', response.data['user']['username'])
+          localStorage.setItem('avatar', response.data['user']['avatar'])
           localStorage.setItem('token', response.data['token'])
-          navigate("/home")
+            navigate("/home")
+
         }
       })
       .catch(function (error) {
@@ -87,13 +94,13 @@ function Login() {
       <div className="Form">
         <div style={{ display: 'block' }}>
           <h3 className='AppName'>Littlegram</h3>
-          <label className='LabelPadrao' style={{ color: emailError ? '#FF2E2E' : 'white' }} >email</label>
-          <input className='InputPadrao' style={{ border: emailError ? '#FF2E2E 2px solid' : 'white 2px solid', background: emailError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} typeof='text' value={email} onChange={(event) => {
+          <label htmlFor='email' className='LabelPadrao' style={{ color: emailError ? '#FF2E2E' : 'white' }} >email</label>
+          <input id='email' className='InputPadrao' style={{ border: emailError ? '#FF2E2E 2px solid' : 'white 2px solid', background: emailError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} typeof='text' value={email} onChange={(event) => {
             setEmail(event.target.value);
           }} />
-          <label className='LabelPadrao' style={{ color: senhaError ? '#FF2E2E' : 'white' }} >senha</label>
+          <label htmlFor='password' className='LabelPadrao' style={{ color: senhaError ? '#FF2E2E' : 'white' }} >senha</label>
 
-          <input className='InputPadrao' style={{ marginBottom: userInvalid ? 5 : 15, border: senhaError ? '#FF2E2E 2px solid' : 'white 2px solid', background: senhaError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} type='password' value={senha} onChange={(event) => {
+          <input id='password' className='InputPadrao' style={{ marginBottom: userInvalid ? 5 : 15, border: senhaError ? '#FF2E2E 2px solid' : 'white 2px solid', background: senhaError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} type='password' value={senha} onChange={(event) => {
             setSenha(event.target.value);
           }} />
 

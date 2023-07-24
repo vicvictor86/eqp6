@@ -15,19 +15,10 @@ import { uploadConfig } from '@config/upload';
 import { AppError } from '@shared/errors/AppError';
 import '@shared/container';
 
-<<<<<<< HEAD
 import routes from './routes';
-const cors = require('cors');
 
 const app = express();
 app.use(cors())
-=======
-import { routes } from './routes';
-
-const app = express();
-
-app.use(cors());
->>>>>>> origin/devVictor
 app.use(express.json());
 app.use('/files/avatar', express.static(uploadConfig.avatarFolder));
 app.use('/files/photos', express.static(uploadConfig.photosFolder));
