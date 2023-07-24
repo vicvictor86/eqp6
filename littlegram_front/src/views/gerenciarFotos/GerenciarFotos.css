@@ -1,13 +1,143 @@
 .PostFotos{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     max-width: 600px;
     width: 100%;
+    height: 89%;
     border: 2px solid white;
-    margin-left:200px;
+    margin-left: 200px;
+    overflow: auto;
 }
 
 @media (max-width:994px) {
     .PostFotos{
         margin-left: 0px;
+        margin-right: 0px;
         margin-bottom: 0px;
     }
 }
+
+.DashPhoto{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border-bottom: 2px solid white;
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+
+.CellPhoto{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.DataPhoto{
+    display: flex;
+    align-items: center;
+}
+
+.BackSidePhoto{
+    align-items: end;
+    padding-top: 15px;
+    padding-bottom: 20px;
+}
+
+.Upload{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.ButtonPhoto{
+    background-color: #FFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 64px;
+    color: #000;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 440;
+    line-height: normal;
+    border-radius: 32px;
+    border: none;
+    padding: 29px;
+}
+
+.ButtonDelete{
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 30px;
+    color: white;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 440;
+    line-height: normal;
+    border-radius: 40px;
+    border: none;
+    padding: 15px;
+}
+
+.ButtonModal{
+    background-color: var(--color1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 50px;
+    color: white;
+    font-size: 23px;
+    font-style: normal;
+    font-weight: 440;
+    line-height: normal;
+    border-radius: 40px;
+    border: none;
+    padding: 15px;
+}
+
+.ButtonInputImage {
+    background: var(--color1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 230px;
+    height: 50px;
+    color: white;
+    font-size: 23px;
+    font-style: normal;
+    font-weight: 440;
+    line-height: normal;
+    border-radius: 40px;
+    border: none;
+    padding: 15px;
+  }
+
+.Image{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    height: auto;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background-color: var(--color3);
+  }
+  
