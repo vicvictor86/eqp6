@@ -1,15 +1,17 @@
 import { FakeHashProvider } from '@models/providers/HashProvider/fakes/FakeHashProvider';
+import { AppError } from '@shared/errors/AppError';
 import { FakeUsersRepository } from '../../../models/repositories/fakes/FakeUsersRepository';
 
 import { AuthenticateUserService } from '../AuthenticateUserService';
 
-import { AppError } from '../../../shared/errors/AppError';
+import { ConfirmEmailService } from '../ConfirmEmailService';
 
 let fakeUsersRepository: FakeUsersRepository;
 let fakeHashProvider: FakeHashProvider;
 let authenticateUser: AuthenticateUserService;
+let confirmEmailService: ConfirmEmailService;
 
-describe('AuthenticateUserService', () => {
+describe('ConfirmEmailService', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
     fakeHashProvider = new FakeHashProvider();
@@ -18,9 +20,11 @@ describe('AuthenticateUserService', () => {
       fakeUsersRepository,
       fakeHashProvider,
     );
+
+    confirmEmailService = new ConfirmEmailService(fakeUsersRepository);
   });
 
-  it('should be able to authenticate', async () => {
+  it('should be able to confirm the email after create the account', async () => {
     const user = await fakeUsersRepository.create({
       realName: 'Test User',
       username: 'TestUser',
@@ -37,22 +41,29 @@ describe('AuthenticateUserService', () => {
       password: '123456',
     });
 
+    await confirmEmailService.execute({
+      email: response.user.email,
+      token: response.token,
+    });
+
+    const newUser = await fakeUsersRepository.findById(user.id);
+
     expect(response).toHaveProperty('token');
     expect(response.user.email).toBe(user.email);
     expect(response.user.password).toBe(user.password);
-    expect(response.user).toEqual(user);
+    expect(newUser?.confirmed).toEqual(true);
   });
 
-  it('should not be able to authenticate with non existing user', async () => {
+  it('should NOT be able to confirm the email of an account that not exists', async () => {
     await expect(
-      authenticateUser.execute({
-        email: 'testuser@example.com',
-        password: '123456',
+      confirmEmailService.execute({
+        email: 'test@example.com',
+        token: 'unvalid-token',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should not be able to authenticate with wrong password', async () => {
+  it('should NOT be able to confirm the email after when the user id of token is different of the user id database', async () => {
     await fakeUsersRepository.create({
       realName: 'Test User',
       username: 'TestUser',
@@ -64,10 +75,31 @@ describe('AuthenticateUserService', () => {
       confirmed: false,
     });
 
+    await fakeUsersRepository.create({
+      realName: 'Test User 2',
+      username: 'TestUser 2',
+      email: 'testuser2@example.com',
+      password: '123456',
+      avatar: 'test-avatar.jpg',
+      isAdmin: false,
+      bio: 'Test User Bio',
+      confirmed: false,
+    });
+
+    const response = await authenticateUser.execute({
+      email: 'testuser@example.com',
+      password: '123456',
+    });
+
+    const response2 = await authenticateUser.execute({
+      email: 'testuser2@example.com',
+      password: '123456',
+    });
+
     await expect(
-      authenticateUser.execute({
-        email: 'testuser@example.com',
-        password: 'wrong-password',
+      confirmEmailService.execute({
+        email: response.user.email,
+        token: response2.token,
       }),
     ).rejects.toBeInstanceOf(AppError);
   });

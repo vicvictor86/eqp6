@@ -3,6 +3,7 @@ import { instanceToInstance } from 'class-transformer';
 import { container } from 'tsyringe';
 import { z } from 'zod';
 
+import { SendEmailVerificationService } from 'services/users/SendEmailVerificationService';
 import { AuthenticateUserService } from '../services/users/AuthenticateUserService';
 import { CreateUserService } from '../services/users/CreateUserService';
 import { ShowUserService } from '../services/users/ShowUserService';
@@ -24,6 +25,9 @@ export class UsersController {
 
     const createUserService = container.resolve(CreateUserService);
     const authenticateUserService = container.resolve(AuthenticateUserService);
+    const sendEmailVerificationService = container.resolve(
+      SendEmailVerificationService,
+    );
 
     const user = await createUserService.execute({
       realName,
@@ -33,12 +37,18 @@ export class UsersController {
       avatar,
       bio,
       isAdmin: isAdmin || false,
+      confirmed: false,
     });
 
     const { token } = await authenticateUserService.execute({
       email,
       password,
     });
+
+    // sendEmailVerificationService.execute({
+    //   token,
+    //   user,
+    // });
 
     return response.status(200).json({ user: instanceToInstance(user), token });
   }

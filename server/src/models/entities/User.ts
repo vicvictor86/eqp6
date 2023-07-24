@@ -33,6 +33,9 @@ export class User {
   @Column()
   bio: string;
 
+  @Column()
+  confirmed: boolean;
+
   @Column({ name: 'is_admin' })
   isAdmin: boolean;
 

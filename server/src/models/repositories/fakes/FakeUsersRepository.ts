@@ -51,6 +51,14 @@ export class FakeUsersRepository implements IUsersRepository {
     return user;
   }
 
+  public async update(id: string, data: Partial<User>): Promise<User> {
+    const findIndex = this.users.findIndex(user => user.id === id);
+
+    this.users[findIndex] = { ...this.users[findIndex], ...data };
+
+    return this.users[findIndex];
+  }
+
   public async save(user: User): Promise<User> {
     const findIndex = this.users.findIndex(findUser => findUser.id === user.id);
 

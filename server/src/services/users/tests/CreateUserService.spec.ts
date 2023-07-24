@@ -24,6 +24,7 @@ describe('CreateUserService', () => {
       email: 'test@example.com',
       password: '123456',
       isAdmin: false,
+      confirmed: false,
     });
 
     expect(user).toHaveProperty('id');
@@ -37,6 +38,7 @@ describe('CreateUserService', () => {
       email: 'test@example.com',
       password: '123456',
       isAdmin: false,
+      confirmed: false,
     });
 
     await expect(
@@ -46,6 +48,7 @@ describe('CreateUserService', () => {
         email: 'test@example.com',
         password: '123456',
         isAdmin: false,
+        confirmed: false,
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
