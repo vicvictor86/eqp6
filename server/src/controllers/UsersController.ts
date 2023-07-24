@@ -45,10 +45,10 @@ export class UsersController {
       password,
     });
 
-    // sendEmailVerificationService.execute({
-    //   token,
-    //   user,
-    // });
+    sendEmailVerificationService.execute({
+      token,
+      user,
+    });
 
     return response.status(200).json({ user: instanceToInstance(user), token });
   }
