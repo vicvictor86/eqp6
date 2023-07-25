@@ -19,7 +19,7 @@ function Menu() {
     setImage( config.baseURL + '/files/avatar/' + localStorage.getItem('avatar'))
     
     isAuth(navigate)
-
+console.log('etesg')
 
   })
   const logout = () => {
@@ -45,7 +45,7 @@ function Menu() {
           <hr className='BarraMenu' />
         </div>
         <hr style={{position:'absolute', bottom: 45}} className='BarraMenu'/>
-        <div onClick={() => logout()} className='LogoutMenu'>
+        <div onClick={() => setLogoutModal(true)} className='LogoutMenu'>
           <img style={{width:30, height:25}} src={Logout} alt='logout' />          Logout
         </div>
       </div>
