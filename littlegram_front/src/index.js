@@ -12,7 +12,7 @@ import {
 import Register from './views/register/Register';
 import DashBoard from './views/dashBoard/DashBoard';
 import GerenciarFotos from './views/gerenciarFotos/GerenciarFotos'
-
+import VerificandoEmail from './views/verificandoEmail/VerificandoEmail';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -31,6 +31,11 @@ const router = createBrowserRouter([
     path: "/photos",
     Component:GerenciarFotos
   },
+  {
+    path : "/confirm-account/:email/:token",
+    Component: VerificandoEmail,
+    
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

@@ -76,8 +76,7 @@ function Login() {
             localStorage.setItem('token', response.data['token'])
             navigate("/home")
           }
-     
-
+          
         }
       })
       .catch(function (error) {
@@ -113,7 +112,7 @@ function Login() {
 
           <label className='LabelPadrao' style={{ color: userInvalid ? '#FF2E2E' : 'white', display:  userInvalid ? 'block' : 'none', margin: 'auto', marginBottom: 15 }} >email ou senha inválidos</label>
 
-          <label className='LabelPadrao' style={{ color: esperandoConfirmError ? '#FF2E2E' : 'white', display:  esperandoConfirmError ? 'block' : 'none', margin: 'auto', marginBottom: 15 }} >esperando confirma</label>
+          <label className='LabelPadrao' style={{ color: esperandoConfirmError ? '#FF2E2E' : 'white', display:  esperandoConfirmError ? 'block' : 'none', margin: 'auto', marginBottom: 15 }} >esperando confirmar o email</label>
 
 
           <button className='Button' onClick={logar}>Avançar</button>
