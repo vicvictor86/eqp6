@@ -43,6 +43,7 @@ function Login() {
   const [emailError, setEmailError] = useState(false);
   const [senhaError, setSenhaError] = useState(false);
   const [userInvalid, setUserInvalid] = useState(false)
+  const [esperandoConfirmError, setEsperandoConfirmError] = useState(false)
   const isEmail = (email) => {
     const emailRegex = /^([a-zA-Z][^<>\"!@[\]#$%¨&*()~^:;ç,\-´`=+{}º\|/\\?]{1,})@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     return emailRegex.test(String(email).toLowerCase())
@@ -65,11 +66,17 @@ function Login() {
       .then(function (response) {
         console.log(response.data)
         if(response.status === 200){
-          setUserInvalid(false)
-          localStorage.setItem('username', response.data['user']['username'])
-          localStorage.setItem('avatar', response.data['user']['avatar'])
-          localStorage.setItem('token', response.data['token'])
+          if(response.data['user']['confirm'] === false){
+            setEsperandoConfirmError(true)
+          }else{
+            setEsperandoConfirmError(false)
+            setUserInvalid(false)
+            localStorage.setItem('username', response.data['user']['username'])
+            localStorage.setItem('avatar', response.data['user']['avatar'])
+            localStorage.setItem('token', response.data['token'])
             navigate("/home")
+          }
+     
 
         }
       })
@@ -105,6 +112,8 @@ function Login() {
           }} />
 
           <label className='LabelPadrao' style={{ color: userInvalid ? '#FF2E2E' : 'white', display:  userInvalid ? 'block' : 'none', margin: 'auto', marginBottom: 15 }} >email ou senha inválidos</label>
+
+          <label className='LabelPadrao' style={{ color: esperandoConfirmError ? '#FF2E2E' : 'white', display:  esperandoConfirmError ? 'block' : 'none', margin: 'auto', marginBottom: 15 }} >esperando confirma</label>
 
 
           <button className='Button' onClick={logar}>Avançar</button>
