@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import { IUsersRepository } from '@models/repositories/interfaces/IUserRepository';
-import { User } from '@models/User';
+import { User } from '@models/entities/User';
 
 @injectable()
 export class ShowUserService {

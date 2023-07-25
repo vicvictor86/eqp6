@@ -5,7 +5,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Photo } from './Photo';
 
 @Entity('users')
 export class User {
@@ -33,6 +35,9 @@ export class User {
 
   @Column({ name: 'is_admin' })
   isAdmin: boolean;
+
+  @OneToMany(() => Photo, photo => photo.user)
+  photos: Photo[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
