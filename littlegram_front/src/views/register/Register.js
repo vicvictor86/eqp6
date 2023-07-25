@@ -48,11 +48,11 @@ function Register() {
     setSenhaError(senha === "" || (senha !== confirm_senha) || !validarSenha(senha) ? true : false)
     setConfirmSenhaError(confirm_senha === "" || (senha !== confirm_senha) || !validarSenha(confirm_senha) ? true : false)
     setCadastradoError(false)
-    setImageError( image.file === null || !checkImageSize()  ? true : false)
+    setImageError( image.file === null ? true : false)
 
 
 
-    if (image.file !== "" && username !== "" && nome !== "" && sobrenome !== "" && email !== "" && senha !== "" && confirm_senha !== "" && (senha === confirm_senha) && isEmail(email) && validarSenha(senha) && validarSenha(confirm_senha) && checkImageSize()) {
+    if (image.file !== "" && username !== "" && nome !== "" && sobrenome !== "" && email !== "" && senha !== "" && confirm_senha !== "" && (senha === confirm_senha) && isEmail(email) && validarSenha(senha) && validarSenha(confirm_senha)) {
 
     
       instance.post('/users', {
@@ -113,6 +113,18 @@ function Register() {
             <img alt='' src={image.file} style={{ width: 130, height: 130, background: 'white', borderRadius: '50%', }} accept="image/*" />
             <label htmlFor='imageInput' className='InputImage' style={{ color: imageError ? '#FF2E2E' : 'black' }} >Adicionar Imagem</label>
             <input accept="image/png,image/jpeg" id='imageInput' className='' style={{ display: 'none' }} type='file' onChange={(event) => {
+                const file = event.target.files[0];
+                const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+                if (!acceptedImageTypes.includes(file['type']) || !checkImageSize()) {
+                  setImageError(true);
+                  setImage({
+                    fileReal: "",
+                    file:""
+                  })
+                  return;
+                }
+                setImageError(false);
+
               setImage({
                 fileReal: event.target.files[0],
                 file: URL.createObjectURL(event.target.files[0])
