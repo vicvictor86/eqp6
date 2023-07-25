@@ -12,7 +12,8 @@ import { useState, useEffect} from 'react';
 const instance = axios.create({
   baseURL: config.baseURL,
   headers:{
-    'Access-Control-Allow-Origin': '*'
+    'Access-Control-Allow-Origin': '*',
+    'Authorization': 'Bearer '+ localStorage.getItem('token'),
   }
 });
 
@@ -24,11 +25,11 @@ function GerenciarFotos() {
     file: null,
   })
   const [photos, setPhotos] = useState([{}])
-  // useEffect(() => {
-  //   instance.get('/photos/user/').then((response) => {
-  //     setPhotos(response.data)
-  //   })
-  // },[])
+  useEffect(() => {
+    instance.get('/photos/user/').then((response) => {
+      setPhotos(response.data)
+    })
+  },[])
 
   const [imageError, setImageError] = useState(false)
 
@@ -90,7 +91,7 @@ function GerenciarFotos() {
     <div className="Container">
           <Menu />
           <div className='PostFotos'>
-            {/* {photos.map((photo) => (
+             {photos.map((photo) => (
               <div className='DashPhoto'>
                 <img src={gatoSus} alt="Cat" class="Image"/>
                 <div className='CellPhoto'>
@@ -103,7 +104,7 @@ function GerenciarFotos() {
                   <button class='ButtonDelete'>Deletar</button>
                 </div>
               </div>
-            ))} */}
+            ))} 
             <div className='DashPhoto'>
               <img src={gato} alt="Cat2" class="Image"/>
                 <div className='CellPhoto'>
@@ -125,6 +126,7 @@ function GerenciarFotos() {
                   </ReactModal>
                 </div>
             </div>
+
             <div className='BackSidePhoto'>
               <button class="ButtonPhoto" onClick={handleOpenModal}>Adicionar Foto</button>
               <ReactModal isOpen={openUpload} onRequestClose={handleCloseModal} style={POPUP_STYLE}>
