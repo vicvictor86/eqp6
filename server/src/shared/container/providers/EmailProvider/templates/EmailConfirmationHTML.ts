@@ -197,7 +197,7 @@ export const emailConfirmationHTML = function makeEmail(
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
               <p style="margin: 0;">Se não funcionar, copie e cole o link a seguir no seu navegador:</p>
-              <p style="margin: 0;"><a href="${process.env.FRONT_END_URL}/confirm-account/${email}/${token}" target="_blank">https://blogdesire.com/xxx-xxx-xxxx</a></p>
+              <p style="margin: 0;"><a href="${process.env.FRONT_END_URL}/confirm-account/${email}/${token}" target="_blank">${process.env.FRONT_END_URL}/confirm-account/${email}/${token}</a></p>
             </td>
           </tr>
           <!-- end copy -->
