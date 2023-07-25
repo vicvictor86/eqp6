@@ -26,6 +26,7 @@ describe('UpdateUserAvatarService', () => {
       email: 'test@example.com',
       password: '123456',
       isAdmin: false,
+      confirmed: false,
     });
 
     await updateUserAvatar.execute({
@@ -54,6 +55,7 @@ describe('UpdateUserAvatarService', () => {
       email: 'test@example.com',
       password: '123456',
       isAdmin: false,
+      confirmed: false,
     });
 
     await updateUserAvatar.execute({

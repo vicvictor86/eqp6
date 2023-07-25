@@ -54,6 +54,11 @@ export const UsersRepository: IUsersRepository = usersRepository.extend({
     return usersRepository.save(user);
   },
 
+  async update(id: string, data: Partial<User>): Promise<User> {
+    // @ts-ignore
+    return usersRepository.update({ id }, { ...data });
+  },
+
   async all(): Promise<User[]> {
     return usersRepository.find();
   },

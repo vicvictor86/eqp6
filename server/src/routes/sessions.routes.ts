@@ -5,5 +5,6 @@ const sessionsRouter = Router();
 const sessionsController = new SessionsController();
 
 sessionsRouter.post('/', sessionsController.create);
+sessionsRouter.patch('/confirm-account/', sessionsController.patch);
 
 export { sessionsRouter };
