@@ -23,7 +23,7 @@ export class SessionsController {
     const authenticateUserService = container.resolve(AuthenticateUserService);
 
     const { user, token } = await authenticateUserService.execute({
-      email,
+      email: email.toUpperCase(),
       password,
     });
 
@@ -35,7 +35,7 @@ export class SessionsController {
 
     const confirmEmailService = container.resolve(ConfirmEmailService);
 
-    await confirmEmailService.execute({ email, token });
+    await confirmEmailService.execute({ email: email.toUpperCase(), token });
 
     return response.status(200).json();
   }

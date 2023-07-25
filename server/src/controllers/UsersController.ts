@@ -32,7 +32,7 @@ export class UsersController {
     const user = await createUserService.execute({
       realName,
       username,
-      email,
+      email: email.toUpperCase(),
       password,
       avatar,
       bio,
@@ -41,7 +41,7 @@ export class UsersController {
     });
 
     const { token } = await authenticateUserService.execute({
-      email,
+      email: email.toUpperCase(),
       password,
     });
 
