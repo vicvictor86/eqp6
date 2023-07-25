@@ -46,10 +46,6 @@ function data(date) {
   return `${day} de ${meses[month]} de ${year} às ${hours}:${minutes}`
 }
 
-
-
-
-
 function GerenciarFotos() {
 
   const [openUpload, setOpenUpload] = useState(false)
@@ -70,8 +66,18 @@ function GerenciarFotos() {
     },
   ])
 
+  const [openErroFileType, setOpenErroFileType] = useState(false);
+
+  const handleCloseErroFileType = () => {
+    setOpenErroFileType(false);
+  }
+
+  const handleOpenErroFileType = () => {
+    setOpenErroFileType(true);
+  }
 
   const [imageError, setImageError] = useState(false)
+  const [openFileRequiredError, setOpenFileRequiredError] = useState(false);
 
   const uploadPhotos = () => {
     instance.get('/photos/user/').then((response) => {
@@ -96,6 +102,13 @@ function GerenciarFotos() {
     setOpenUpload(false)
   }
 
+  const handleCloseFileRequiredError = () => {
+    setOpenFileRequiredError(false);
+  };
+
+  const handleOpenFileRequiredError = () => {
+    setOpenFileRequiredError(true);
+  };
 
   const handleDelete = () => {
     setOpenDelete(openDelete ? false : true)
@@ -110,7 +123,11 @@ function GerenciarFotos() {
   }
 
   const uploadPhoto = () => {
-    const form = new FormData()
+    if (!image.fileReal) {
+      handleOpenFileRequiredError();
+      return;
+    }
+    const form = new FormData();
     form.append('photo', image.fileReal);
 
     axios.post(config.baseURL + '/photos/', form, {
@@ -118,11 +135,21 @@ function GerenciarFotos() {
     }).then((response) => {
 
       if (response.status === 200) {
-        handleCloseModal()
-        setImage({})
+        handleCloseModal();
+        setImage({});
       }
-    })
-  }
+    }).catch((error) => {
+      if (error.response) {
+        console.error('Error response:', error.response);
+      } else if (error.request) {
+        console.error('Error request:', error.request);
+      } else {
+        console.error('Error:', error.message);
+      }
+      console.error('Error config:', error.config);
+    });
+  };
+
   const delet = (path, photoId) => {
 
     axios.delete(config.baseURL + "/photos?path=" + path + "&photoId=" + photoId, {
@@ -133,7 +160,7 @@ function GerenciarFotos() {
     }
     ).then((response) => {
 
-      if(response.status === 200){
+      if (response.status === 200) {
         handleDelete()
         uploadPhotos()
       }
@@ -206,30 +233,51 @@ function GerenciarFotos() {
               <div className='Upload'>
                 <button className='ButtonModal' onClick={uploadPhoto}>Enviar</button>
                 <label htmlFor='imageInput' className='ButtonInputImage' style={{ color: imageError ? '#FF2E2E' : 'white' }} >Adicionar Imagem</label>
-                <input accept="image/png,image/jpeg,image/jpg" id='imageInput' className='' style={{ display: 'none' }} type='file' onChange={(event) => {
-                  if (checkImageSize()) {
-                    setImage({
-                      fileReal: event.target.files[0],
-                      file: URL.createObjectURL(event.target.files[0])
-                    })
-                    setPhotos(uploadPhotos())
-                  } else {
-                    handleOpenErroSize()
-                  }
-
-                }} />
+                <input
+                  accept="image/png,image/jpeg,image/jpg"
+                  id='imageInput'
+                  className=''
+                  style={{ display: 'none' }}
+                  type='file'
+                  onChange={(event) => {
+                    const file = event.target.files[0];
+                    const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+                    if (!acceptedImageTypes.includes(file['type'])) {
+                      handleOpenErroFileType();
+                      return;
+                    }
+                    if (checkImageSize()) {
+                      setImage({
+                        fileReal: file,
+                        file: URL.createObjectURL(file)
+                      })
+                      setPhotos(uploadPhotos())
+                    } else {
+                      handleOpenErroSize()
+                    }
+                  }}
+                />
                 <button onClick={handleCloseModal} className='ButtonModal'>Fechar</button>
               </div>
             </div>
 
           </ReactModal>
         </div>
-
       </div>
       <ReactModal isOpen={openErroPhotoSize} onRequestClose={handleCloseErroSize} style={POPUP_STYLE}>
         <h1 style={{
           color: 'white', fontSize: '25px', width: '510px', marginBottom: '5px',
         }}>Imagem acima de 10 megabytes</h1>
+      </ReactModal>
+      <ReactModal isOpen={openErroFileType} onRequestClose={handleCloseErroFileType} style={POPUP_STYLE}>
+        <h1 style={{
+          color: 'white', fontSize: '25px', width: '510px', marginBottom: '5px',
+        }}>O arquivo não é suportado</h1>
+      </ReactModal>
+      <ReactModal isOpen={openFileRequiredError} onRequestClose={handleCloseFileRequiredError} style={POPUP_STYLE}>
+        <h1 style={{
+          color: 'white', fontSize: '25px', width: '510px', marginBottom: '5px',
+        }}>A seleção do arquivo é obrigatória</h1>
       </ReactModal>
     </div>
   );
