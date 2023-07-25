@@ -118,7 +118,7 @@ export const emailConfirmationHTML = function makeEmail(
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
           <tr>
             <td align="center" valign="top" style="padding: 36px 24px;">
-              <a href="https://www.blogdesire.com" target="_blank" style="display: inline-block;">
+              <a href="${process.env.FRONT_END_URL}" target="_blank" style="display: inline-block;">
                 <img src="https://www.blogdesire.com/wp-content/uploads/2019/07/blogdesire-1.png" alt="Logo" border="0" width="48" style="display: block; width: 48px; max-width: 48px; min-width: 48px;">
               </a>
             </td>
@@ -184,7 +184,7 @@ export const emailConfirmationHTML = function makeEmail(
                     <table border="0" cellpadding="0" cellspacing="0">
                       <tr>
                         <td align="center" bgcolor="#1a82e2" style="border-radius: 6px;">
-                          <a href="${process.env.FRONT_END_URL}/confirm-account?email=${email}&token=${token}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Confirme sua conta</a>
+                          <a href="${process.env.FRONT_END_URL}confirm-account/${email}/${token}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Confirme sua conta</a>
                         </td>
                       </tr>
                     </table>

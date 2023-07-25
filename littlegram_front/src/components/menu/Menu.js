@@ -33,7 +33,7 @@ function Menu() {
     <>
       <div className="Menu">
         <span className='AppNameMenu'> <h1>Littlegram</h1> </span>
-        <img className='ImagePerfilMenu' src={ localStorage.getItem('avatar') === "null" || localStorage.getItem('avatar') === null || localStorage.getItem('avatar') === "" ? "" : null} />
+        <img className='ImagePerfilMenu' src={ localStorage.getItem('avatar') === "null" || localStorage.getItem('avatar') === null || localStorage.getItem('avatar') === "" ? "" : imagem} />
         <span className='PerfilMenu'>@{perfil}</span>
         <div className='ItensMenu'>
           <div onClick={() => {
