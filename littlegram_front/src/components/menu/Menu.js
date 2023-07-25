@@ -15,7 +15,6 @@ function Menu() {
   const [perfil,setPerfil] = useState('')
 
   useEffect(()=>{
-
    var user = localStorage.getItem('user')
     setPerfil(localStorage.getItem('username'))
     setImage( config.baseURL + '/files/avatar/' + localStorage.getItem('avatar'))
@@ -34,7 +33,7 @@ function Menu() {
     <>
       <div className="Menu">
         <span className='AppNameMenu'> <h1>Littlegram</h1> </span>
-        <img className='ImagePerfilMenu' src={imagem} />
+        <img className='ImagePerfilMenu' src={ localStorage.getItem('avatar') === "null" || localStorage.getItem('avatar') === null || localStorage.getItem('avatar') === "" ? "" : null} />
         <span className='PerfilMenu'>@{perfil}</span>
         <div className='ItensMenu'>
           <div onClick={() => {

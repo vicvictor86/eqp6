@@ -74,6 +74,8 @@ function Register() {
             if(response.status === 200){
               navigate('/')
             }
+          }).catch((error) => {
+            console.log(error)
           })
          
             setCadastradoError(false)

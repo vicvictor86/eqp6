@@ -1,3 +1,4 @@
+
 .PostFotos{
     display: flex;
     flex-direction: column;
@@ -33,18 +34,22 @@
 .CellPhoto{
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
     width: 100%;
+    height: 60px;
+    justify-content: space-evenly;
+    align-items: center;
     margin-top: 10px;
 }
+.CellPhoto h5{
+    font-weight: 400;
 
+}
 .DataPhoto{
     display: flex;
     align-items: center;
 }
 
 .BackSidePhoto{
-    align-items: end;
     padding-top: 15px;
     padding-bottom: 20px;
 }
@@ -55,7 +60,9 @@
     justify-content: space-around;
     margin-top: 20px;
 }
-
+.Upload button{
+    margin: 0px 10px;
+}
 .ButtonPhoto{
     background-color: #FFF;
     display: flex;
@@ -66,7 +73,7 @@
     color: #000;
     font-size: 30px;
     font-style: normal;
-    font-weight: 440;
+    font-weight: 500;
     line-height: normal;
     border-radius: 32px;
     border: none;
@@ -74,7 +81,7 @@
 }
 
 .ButtonDelete{
-    background-color: red;
+    background-color: #FF6969;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -88,6 +95,9 @@
     border-radius: 40px;
     border: none;
     padding: 15px;
+
+    margin-top: -10px;
+
 }
 
 .ButtonModal{
@@ -140,4 +150,6 @@
     border-radius: 20px;
     background-color: var(--color3);
   }
-  
+  .ReactModal__Overlay ReactModal__Overlay--after-open{
+    background-color: rgba(255, 255, 255, 0) !important;
+  }

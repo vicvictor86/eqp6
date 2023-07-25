@@ -66,7 +66,7 @@ function Login() {
       .then(function (response) {
         console.log(response.data)
         if(response.status === 200){
-          if(response.data['user']['confirm'] === false){
+          if(response.data['user']['confirmed'] === false){
             setEsperandoConfirmError(true)
           }else{
             setEsperandoConfirmError(false)
