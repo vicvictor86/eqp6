@@ -10,4 +10,4 @@ routes.use('/users', userRouter);
 routes.use('/sessions', sessionsRouter);
 routes.use('/photos', photoRouter);
 
-export { routes };
+export default routes ;

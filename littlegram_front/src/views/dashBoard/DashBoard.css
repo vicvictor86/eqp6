@@ -1,0 +1,13 @@
+.PostDashBoard{
+    max-width: 600px;
+    width: 100%;
+    border: 2px solid white;
+    margin-left:200px;
+}
+
+@media (max-width:994px) {
+    .PostDashBoard{
+        margin-left: 0px;
+        margin-bottom: 0px;
+    }
+}
