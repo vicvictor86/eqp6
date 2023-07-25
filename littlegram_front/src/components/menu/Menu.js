@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import config from '../../config'
 import { isAuth } from '../../views/validators';
-
+import ImageLogout from '../../assets/imgs/logoutImage.svg'
 
 
 function Menu() {
