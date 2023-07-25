@@ -42,49 +42,40 @@ describe('DeletePhotoService', () => {
       confirmed: false,
     });
 
-    await createPhotoService.execute({
+    const photo = await createPhotoService.execute({
       userId: user.id,
       path: 'photo.jpg',
       byteImageSize: 100,
     });
 
+    await deletePhotoService.execute({
+      userId: user.id,
+      photoId: photo.id,
+      path: photo.path,
+    });
+
     const userPhotos = await fakePhotosRepository.findByUserId(user.id);
 
-    if (!userPhotos) {
-      throw new Error('User photos not found');
-    }
-
-    const photoUploadedRecently = userPhotos.find(photo => {
-      return photo.path === 'photo.jpg';
-    });
-
-    if (!photoUploadedRecently) {
-      throw new Error('Photo not found');
-    }
-
-    const photo = await deletePhotoService.execute({
-      userId: user.id,
-      photoId: photoUploadedRecently.id,
-      path: photoUploadedRecently.path,
-    });
-
-    const newUserPhotos = await fakePhotosRepository.findByUserId(user.id);
-
-    expect(newUserPhotos).toEqual(null);
-    expect(photo.path).toBe('photo.jpg');
+    expect(userPhotos).toHaveLength(0);
   });
 
-  it('should NOT be able to delete a photo to a non existing user', async () => {
+  it('should NOT be able to delete a photo if user does not exist', async () => {
+    const photo = await fakePhotosRepository.create({
+      userId: 'non-existing-user-id',
+      path: 'photo.jpg',
+      size: 100,
+    });
+
     await expect(
       deletePhotoService.execute({
-        userId: 'non-existing-user',
-        path: 'photo.jpg',
-        photoId: 'non-existing-photo',
+        userId: 'non-existing-user-id',
+        photoId: photo.id,
+        path: photo.path,
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should NOT be able to delete a non existing photo', async () => {
+  it('should NOT be able to delete a photo if photo does not exist', async () => {
     const user = await fakeUsersRepository.create({
       realName: 'test',
       username: 'testUser',
@@ -94,31 +85,11 @@ describe('DeletePhotoService', () => {
       confirmed: false,
     });
 
-    await createPhotoService.execute({
-      userId: user.id,
-      path: 'photo.jpg',
-      byteImageSize: 100,
-    });
-
-    const userPhotos = await fakePhotosRepository.findByUserId(user.id);
-
-    if (!userPhotos) {
-      throw new Error('User photos not found');
-    }
-
-    const photoUploadedRecently = userPhotos.find(photo => {
-      return photo.path === 'photo.jpg';
-    });
-
-    if (!photoUploadedRecently) {
-      throw new Error('Photo not found');
-    }
-
     await expect(
       deletePhotoService.execute({
         userId: user.id,
-        photoId: 'non-existing-photo',
-        path: 'non-existing-photo.jpg',
+        photoId: 'non-existing-photo-id',
+        path: 'non-existing-photo-path',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
