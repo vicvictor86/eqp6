@@ -33,6 +33,7 @@ describe('CreatePhotoService', () => {
       email: 'test@example.com',
       password: '123456',
       isAdmin: false,
+      confirmed: false,
     });
 
     await createPhotoService.execute({
@@ -68,6 +69,7 @@ describe('CreatePhotoService', () => {
       email: 'test@example.com',
       password: '123456',
       isAdmin: false,
+      confirmed: false,
     });
 
     await expect(
@@ -86,6 +88,7 @@ describe('CreatePhotoService', () => {
       email: 'test@example.com',
       password: '123456',
       isAdmin: false,
+      confirmed: false,
     });
 
     await expect(

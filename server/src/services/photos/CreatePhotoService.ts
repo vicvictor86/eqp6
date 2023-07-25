@@ -57,6 +57,7 @@ export class CreatePhotoService {
     const newPhoto = await this.photosRepository.create({
       userId,
       path: filename,
+      size: byteImageSize,
     });
 
     return newPhoto;

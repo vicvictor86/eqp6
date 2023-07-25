@@ -29,6 +29,7 @@ describe('AuthenticateUserService', () => {
       avatar: 'test-avatar.jpg',
       isAdmin: false,
       bio: 'Test User Bio',
+      confirmed: false,
     });
 
     const response = await authenticateUser.execute({
@@ -60,6 +61,7 @@ describe('AuthenticateUserService', () => {
       avatar: 'test-avatar.jpg',
       isAdmin: false,
       bio: 'Test User Bio',
+      confirmed: false,
     });
 
     await expect(

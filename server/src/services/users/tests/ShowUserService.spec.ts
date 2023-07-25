@@ -17,6 +17,7 @@ describe('UpdateProfile', () => {
       email: 'test@example.com',
       password: '123456',
       isAdmin: false,
+      confirmed: false,
     });
 
     const user2 = await fakeUsersRepository.create({
@@ -25,6 +26,7 @@ describe('UpdateProfile', () => {
       email: 'test2@example.com',
       password: '123456',
       isAdmin: false,
+      confirmed: false,
     });
 
     const usersList = [user1, user2];

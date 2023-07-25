@@ -1,0 +1,27 @@
+@import url(./assets/fonts/fonts-Poppins.css);
+@import url(./assets/fonts/fonts-Tahu.css);
+
+:root {
+  --color1: #AF70FD;
+  --color2: #9C5FEA;
+  --color3: #894DD7;
+  --color4: #753CC3;
+  --color5: #622AB0;
+}
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+#root{
+  height: 100vh;
+  width: 100vw;
+}

@@ -1,1 +1,2 @@
 import './DiskStorageProvider';
+import './EmailProvider';

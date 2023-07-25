@@ -6,4 +6,5 @@ export interface ICreateUserDTO {
   avatar?: string;
   bio?: string;
   isAdmin: boolean;
+  confirmed: boolean;
 }

@@ -17,6 +17,9 @@ export class Photo {
   @Column()
   path: string;
 
+  @Column()
+  size: number;
+
   @Column({ name: 'user_id' })
   userId: string;
 

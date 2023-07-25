@@ -11,6 +11,10 @@ export class FakePhotosRepository implements IPhotosRepository {
     return this.photos;
   }
 
+  public async findAllByUserId(userId: string): Promise<Photo[]> {
+    return this.photos.filter(photo => photo.userId === userId);
+  }
+
   public async findById(id: string): Promise<Photo | null> {
     const findPhoto = this.photos.find(photo => photo.id === id);
 
@@ -19,6 +23,10 @@ export class FakePhotosRepository implements IPhotosRepository {
 
   public async findByUserId(userId: string): Promise<Photo[] | null> {
     const findPhotos = this.photos.filter(photo => photo.userId === userId);
+
+    if (findPhotos.length === 0) {
+      return null;
+    }
 
     return findPhotos || null;
   }
@@ -47,5 +55,9 @@ export class FakePhotosRepository implements IPhotosRepository {
     this.photos[findIndex] = photo;
 
     return photo;
+  }
+
+  public async delete(photoId: string): Promise<void> {
+    this.photos = this.photos.filter(photo => photo.id !== photoId);
   }
 }

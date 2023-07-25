@@ -1,12 +1,22 @@
 import { instanceToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
+
 import { CreatePhotoService } from 'services/photos/CreatePhotoService';
+import { DeletePhotoService } from 'services/photos/DeletePhotoService';
+import { ShowPhotoService } from 'services/photos/ShowPhotoService';
+
 import { container } from 'tsyringe';
 import { z } from 'zod';
 
 const createPhotoSchema = z.object({
   userId: z.string().uuid(),
   path: z.string(),
+});
+
+const deletePhotoSchema = z.object({
+  userId: z.string().uuid(),
+  path: z.string(),
+  photoId: z.string().uuid(),
 });
 
 export class PhotosController {
@@ -19,28 +29,40 @@ export class PhotosController {
     const byteImageSize = request.file?.size;
     const createPhotoService = container.resolve(CreatePhotoService);
 
-    const user = await createPhotoService.execute({
+    const photo = await createPhotoService.execute({
       userId,
       path,
       byteImageSize,
     });
 
-    return response.json(instanceToInstance(user));
+    return response.json(instanceToInstance(photo));
   }
 
-  // public async update(request: Request, response: Response): Promise<Response> {
-  //   const { userId, avatarFilename } = updateUserAvatarSchema.parse({
-  //     userId: request.user.id,
-  //     avatarFilename: request.file?.filename,
-  //   });
+  public async show(request: Request, response: Response): Promise<Response> {
+    const userId = request.user.id;
 
-  //   const updateUserAvatar = container.resolve(UpdateUserAvatarService);
+    const showPhotoService = container.resolve(ShowPhotoService);
 
-  //   const user = await updateUserAvatar.execute({
-  //     userId,
-  //     avatarFilename,
-  //   });
+    const photos = await showPhotoService.execute(userId);
 
-  //   return response.json(instanceToInstance(user));
-  // }
+    return response.json(photos);
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const { userId, photoId, path } = deletePhotoSchema.parse({
+      userId: request.user.id,
+      path: request.query.path,
+      photoId: request.query.photoId,
+    });
+
+    const deletePhotoService = container.resolve(DeletePhotoService);
+
+    const photo = await deletePhotoService.execute({
+      userId,
+      photoId,
+      path,
+    });
+
+    return response.json(instanceToInstance(photo));
+  }
 }
