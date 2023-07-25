@@ -14,14 +14,12 @@ const transporter = nodemailer.createTransport({
 
 export class EmailProvider implements IEmailProvider {
   async sendEmail({ to, subject, text, html }: EmailContent): Promise<void> {
-    const info = await transporter.sendMail({
+    await transporter.sendMail({
       from: `"LitteGram" <${process.env.EMAIL_HOST_USER}>`,
       to,
       subject,
       text,
       html,
     });
-
-    console.log('Message sent: %s', info.messageId);
   }
 }
