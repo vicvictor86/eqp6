@@ -51,8 +51,8 @@ export class PhotosController {
   public async delete(request: Request, response: Response): Promise<Response> {
     const { userId, photoId, path } = deletePhotoSchema.parse({
       userId: request.user.id,
-      path: request.body.path,
-      photoId: request.body.photoId,
+      path: request.query.path,
+      photoId: request.query.photoId,
     });
 
     const deletePhotoService = container.resolve(DeletePhotoService);
