@@ -15,7 +15,6 @@ function Menu() {
   const [perfil,setPerfil] = useState('')
   const [logoutModal, setLogoutModal] = useState(false)
   useEffect(()=>{
-   var user = localStorage.getItem('user')
     setPerfil(localStorage.getItem('username'))
     setImage( config.baseURL + '/files/avatar/' + localStorage.getItem('avatar'))
     

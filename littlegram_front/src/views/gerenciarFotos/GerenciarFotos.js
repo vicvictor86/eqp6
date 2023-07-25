@@ -64,13 +64,6 @@ function GerenciarFotos() {
   const [openErroFileType, setOpenErroFileType] = useState(false);
 
   // funcoes para gerenciar abetura de modais
-  const handleCloseErroFileType = () => {
-    setOpenErroFileType(false);
-  }
-
-  const handleOpenErroFileType = () => {
-    setOpenErroFileType(true);
-  }
 
   const handleModal = () => {
     setOpenUpload(openUpload ? false : true)
@@ -84,9 +77,6 @@ function GerenciarFotos() {
     setOpenDelete(openDelete ? false : true)
   }
 
-  const handleErroSize = () => {
-    setErroSize(openErroPhotoSize ? false : true)
-  }
   // funcoes de requisicao
   const uploadPhoto = () => {
     if (!image.fileReal) {
@@ -148,19 +138,11 @@ function GerenciarFotos() {
     })
   }
   useEffect(() => {
+    console.log('render')
     uploadPhotos()
   }, [])
 
-  const POPUP_STYLE = {
-
-    content: {
-
-      background: 'var(--color3)',
-
-    }
-  }
   return (
-
     <div className="Container">
       <Menu />
       <div className='PostFotos'>
