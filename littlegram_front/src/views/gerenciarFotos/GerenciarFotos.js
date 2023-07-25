@@ -140,7 +140,6 @@ function GerenciarFotos() {
 
         response.data[key].size = bytesToMegabytes(response.data[key].size)
       }
-      console.log(response.data)
       setPhotos(response.data)
     }).catch((response) => {
       if (response['response']['data']['message'] === ["No photos found for this user."]) {
@@ -167,7 +166,7 @@ function GerenciarFotos() {
       <div className='PostFotos'>
         {photos !== undefined && photos.map((photo, index) => (
           <div key={index} className='DashPhoto'>
-            <img src={config.baseURL + "/files/photos/" + photo.path} alt="Cat" className="Image" />
+            <img src={config.baseURL + "/files/photos/" + photo.path} alt="" className="Image" />
             <div className='CellPhoto'>
               <div className='DataPhoto'>
                 <h5 style={{ color: 'white', fontSize: '17px', }}>data: {data(photo.createdAt)}</h5>
@@ -252,9 +251,9 @@ function GerenciarFotos() {
 
       <Modal show={openUpload} onHide={handleModal} >
         <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
+        <h1 style={{color: 'white', width: '100%', fontWeight:500, textAlign:'left'}}>Upload de Imagem</h1>
           {
-            image.file === null ? <img src={Search} /> : <img alt='' src={image.file} style={{ width: '100%', height: 'auto' }} accept="image/*" />
-
+            image.file === null ? <><img src={Search} /> <h1 style={{color: 'white', fontSize: '18px', width: '100%', marginBottom: '5px', fontWeight:400, textAlign:'center'}}>Procure por uma imagem</h1></> : <img alt='' src={image.file} style={{ width: '100%', height: 'auto' }} accept="image/*" />
           }
           <div className='Upload'>
             <button className='ButtonModal' onClick={uploadPhoto}>Enviar</button>
@@ -289,6 +288,8 @@ function GerenciarFotos() {
       </Modal>
       <Modal show={openDelete} onHide={handleDelete} >
         <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
+        <h1 style={{color: 'white', width: '100%', fontWeight:500, textAlign:'left'}}>Deletar Imagem</h1>
+
           <img src={Trash} style={{width:'85%', margin:'0px auto', textAlign:'center'}}/>
           <h1 style={{
             color: 'white', fontSize: '25px', width: '100%', marginBottom: '5px',

@@ -62,11 +62,9 @@ function Register() {
         password: senha
       })
         .then(function (response) {
-          console.log(response.data)
           if (response.status === 200) {
 
             const form = new FormData();
-            console.log(image.file)
             form.append('avatar', image.fileReal);
             axios.patch(config.baseURL + '/users/avatar',form,  {
               headers: {  'Content-Type': 'multipart/form-data',  Authorization: 'Bearer '+response.data.token }
@@ -75,7 +73,6 @@ function Register() {
               navigate('/')
             }
           }).catch((error) => {
-            console.log(error)
           })
          
             setCadastradoError(false)
@@ -85,7 +82,6 @@ function Register() {
           }
         })
         .catch(function (error) {
-          console.log(error);
           if (error.response.data['message'] === "Username or email already exists") {
 
             setCadastradoError(true)

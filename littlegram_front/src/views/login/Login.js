@@ -64,7 +64,6 @@ function Login() {
         password: senha
       })
       .then(function (response) {
-        console.log(response.data)
         if(response.status === 200){
           if(response.data['user']['confirmed'] === false){
             setEsperandoConfirmError(true)
@@ -80,7 +79,6 @@ function Login() {
         }
       })
       .catch(function (error) {
-        console.log(error);
         if(error.response.data['message'] == "Email or password incorrect"){
           setUserInvalid(true)
         }

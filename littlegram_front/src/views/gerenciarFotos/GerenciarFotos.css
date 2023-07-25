@@ -105,12 +105,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px;
+    width: 100%;
+    max-width: 100px;
     height: 50px;
     color: white;
-    font-size: 23px;
+    font-size: 1.5rem;
     font-style: normal;
-    font-weight: 440;
+    font-weight: 500;
     line-height: normal;
     border-radius: 40px;
     border: none;
@@ -125,16 +126,16 @@
     width: 230px;
     height: 50px;
     color: white;
-    font-size: 23px;
+    font-size: 1.4rem;
     font-style: normal;
-    font-weight: 440;
+    font-weight: 500;
     line-height: normal;
     border-radius: 40px;
     border: none;
     padding: 15px;
   }
 
-.Image{
+.PostFotos .Image{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -152,16 +153,27 @@
   }
   .modal-content {
     border-radius: 20px !important;
-    margin-top: 150px;
+    margin-top: 70px;
 
    }
    .modal-body {
+    padding: 20px;
     border-radius: 19px !important;
+    text-align: center;
+
    }
    
-   .modal-body {
-        text-align: center;
-   }
    .modal-body h1 {
     text-align: left;
    }
+
+   @media (max-width:556px) {
+    .ButtonModal, .ButtonInputImage{
+        font-size: 1rem;
+    }
+    .modal-content {
+        border-radius: 20px !important;
+        margin-top: 50px;
+
+       }
+}

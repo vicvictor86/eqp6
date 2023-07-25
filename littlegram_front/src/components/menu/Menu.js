@@ -7,13 +7,13 @@ import { useEffect, useState } from 'react';
 import config from '../../config'
 import { isAuth } from '../../views/validators';
 import ImageLogout from '../../assets/imgs/logoutImage.svg'
-
+import Modal from 'react-bootstrap/Modal'
 
 function Menu() {
   const navigate = useNavigate()
   const [imagem,setImage] = useState('')
   const [perfil,setPerfil] = useState('')
-
+  const [logoutModal, setLogoutModal] = useState(false)
   useEffect(()=>{
    var user = localStorage.getItem('user')
     setPerfil(localStorage.getItem('username'))
@@ -62,10 +62,24 @@ function Menu() {
         <img style={{width:30, height:25}} src={Image} alt='Gerenciar Imagens' />  
 
         </div>
-        <div onClick={() => logout()} className='ItemMenuMobile'>
+        <div onClick={() => setLogoutModal(true)} className='ItemMenuMobile'>
         <img style={{width:30, height:25}} src={Logout} alt='logout' />  
         </div>
       </div>
+      <Modal show={logoutModal} onHide={() => setLogoutModal(false)} >
+        <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
+        <h1 style={{color: 'white', width: '100%', fontWeight:500, textAlign:'left'}}>Logout</h1>
+
+          <img src={ImageLogout} style={{width:'85%', margin:'0px auto', textAlign:'center'}}/>
+          <h1 style={{
+            color: 'white', fontSize: '25px', width: '100%', marginBottom: '5px',
+          }}>Tem certeza que deseja sair?</h1>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '20px' }}>
+            <button className='ButtonModal' onClick={() => logout()}>Sim</button>
+            <button className='ButtonModal' onClick={() => setLogoutModal(false)}>Não</button>
+          </div>
+        </Modal.Body>
+      </Modal>
       </>
   );
 }
