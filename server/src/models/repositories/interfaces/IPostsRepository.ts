@@ -3,7 +3,7 @@ import { Post } from '@models/entities/Post';
 
 export interface IPostsRepository {
   findById(id: string): Promise<Post | null>;
-  findByPhotoPath(photoPath: string): Promise<Post | null>;
+  findByPhotoId(photoId: string): Promise<Post | null>;
   findByUserId(userId: string): Promise<Post[] | null>;
 
   all(): Promise<Post[]>;

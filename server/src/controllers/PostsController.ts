@@ -1,17 +1,17 @@
 import { instanceToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
 
-import { CreatePostService } from 'services/posts/CreatePostService';
-import { DeletePostService } from 'services/posts/DeletePostService';
-import { ShowPostsService } from 'services/posts/ShowPostsService';
-
 import { container } from 'tsyringe';
 import { z } from 'zod';
+
+import { CreatePostService } from '../services/posts/CreatePostService';
+import { DeletePostService } from '../services/posts/DeletePostService';
+import { ShowPostsService } from '../services/posts/ShowPostsService';
 
 const createPostSchema = z.object({
   userId: z.string().uuid(),
   photoId: z.string(),
-  description: z.string(),
+  description: z.string().max(1000),
 });
 
 const deletePostSchema = z.object({

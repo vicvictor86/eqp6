@@ -1,12 +1,12 @@
 import { instanceToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
 
-import { CreatePhotoService } from 'services/photos/CreatePhotoService';
-import { DeletePhotoService } from 'services/photos/DeletePhotoService';
-import { ShowPhotoService } from 'services/photos/ShowPhotoService';
-
 import { container } from 'tsyringe';
 import { z } from 'zod';
+
+import { CreatePhotoService } from '../services/photos/CreatePhotoService';
+import { DeletePhotoService } from '../services/photos/DeletePhotoService';
+import { ShowPhotoService } from '../services/photos/ShowPhotoService';
 
 const createPhotoSchema = z.object({
   userId: z.string().uuid(),

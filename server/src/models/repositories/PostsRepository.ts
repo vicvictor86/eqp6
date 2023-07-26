@@ -16,10 +16,10 @@ export const PostRepository: IPostsRepository = postRepository.extend({
     return post;
   },
 
-  async findByPhotoPath(photoPath: string): Promise<Post | null> {
+  async findByPhotoId(photoId: string): Promise<Post | null> {
     const post = await postRepository.findOne({
       where: {
-        photoPath,
+        photoId,
       },
     });
     return post;

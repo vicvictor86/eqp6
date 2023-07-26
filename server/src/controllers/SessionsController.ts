@@ -3,7 +3,7 @@ import { container } from 'tsyringe';
 import { instanceToInstance } from 'class-transformer';
 import { z } from 'zod';
 
-import { ConfirmEmailService } from 'services/users/ConfirmEmailService';
+import { ConfirmEmailService } from '../services/users/ConfirmEmailService';
 import { AuthenticateUserService } from '../services/users/AuthenticateUserService';
 
 const authenticateSchema = z.object({

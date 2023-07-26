@@ -6,37 +6,32 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
-  OneToMany,
 } from 'typeorm';
 
-import { Photo } from './Photo';
+import { Post } from './Post';
 import { User } from './User';
-import { Comment } from './Comment';
 
-@Entity('posts')
-export class Post {
+@Entity('comments')
+export class Comment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  description: string;
+  text: string;
 
   @Column({ name: 'user_id' })
   userId: string;
 
-  @ManyToOne(() => User, user => user.posts, { eager: true })
+  @ManyToOne(() => User, user => user.photos)
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @Column({ name: 'photo_id' })
-  photoId: string;
+  @Column({ name: 'post_id' })
+  postId: string;
 
-  @ManyToOne(() => Photo, photo => photo.posts, { eager: true })
-  @JoinColumn({ name: 'photo_id' })
-  photo: Photo;
-
-  @OneToMany(() => Comment, comment => comment.post)
-  comments: Comment[];
+  @ManyToOne(() => Post, post => post.comments)
+  @JoinColumn({ name: 'post_id' })
+  post: Post;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
