@@ -118,7 +118,7 @@ export const emailConfirmationHTML = function makeEmail(
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
           <tr>
             <td align="center" valign="top" style="padding: 36px 24px;">
-          
+
             </td>
           </tr>
         </table>

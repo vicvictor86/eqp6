@@ -8,6 +8,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Photo } from './Photo';
+import { Post } from './Post';
 
 @Entity('users')
 export class User {
@@ -41,6 +42,9 @@ export class User {
 
   @OneToMany(() => Photo, photo => photo.user)
   photos: Photo[];
+
+  @OneToMany(() => Post, post => post.user)
+  posts: Post[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

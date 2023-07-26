@@ -1,0 +1,59 @@
+import { connectionSource } from '@models/database/dataSource';
+import { ICreatePostDTO } from '@models/dtos/ICreatePostDTO';
+
+import { Post } from '@models/entities/Post';
+import { IPostsRepository } from './interfaces/IPostsRepository';
+
+const postRepository = connectionSource.getRepository(Post);
+
+export const PostRepository: IPostsRepository = postRepository.extend({
+  async findById(id: string): Promise<Post | null> {
+    const post = await postRepository.findOne({
+      where: {
+        id,
+      },
+    });
+    return post;
+  },
+
+  async findByPhotoPath(photoPath: string): Promise<Post | null> {
+    const post = await postRepository.findOne({
+      where: {
+        photoPath,
+      },
+    });
+    return post;
+  },
+
+  async findByUserId(userId: string): Promise<Post[] | null> {
+    const post = await postRepository.find({
+      where: {
+        userId,
+      },
+    });
+    return post;
+  },
+
+  async create(postData: ICreatePostDTO): Promise<Post> {
+    const post = postRepository.create(postData);
+
+    await postRepository.save(post);
+
+    return post;
+  },
+
+  async save(post: Post): Promise<Post> {
+    return postRepository.save(post);
+  },
+
+  async all(): Promise<Post[]> {
+    return postRepository.find();
+  },
+
+  async delete(photoId: string): Promise<void> {
+    postRepository.delete(photoId);
+  },
+  async findAllByUserId(userId: string): Promise<Post[]> {
+    return postRepository.find({ where: { userId } });
+  },
+});
