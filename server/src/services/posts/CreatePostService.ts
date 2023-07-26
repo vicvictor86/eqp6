@@ -51,6 +51,10 @@ export class CreatePostService {
       throw new AppError('Photo is not from this user');
     }
 
+    if (description.length > 1000) {
+      throw new AppError('Description must be less than 1000 characters');
+    }
+
     const newPost = await this.postsRepository.create({
       userId,
       photoId,
