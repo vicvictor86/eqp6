@@ -32,4 +32,11 @@ commentsRouter.delete(
   commentsController.delete,
 );
 
+commentsRouter.delete(
+  '/post',
+  ensureAuthenticated,
+  ensureEmailConfirmation.execute,
+  commentsController.deleteByPost,
+);
+
 export { commentsRouter };

@@ -53,7 +53,4 @@ export const PostRepository: IPostsRepository = postRepository.extend({
   async delete(photoId: string): Promise<void> {
     postRepository.delete(photoId);
   },
-  async findAllByUserId(userId: string): Promise<Post[]> {
-    return postRepository.find({ where: { userId } });
-  },
 });

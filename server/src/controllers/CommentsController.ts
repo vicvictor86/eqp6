@@ -1,5 +1,6 @@
 import { instanceToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
+import { DeleteCommentsByPostService } from 'services/comments/DeleteCommentsByPostService';
 
 import { container } from 'tsyringe';
 import { z } from 'zod';
@@ -17,6 +18,11 @@ const createCommentSchema = z.object({
 const deletePhotoSchema = z.object({
   userId: z.string().uuid(),
   commentId: z.string().uuid(),
+  postId: z.string().uuid(),
+});
+
+const deletePhotoByPostSchema = z.object({
+  userId: z.string().uuid(),
   postId: z.string().uuid(),
 });
 
@@ -58,12 +64,33 @@ export class CommentsController {
 
     const deleteCommentService = container.resolve(DeleteCommentService);
 
-    const photo = await deleteCommentService.execute({
+    const comment = await deleteCommentService.execute({
       userId,
       commentId,
       postId,
     });
 
-    return response.json(instanceToInstance(photo));
+    return response.json(instanceToInstance(comment));
+  }
+
+  public async deleteByPost(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {
+    const { userId, postId } = deletePhotoByPostSchema.parse({
+      userId: request.user.id,
+      postId: request.query.postId,
+    });
+
+    const deleteCommentsByPostService = container.resolve(
+      DeleteCommentsByPostService,
+    );
+
+    const comments = await deleteCommentsByPostService.execute({
+      userId,
+      postId,
+    });
+
+    return response.json(instanceToInstance(comments));
   }
 }

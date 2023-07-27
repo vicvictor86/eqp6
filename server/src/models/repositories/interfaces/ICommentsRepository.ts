@@ -10,4 +10,5 @@ export interface ICommentsRepository {
   create(data: ICreateCommentDTO): Promise<Comment>;
   save(comment: Comment): Promise<Comment>;
   delete(commentId: string): Promise<void>;
+  deleteByPost(postId: string): Promise<void>;
 }

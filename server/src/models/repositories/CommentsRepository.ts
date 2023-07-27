@@ -51,7 +51,11 @@ export const CommentsRepository: ICommentsRepository =
       return commentsRepository.find();
     },
 
-    async delete(photoId: string): Promise<void> {
-      commentsRepository.delete(photoId);
+    async delete(commentsId: string): Promise<void> {
+      commentsRepository.delete(commentsId);
+    },
+
+    async deleteByPost(postId: string): Promise<void> {
+      commentsRepository.delete({ postId });
     },
   });

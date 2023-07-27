@@ -11,10 +11,6 @@ export class FakePhotosRepository implements IPhotosRepository {
     return this.photos;
   }
 
-  public async findAllByUserId(userId: string): Promise<Photo[]> {
-    return this.photos.filter(photo => photo.userId === userId);
-  }
-
   public async findById(id: string): Promise<Photo | null> {
     const findPhoto = this.photos.find(photo => photo.id === id);
 
