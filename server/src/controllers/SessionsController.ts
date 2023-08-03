@@ -10,7 +10,7 @@ const authenticateSchema = z.object({
   email: z.string().email(),
   password: z.string(),
 });
-
+// alteracoes feitas
 const emailConfirmationSchema = z.object({
   email: z.string().email(),
   token: z.string(),
