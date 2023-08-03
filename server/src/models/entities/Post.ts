@@ -12,6 +12,7 @@ import {
 import { Photo } from './Photo';
 import { User } from './User';
 import { Comment } from './Comment';
+import { PostEvaluation } from './PostEvaluation';
 
 @Entity('posts')
 export class Post {
@@ -37,6 +38,9 @@ export class Post {
 
   @OneToMany(() => Comment, comment => comment.post)
   comments: Comment[];
+
+  @OneToMany(() => PostEvaluation, postEvaluation => postEvaluation.post)
+  evaluations: PostEvaluation[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

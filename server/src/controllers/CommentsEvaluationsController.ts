@@ -8,7 +8,7 @@ import { CreateCommentEvaluationService } from '../services/commentsEvaluations/
 import { ShowCommentsEvaluationsService } from '../services/commentsEvaluations/ShowCommentsEvaluationsService';
 import { ShowCommentsEvaluationsByCommentService } from '../services/commentsEvaluations/ShowCommentsEvaluationsByCommentService';
 
-const createCommentSchema = z.object({
+const createCommentEvaluationSchema = z.object({
   isLike: z.boolean(),
   userId: z.string().uuid(),
   commentId: z.string().uuid(),
@@ -20,7 +20,7 @@ const showCommentsEvaluationsByCommentCommentSchema = z.object({
 
 export class CommentsEvaluationsController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const { isLike, userId, commentId } = createCommentSchema.parse({
+    const { isLike, userId, commentId } = createCommentEvaluationSchema.parse({
       userId: request.user.id,
       isLike: request.body.isLike,
       commentId: request.body.commentId,

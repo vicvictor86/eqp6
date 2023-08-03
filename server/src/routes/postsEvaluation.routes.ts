@@ -3,33 +3,33 @@ import { container } from 'tsyringe';
 
 import { ensureAuthenticated } from '@shared/middlewares/ensureAuthenticate';
 import { EnsureEmailConfirmationMiddleware } from '@shared/middlewares/EnsureEmailConfirmationMiddleware';
-import { CommentsEvaluationsController } from '@controllers/CommentsEvaluationsController';
+import { PostsEvaluationsController } from '@controllers/PostsEvaluationsController';
 
-const commentsEvaluationsRouter = Router();
-const commentsEvaluationsController = new CommentsEvaluationsController();
+const postsEvaluationsRouter = Router();
+const postsEvaluationsController = new PostsEvaluationsController();
 const ensureEmailConfirmation = container.resolve(
   EnsureEmailConfirmationMiddleware,
 );
 
-commentsEvaluationsRouter.post(
+postsEvaluationsRouter.post(
   '/',
   ensureAuthenticated,
   ensureEmailConfirmation.execute,
-  commentsEvaluationsController.create,
+  postsEvaluationsController.create,
 );
 
-commentsEvaluationsRouter.get(
+postsEvaluationsRouter.get(
   '/',
   ensureAuthenticated,
   ensureEmailConfirmation.execute,
-  commentsEvaluationsController.show,
+  postsEvaluationsController.show,
 );
 
-commentsEvaluationsRouter.get(
-  '/comment',
+postsEvaluationsRouter.get(
+  '/post',
   ensureAuthenticated,
   ensureEmailConfirmation.execute,
-  commentsEvaluationsController.showByComment,
+  postsEvaluationsController.showByPost,
 );
 
-export { commentsEvaluationsRouter };
+export { postsEvaluationsRouter };
