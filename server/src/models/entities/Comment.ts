@@ -6,7 +6,9 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
+import { CommentEvaluation } from './CommentEvaluation';
 
 import { Post } from './Post';
 import { User } from './User';
@@ -22,7 +24,7 @@ export class Comment {
   @Column({ name: 'user_id' })
   userId: string;
 
-  @ManyToOne(() => User, user => user.photos)
+  @ManyToOne(() => User, user => user.comments)
   @JoinColumn({ name: 'user_id' })
   user: User;
 
@@ -32,6 +34,12 @@ export class Comment {
   @ManyToOne(() => Post, post => post.comments)
   @JoinColumn({ name: 'post_id' })
   post: Post;
+
+  @OneToMany(
+    () => CommentEvaluation,
+    commentEvaluation => commentEvaluation.comment,
+  )
+  evaluations: CommentEvaluation[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

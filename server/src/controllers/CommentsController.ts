@@ -1,6 +1,5 @@
 import { instanceToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
-import { DeleteCommentsByPostService } from 'services/comments/DeleteCommentsByPostService';
 
 import { container } from 'tsyringe';
 import { z } from 'zod';
@@ -8,6 +7,7 @@ import { z } from 'zod';
 import { CreateCommentService } from '../services/comments/CreateCommentService';
 import { DeleteCommentService } from '../services/comments/DeleteCommentService';
 import { ShowCommentsService } from '../services/comments/ShowCommentsService';
+import { DeleteCommentsByPostService } from '../services/comments/DeleteCommentsByPostService';
 
 const createCommentSchema = z.object({
   text: z.string().max(1000),

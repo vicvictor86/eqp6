@@ -7,6 +7,8 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
+import { Comment } from './Comment';
+import { CommentEvaluation } from './CommentEvaluation';
 import { Photo } from './Photo';
 import { Post } from './Post';
 
@@ -45,6 +47,15 @@ export class User {
 
   @OneToMany(() => Post, post => post.user)
   posts: Post[];
+
+  @OneToMany(() => Comment, comment => comment.user)
+  comments: Comment[];
+
+  @OneToMany(
+    () => CommentEvaluation,
+    commentEvaluation => commentEvaluation.user,
+  )
+  commentsEvaluations: CommentEvaluation[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

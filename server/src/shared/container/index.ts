@@ -15,6 +15,9 @@ import { IPostsRepository } from '@models/repositories/interfaces/IPostsReposito
 import { CommentsRepository } from '@models/repositories/CommentsRepository';
 import { ICommentsRepository } from '@models/repositories/interfaces/ICommentsRepository';
 
+import { ICommentsEvaluationsRepository } from '@models/repositories/interfaces/ICommentsEvaluationRepository';
+import { CommentsEvaluationsRepository } from '@models/repositories/CommentsEvaluationRepository';
+
 container.registerInstance<IUsersRepository>(
   'UsersRepository',
   UsersRepository,
@@ -30,4 +33,9 @@ container.registerInstance<IPostsRepository>('PostsRepository', PostRepository);
 container.registerInstance<ICommentsRepository>(
   'CommentsRepository',
   CommentsRepository,
+);
+
+container.registerInstance<ICommentsEvaluationsRepository>(
+  'CommentsEvaluationsRepository',
+  CommentsEvaluationsRepository,
 );
