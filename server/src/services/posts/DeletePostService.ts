@@ -32,13 +32,13 @@ export class DeletePostService {
     const post = await this.postsRepository.findById(postId);
 
     if (!post) {
-      throw new AppError('Photo not found');
+      throw new AppError('Post not found');
     }
 
-    const photoIsFromUser = post.userId === userId;
+    const postIsFromUser = post.userId === userId;
 
-    if (!photoIsFromUser) {
-      throw new AppError('Photo is not from this user', 401);
+    if (!postIsFromUser) {
+      throw new AppError('Post is not from this user', 401);
     }
 
     await this.postsRepository.delete(postId);
