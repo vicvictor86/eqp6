@@ -1,22 +1,82 @@
-import { IPhotosRepository } from '@models/repositories/interfaces/IPhotosRepository';
-import { Photo } from '@models/entities/Photo';
 import { inject, injectable } from 'tsyringe';
+
+import { IUsersRepository } from '@models/repositories/interfaces/IUserRepository';
+import { IPhotosRepository } from '@models/repositories/interfaces/IPhotosRepository';
+
+import { Photo } from '@models/entities/Photo';
+
 import { AppError } from '@shared/errors/AppError';
+
+interface Request {
+  userId: string;
+
+  limit: number;
+
+  offset: number;
+}
+
+interface Response {
+  photos: Photo[];
+
+  totalPhotos: number;
+
+  totalPages: number;
+
+  offset: number;
+}
 
 @injectable()
 export class ShowPhotoService {
   constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+
     @inject('PhotosRepository')
     private photosRepository: IPhotosRepository,
   ) {}
 
-  public async execute(userId: string): Promise<Photo[]> {
-    const photos = await this.photosRepository.findByUserId(userId);
+  public async execute({ userId, offset, limit }: Request): Promise<Response> {
+    const defaultResponse = {
+      photos: [],
+      totalPhotos: 0,
+      totalPages: 1,
+      offset: 0,
+    } as Response;
 
-    if (!photos) {
-      throw new AppError('No photos found for this user.');
+    const user = await this.usersRepository.findById(userId);
+
+    if (!user) {
+      throw new AppError('User not found');
     }
 
-    return photos;
+    const allPhotos = await this.photosRepository.findByUserId(userId);
+
+    if (!allPhotos) {
+      return defaultResponse;
+    }
+
+    const totalPhotos = allPhotos.length;
+    const totalPages = Math.ceil(totalPhotos / limit);
+
+    const realOffset = offset * limit;
+
+    const photos = await this.photosRepository.findByUserIdPaginated({
+      userId,
+      limit,
+      offset: realOffset,
+    });
+
+    if (!photos) {
+      return defaultResponse;
+    }
+
+    const response = {
+      photos,
+      totalPhotos,
+      totalPages,
+      offset,
+    } as Response;
+
+    return response;
   }
 }

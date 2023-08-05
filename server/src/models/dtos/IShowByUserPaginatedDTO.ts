@@ -1,4 +1,4 @@
-export interface IShowPostPaginatedDTO {
+export interface IShowByUserPaginatedDTO {
   userId: string;
 
   limit: number;

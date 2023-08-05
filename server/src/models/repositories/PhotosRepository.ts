@@ -1,7 +1,8 @@
 import { connectionSource } from '@models/database/dataSource';
-import { ICreatePhotoDTO } from '@models/dtos/ICreatePhotoDTO';
 
 import { Photo } from '@models/entities/Photo';
+
+import { ICreatePhotoDTO } from '@models/dtos/ICreatePhotoDTO';
 import { IPhotosRepository } from './interfaces/IPhotosRepository';
 
 const photosRepository = connectionSource.getRepository(Photo);
@@ -32,6 +33,25 @@ export const PhotosRepository: IPhotosRepository = photosRepository.extend({
       },
     });
     return photo;
+  },
+
+  async findByUserIdPaginated({
+    userId,
+    limit,
+    offset,
+  }: {
+    userId: string;
+    limit: number;
+    offset: number;
+  }): Promise<Photo[]> {
+    const photos = await photosRepository.find({
+      where: {
+        userId,
+      },
+      take: limit,
+      skip: offset,
+    });
+    return photos;
   },
 
   async create(photoData: ICreatePhotoDTO): Promise<Photo> {

@@ -1,11 +1,10 @@
 import { instanceToInstance } from 'class-transformer';
 import { Request, Response } from 'express';
-import { CreateMultiplePhotosService } from 'services/photos/CreateMultiplePhotosService';
-
 import { container } from 'tsyringe';
 import { z } from 'zod';
 
 import { CreatePhotoService } from '../services/photos/CreatePhotoService';
+import { CreateMultiplePhotosService } from '../services/photos/CreateMultiplePhotosService';
 import { DeletePhotoService } from '../services/photos/DeletePhotoService';
 import { ShowPhotoService } from '../services/photos/ShowPhotoService';
 
@@ -28,6 +27,12 @@ const deletePhotoSchema = z.object({
   userId: z.string().uuid(),
   path: z.string(),
   photoId: z.string().uuid(),
+});
+
+const showPhotosSchema = z.object({
+  userId: z.string().uuid(),
+  limit: z.number().int().positive().default(10),
+  offset: z.number().int().nonnegative().default(0),
 });
 
 export class PhotosController {
@@ -74,11 +79,15 @@ export class PhotosController {
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
-    const userId = request.user.id;
+    const { userId, limit, offset } = showPhotosSchema.parse({
+      userId: request.user.id,
+      limit: Number(request.query.limit),
+      offset: Number(request.query.offset),
+    });
 
     const showPhotoService = container.resolve(ShowPhotoService);
 
-    const photos = await showPhotoService.execute(userId);
+    const photos = await showPhotoService.execute({ userId, limit, offset });
 
     return response.json(photos);
   }
