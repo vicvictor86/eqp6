@@ -19,6 +19,12 @@ const deletePostSchema = z.object({
   postId: z.string(),
 });
 
+const showPostSchema = z.object({
+  userId: z.string().uuid(),
+  limit: z.number().int().positive().default(10),
+  offset: z.number().int().nonnegative().default(0),
+});
+
 export class PostsController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { userId, photoId, description } = createPostSchema.parse({
@@ -39,11 +45,15 @@ export class PostsController {
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
-    const userId = request.user.id;
+    const { userId, limit, offset } = showPostSchema.parse({
+      userId: request.user.id,
+      limit: Number(request.query.limit),
+      offset: Number(request.query.offset),
+    });
 
     const showPostsService = container.resolve(ShowPostsService);
 
-    const posts = await showPostsService.execute(userId);
+    const posts = await showPostsService.execute({ userId, limit, offset });
 
     return response.json(posts);
   }

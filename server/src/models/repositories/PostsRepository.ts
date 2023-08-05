@@ -34,6 +34,24 @@ export const PostRepository: IPostsRepository = postRepository.extend({
     return post;
   },
 
+  async findByUserIdPaginated({
+    userId,
+    limit,
+    offset,
+  }): Promise<Post[] | null> {
+    const post = await postRepository.find({
+      where: {
+        userId,
+      },
+      take: limit,
+      skip: offset,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    return post;
+  },
+
   async create(postData: ICreatePostDTO): Promise<Post> {
     const post = postRepository.create(postData);
 
