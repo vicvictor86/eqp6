@@ -31,6 +31,14 @@ photoRouter.post(
   photoController.create,
 );
 
+photoRouter.post(
+  '/multiples',
+  ensureAuthenticated,
+  ensureEmailConfirmation.execute,
+  uploadMiddleware.array('photos', 10),
+  photoController.createMultiple,
+);
+
 photoRouter.get(
   '/user/',
   ensureAuthenticated,
