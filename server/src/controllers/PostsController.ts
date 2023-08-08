@@ -12,6 +12,7 @@ const createPostSchema = z.object({
   userId: z.string().uuid(),
   photoId: z.string(),
   description: z.string().max(1000),
+  filterUsed: z.string(),
 });
 
 const deletePostSchema = z.object({
@@ -27,11 +28,14 @@ const showPostSchema = z.object({
 
 export class PostsController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const { userId, photoId, description } = createPostSchema.parse({
-      userId: request.user.id,
-      photoId: request.body.photoId,
-      description: request.body.description,
-    });
+    const { userId, photoId, description, filterUsed } = createPostSchema.parse(
+      {
+        userId: request.user.id,
+        photoId: request.body.photoId,
+        description: request.body.description,
+        filterUsed: request.body.filterUsed,
+      },
+    );
 
     const createPostService = container.resolve(CreatePostService);
 
@@ -39,6 +43,7 @@ export class PostsController {
       userId,
       photoId,
       description,
+      filterUsed,
     });
 
     return response.json(instanceToInstance(post));

@@ -67,12 +67,14 @@ describe('CreatePhotoService', () => {
       userId: user.id,
       photoId: photos[0].id,
       description: 'Description Test',
+      filterUsed: 'none',
     });
 
     await createPostService.execute({
       userId: user.id,
       photoId: photos[0].id,
       description: 'Description Test 2',
+      filterUsed: 'none',
     });
 
     const userPosts = await showPostsService.execute({
