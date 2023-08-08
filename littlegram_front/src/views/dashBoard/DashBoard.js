@@ -53,11 +53,10 @@ function DashBoard() {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     }).then((response) => {
+
+      if (offSetPhotos + 1 > response.data.totalPages || response.data.photos === []) return
+
       setOffSetPhotos(prevPage => prevPage + 1);
-      console.log(response)
-
-      if (offSetPhotos + 1 >= response.data.totalPages || response.data.photos === []) return
-
       setIsFetchingPhotos(false);
       setPhotos(photos.concat(response.data.photos));
     }).catch((response) => {
@@ -116,7 +115,7 @@ function DashBoard() {
         <Menu />
         <div className='PostDashBoard'>
           <div style={{ width: '100%', padding: 15, textAlign: 'center' }}><button onClick={() => { setOpenNewPost(true); getPhotos() }} className='ButtonPhoto'>Adicionar Post</button></div>
-          <div className='PostsList' onScroll={handleScrollPosts} >
+          <div className='ListViews' onScroll={handleScrollPosts} >
             {posts.length > 0 && posts.map((post, index) => (
               <div key={index} className='DashPhoto' style={{paddingTop:0}}>
                   <div className='PostHeader'>
