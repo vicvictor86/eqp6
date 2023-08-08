@@ -2,6 +2,7 @@ import { v4 } from 'uuid';
 
 import { ICreatePostDTO } from '@models/dtos/ICreatePostDTO';
 import { Post } from '@models/entities/Post';
+import { IShowByUserPaginatedDTO } from '@models/dtos/IShowByUserPaginatedDTO';
 import { IPostsRepository } from '../interfaces/IPostsRepository';
 
 class FakePostsRepository implements IPostsRepository {
@@ -27,6 +28,23 @@ class FakePostsRepository implements IPostsRepository {
     }
 
     return findPosts;
+  }
+
+  public async findByUserIdPaginated(
+    data: IShowByUserPaginatedDTO,
+  ): Promise<Post[] | null> {
+    const findPosts = this.posts.filter(post => post.userId === data.userId);
+
+    if (findPosts.length === 0) {
+      return null;
+    }
+
+    const skip = data.offset * data.limit;
+    const take = data.limit;
+
+    const posts = findPosts.slice(skip, skip + take);
+
+    return posts;
   }
 
   public async create(postData: ICreatePostDTO): Promise<Post> {

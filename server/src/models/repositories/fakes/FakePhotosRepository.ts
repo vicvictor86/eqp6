@@ -2,6 +2,7 @@ import { v4 } from 'uuid';
 import { Photo } from '@models/entities/Photo';
 
 import { ICreatePhotoDTO } from '@models/dtos/ICreatePhotoDTO';
+import { IShowByUserPaginatedDTO } from '@models/dtos/IShowByUserPaginatedDTO';
 import { IPhotosRepository } from '../interfaces/IPhotosRepository';
 
 export class FakePhotosRepository implements IPhotosRepository {
@@ -31,6 +32,25 @@ export class FakePhotosRepository implements IPhotosRepository {
     const findPhoto = this.photos.find(photo => photo.path === path);
 
     return findPhoto || null;
+  }
+
+  public async findByUserIdPaginated(
+    data: IShowByUserPaginatedDTO,
+  ): Promise<Photo[] | null> {
+    const findPhotos = this.photos.filter(
+      photo => photo.userId === data.userId,
+    );
+
+    if (findPhotos.length === 0) {
+      return null;
+    }
+
+    const skip = data.offset * data.limit;
+    const take = data.limit;
+
+    const photos = findPhotos.slice(skip, skip + take);
+
+    return photos || null;
   }
 
   public async create(data: ICreatePhotoDTO): Promise<Photo> {
