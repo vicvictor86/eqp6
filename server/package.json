@@ -7,6 +7,7 @@
     "dev": "ts-node-dev --transpile-only -r tsconfig-paths/register --inspect --ignore-watch node_modules src/index.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migration:run": "ts-node-dev ./node_modules/typeorm/cli.js migration:run -d src/models/database/dataSource.ts",
+    "build": "tsc --project tsconfig.build.json",
     "test": "jest",
     "test-coverage": "jest --collect-coverage"
   },
