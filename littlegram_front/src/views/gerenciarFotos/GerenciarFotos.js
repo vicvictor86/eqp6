@@ -181,7 +181,7 @@ function GerenciarFotos() {
     <div className="Container">
       <Menu />
       <div className='PostFotos'>
-        <div style={{ width: '100%', padding: 15, textAlign: 'center' }}><button onClick={handleModal} className='ButtonPhoto'>Adicionar Post</button></div>
+        <div style={{ width: '100%', padding: 15, textAlign: 'center' }}><button onClick={handleModal} className='ButtonPhoto'>Adicionar Foto</button></div>
 
         <div className='ListViews' onScroll={handleScrollPhotos} >
           {photos !== undefined && photos.map((photo, index) => (
