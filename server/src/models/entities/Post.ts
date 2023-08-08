@@ -22,6 +22,9 @@ export class Post {
   @Column()
   description: string;
 
+  @Column({ name: 'filter_used' })
+  filterUsed: string;
+
   @Column({ name: 'user_id' })
   userId: string;
 

@@ -65,6 +65,7 @@ describe('DeletePostService', () => {
       userId: user.id,
       photoId: photo.id,
       description: 'Description Test',
+      filterUsed: 'none',
     });
 
     await deletePostService.execute({
@@ -133,6 +134,7 @@ describe('DeletePostService', () => {
       userId: otherUser.id,
       photoId: photoFromOtherUser.id,
       description: 'Description Test',
+      filterUsed: 'none',
     });
 
     await expect(
