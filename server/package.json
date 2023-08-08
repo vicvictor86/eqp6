@@ -8,7 +8,7 @@
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migration:run": "ts-node-dev ./node_modules/typeorm/cli.js migration:run -d src/models/database/dataSource.ts",
     "migration:revert": "npm run typeorm migration:revert -- -d src/models/database/dataSource",
-    "build": "tsc",
+    "build": "tsc --project tsconfig.build.json",
     "test": "jest",
     "test-coverage": "jest --collect-coverage"
   },
