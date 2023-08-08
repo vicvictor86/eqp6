@@ -126,6 +126,7 @@ function GerenciarFotos() {
   }
   const uploadPhotos = () => {
     instance.get('/photos/user/').then((response) => {
+      console.log(response.data)
       for (const key in response.data) {
 
         response.data[key].size = bytesToMegabytes(response.data[key].size)
@@ -138,8 +139,10 @@ function GerenciarFotos() {
     })
   }
   useEffect(() => {
-    console.log('render')
-    uploadPhotos()
+    setTimeout(() => {
+      uploadPhotos()
+
+    }, 200);
   }, [])
 
   return (
@@ -254,6 +257,9 @@ function GerenciarFotos() {
                   return;
                 }
                 if (checkImageSize()) {
+                  console.log(file)
+                  console.log(URL.createObjectURL(file))
+
                   setImage({
                     fileReal: file,
                     file: URL.createObjectURL(file)

@@ -78,6 +78,8 @@
     border-radius: 32px;
     border: none;
     padding: 29px;
+    max-width: 265px;
+    margin: auto;
 }
 
 .ButtonDelete{
