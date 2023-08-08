@@ -6,40 +6,62 @@ import Menu from '../../components/menu/Menu.js'
 import config from '../../config';
 import axios from 'axios'
 import ImageFilter from 'react-image-filter';
-import Posts from '../../components/menu/Posts';
+import { useNavigate } from 'react-router-dom';
 function DashBoard() {
+  // Controladores da requisição
+  const [isFetchingPhotos, setIsFetchingPhotos] = useState(false);
 
-  const [photos, setPhotos] = useState([])
+  const [isFetchingPosts, setIsFetchingPosts] = useState(false);
+  const [offSetPosts, setOffSetPosts] = useState(0);
+  const [offSetPhotos, setOffSetPhotos] = useState(0);
+
+  const [posts, setPosts] = useState([])
 
   //modal selecionar imagem
   const [openNewPost, setOpenNewPost] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null)
+  const [photos, setPhotos] = useState([])
 
   //modal selecionar filtro
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedFilter, setSelectedFilter] = useState(0)
-  const [photoFilter, setPhotoFilter] = useState(null)
   const [descricao, setDescricao] = useState('')
-  const [posts, setPosts] = useState([])
+
+  const navigate = useNavigate()
 
   function getPosts() {
-   axios.get(config.baseURL + "/posts/user/?limit=20&page=1", {
+    setIsFetchingPosts(true);
+    axios.get(config.baseURL + "/posts/user/?limit=10&offset=" + offSetPosts, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     }).then((response) => {
-        setPosts(response.data)
-      })
+      console.log(response.data)
+      setPosts(posts.concat(response.data.posts));
+      console.log(offSetPosts)
+      if (offSetPosts + 1 >= response.data.totalPages || response.data.posts === []) return
+
+      setOffSetPosts(offSetPosts + 1); // Usando a função de atualização do estado para obter o valor mais recente de 'page'
+      setIsFetchingPosts(false);
+    })
   }
 
   const getPhotos = () => {
-    axios.get(config.baseURL + '/photos/user/', {
+    setIsFetchingPhotos(true);
+    axios.get(config.baseURL + "/photos/user/?limit=10&offset=" + offSetPhotos, {
       headers: {
-        Authorization: "Bearer " + localStorage.getItem('token')
+        Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     }).then((response) => {
-      setPhotos(response.data)
+      setOffSetPhotos(prevPage => prevPage + 1);
+      console.log(response)
+
+      if (offSetPhotos + 1 >= response.data.totalPages || response.data.photos === []) return
+
+      setIsFetchingPhotos(false);
+      setPhotos(photos.concat(response.data.photos));
     }).catch((response) => {
+      console.log(response)
       if (response['response']['data']['message'] === ["No photos found for this user."]) {
         setPhotos([])
       }
@@ -50,7 +72,7 @@ function DashBoard() {
     axios.post(config.baseURL + "/posts/", {
       photoId: photos[selectedImage].id,
       description: descricao,
-      filterUsed: selectedImage
+      filterUsed: String(selectedFilter)
     }, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -58,30 +80,70 @@ function DashBoard() {
     }).then((response) => {
       if (response.status === 200) {
         setOpenFilter(false)
-        getPosts()
+        navigate(0)
       }
     })
   }
+
+  // Quando o scroll de posts se move
+  const handleScrollPosts = (event) => {
+    if (event.target.scrollTop + event.target.clientHeight >= event.target.scrollHeight - 100 && !isFetchingPosts) {
+      getPosts()
+    }
+  }
+
+  // Quando o scrool de photos se move
+  const handleScrollPhotos = (event) => {
+    if (event.target.scrollTop + event.target.clientHeight >= event.target.scrollHeight - 100 && !isFetchingPhotos) {
+      getPhotos()
+    }
+  }
+
   useEffect(() => {
-    console.log(posts)
+    getPosts()
   }, [])
+
+  const returnBackground = (url) => {
+    var part1 = "url("
+    var part2 = url === "" ? "" : config.baseURL + '/files/avatar/' + url
+    var part3 = ")  center/cover"
+    return part1 + part2 + part3
+  }
   return (
 
     <>
-    <div className="Container">
-      <Menu />
-      <div className='PostDashBoard'>
-        <div style={{ width: '100%', padding: 15, textAlign: 'center' }}><button onClick={() => { setOpenNewPost(true); getPhotos() }} className='ButtonPhoto'>Adicionar Post</button></div>
-        <Posts postsData={posts} activeScroll={true} />
-      </div>
-    </div>
+      <div className="Container">
+        <Menu />
+        <div className='PostDashBoard'>
+          <div style={{ width: '100%', padding: 15, textAlign: 'center' }}><button onClick={() => { setOpenNewPost(true); getPhotos() }} className='ButtonPhoto'>Adicionar Post</button></div>
+          <div className='PostsList' onScroll={handleScrollPosts} >
+            {posts.length > 0 && posts.map((post, index) => (
+              <div key={index} className='DashPhoto' style={{paddingTop:0}}>
+                  <div className='PostHeader'>
+                  <div style={{ background: returnBackground(post.user.avatar), width: 40, height: 40, border: 'solid 1px white', margin:'auto 0px' }} className='ImagePerfilMenu'  ></div>
+                  <span style={{ color:'white', fontSize:18, fontWeight:500, margin: 'auto 10px'}}>{ '@'+post.user.username}</span>
+                  </div>
 
-    {/* Modais */}
+                <ImageFilter
+                  style={{ marginLeft: 50 }}
+                  image={config.baseURL + "/files/photos/" + post.photo.path}
+                  filter={config.filtros[post.filterUsed].filter} // see docs beneath
+                  colorOne={config.filtros[post.filterUsed].colorOne}
+                  colorTwo={config.filtros[post.filterUsed].colorTwo}
+                />
+                <span className='PostDescricao' >{post.description}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Modais */}
 
       <Modal dialogClassName='ModalMaior' show={openNewPost} onHide={() => {
         setOpenNewPost(openNewPost ? false : true)
       }}>
-        <Modal.Body className='ModalMaior' style={{ backgroundColor: 'var(--color3)' }}>
+        <Modal.Body onScroll={handleScrollPhotos} className='ModalMaior' style={{ backgroundColor: 'var(--color3)', maxHeight: '86vh', overflow: 'auto' }}>
           <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Novo Post:</h1>
           <h3 style={{ textAlign: 'left', color: 'white' }}>Selecione uma imagem</h3>
           <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row', border: 'none' }} className='DashPhoto'>
@@ -101,20 +163,16 @@ function DashBoard() {
       <Modal dialogClassName='ModalMaior' show={openFilter} onHide={() => {
         setOpenFilter(openFilter ? false : true)
         setSelectedFilter(0)
-        setPhotoFilter(null)
         setDescricao('')
       }}>
-        <Modal.Body className='ModalMaior' style={{ backgroundColor: 'var(--color3)' }}>
+        <Modal.Body className='ModalMaior' style={{ backgroundColor: 'var(--color3)', maxHeight: '86vh', overflow: 'auto' }}>
           <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Novo Post:</h1>
           <h3 style={{ textAlign: 'left', color: 'white' }}>Selecione um filtro</h3>
           <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row', border: 'none' }} className='DashPhoto'>
 
 
             <ImageFilter
-              onChange={(image) => {
-                setPhotoFilter(image)
-              }}
-              image={ selectedImage !== null ? config.baseURL + "/files/photos/" + photos[selectedImage].path : ''}
+              image={selectedImage !== null ? config.baseURL + "/files/photos/" + photos[selectedImage].path : ''}
               filter={config.filtros[selectedFilter].filter} // see docs beneath
               colorOne={config.filtros[selectedFilter].colorOne}
               colorTwo={config.filtros[selectedFilter].colorTwo}

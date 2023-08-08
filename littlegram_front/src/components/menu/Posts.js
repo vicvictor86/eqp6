@@ -21,6 +21,8 @@ function Posts({ postsData , activeScroll = true }) {
                 .then((response) => {
                     console.log(response)
                     console.log(response.data)
+                    console.log(response.data)
+
                     var array = posts
                     for (const key in response.data) {
                         array.push(response.data[key])
