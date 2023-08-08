@@ -50,6 +50,10 @@ function data(date) {
 }
 
 function GerenciarFotos() {
+  const [isFetchingPhotos, setIsFetchingPhotos] = useState(false);
+
+;
+  const [offSetPhotos, setOffSetPhotos] = useState(0);
   // variaives extras
   const [selectedExclude, setSelectedExclude] = useState({})
   const [imageError, setImageError] = useState(false)
@@ -126,6 +130,7 @@ function GerenciarFotos() {
   }
   const uploadPhotos = () => {
     instance.get('/photos/user/').then((response) => {
+      console.log(response.data)
       for (const key in response.data) {
 
         response.data[key].size = bytesToMegabytes(response.data[key].size)
@@ -137,87 +142,119 @@ function GerenciarFotos() {
       }
     })
   }
+  const getPhotos = () => {
+    setIsFetchingPhotos(true);
+    axios.get(config.baseURL + "/photos/user/?limit=10&offset=" + offSetPhotos, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then((response) => {
+      console.log(response)
+
+      for (const key in response.data.photos) {
+        response.data.photos[key].size = bytesToMegabytes(response.data.photos[key].size)
+      }
+
+      setPhotos(photos.concat(response.data.photos));
+
+      if (offSetPhotos + 1 >= response.data.totalPages || response.data.photos === []) return
+      setOffSetPhotos(offSetPhotos+ 1);
+      setIsFetchingPhotos(false);
+    }).catch((response) => {
+      // console.log(response)
+      // if (response['response']['data']['message'] === ["No photos found for this user."]) {
+      //   setPhotos([])
+      // }
+    })
+  }
+  // Quando o scrool de photos se move
+  const handleScrollPhotos = (event) => {
+    if (event.target.scrollTop + event.target.clientHeight >= event.target.scrollHeight - 100 && !isFetchingPhotos) {
+      getPhotos()
+    }
+  }
   useEffect(() => {
-    console.log('render')
-    uploadPhotos()
+    getPhotos()
   }, [])
 
   return (
     <div className="Container">
       <Menu />
       <div className='PostFotos'>
-        {photos !== undefined && photos.map((photo, index) => (
-          <div key={index} className='DashPhoto'>
-            <img src={config.baseURL + "/files/photos/" + photo.path} alt="" className="Image" />
-            <div className='CellPhoto'>
-              <div className='DataPhoto'>
-                <h5 style={{ color: 'white', fontSize: '17px', }}>data: {data(photo.createdAt)}</h5>
+        <div style={{ width: '100%', padding: 15, textAlign: 'center' }}><button onClick={handleModal} className='ButtonPhoto'>Adicionar Foto</button></div>
+
+        <div className='ListViews' onScroll={handleScrollPhotos} >
+          {photos !== undefined && photos.map((photo, index) => (
+            <div key={index} className='DashPhoto'>
+              <img src={config.baseURL + "/files/photos/" + photo.path} alt="" className="Image" />
+              <div className='CellPhoto'>
+                <div className='DataPhoto'>
+                  <h5 style={{ color: 'white', fontSize: '17px', }}>data: {data(photo.createdAt)}</h5>
+                </div>
+                <div className='DataPhoto'>
+                  <h5 style={{ color: 'white', fontSize: '17px', }}>tamanho: {photo.size} mb</h5>
+                </div>
+                <button className='ButtonDelete' onClick={() => {
+                  setSelectedExclude({
+                    photoId: photo.id,
+                    path: photo.path
+                  })
+                  handleDelete()
+                }}>deletar</button>
               </div>
-              <div className='DataPhoto'>
-                <h5 style={{ color: 'white', fontSize: '17px', }}>tamanho: {photo.size} mb</h5>
-              </div>
-              <button className='ButtonDelete' onClick={() => {
-                setSelectedExclude({
-                  photoId: photo.id,
-                  path: photo.path
-                })
-                handleDelete()
-              }}>deletar</button>
             </div>
-          </div>
-        ))}
-
-        <div className='BackSidePhoto'>
-
-          <button className="ButtonPhoto" onClick={handleModal}>Adicionar Foto</button>
+          ))}
         </div>
+
+
+
       </div>
 
       {/* toasts */}
       <ToastContainer
-          className="p-3"
-          position={'bottom-end'}
-          style={{ zIndex: 10000}}>
-          <Toast
+        className="p-3"
+        position={'bottom-end'}
+        style={{ zIndex: 10000 }}>
+        <Toast
           onClose={() => setErroSize(false)} show={openErroPhotoSize} delay={3000} autohide
-          >
-        <Toast.Header style={{background:'#ff6347', color:'white'}} closeButton={false}>
-              <strong className="me-auto">Error</strong>
-              <small>agora</small>
-            </Toast.Header>
-            <Toast.Body style={{background: '#ff6347', color:'white'}}>Imagem acima de 10 megabytes.</Toast.Body>
-          </Toast>
-        </ToastContainer>
+        >
+          <Toast.Header style={{ background: '#ff6347', color: 'white' }} closeButton={false}>
+            <strong className="me-auto">Error</strong>
+            <small>agora</small>
+          </Toast.Header>
+          <Toast.Body style={{ background: '#ff6347', color: 'white' }}>Imagem acima de 10 megabytes.</Toast.Body>
+        </Toast>
+      </ToastContainer>
 
       <ToastContainer
-          className="p-3"
-          position={'bottom-end'}
-          style={{ zIndex: 10000}}>
-          <Toast
+        className="p-3"
+        position={'bottom-end'}
+        style={{ zIndex: 10000 }}>
+        <Toast
           onClose={() => setOpenErroFileType(false)} show={openErroFileType} delay={3000} autohide
-          >
-        <Toast.Header style={{background:'#ff6347', color:'white'}} closeButton={false}>
-              <strong className="me-auto">Error</strong>
-              <small>agora</small>
-            </Toast.Header>
-            <Toast.Body style={{background: '#ff6347', color:'white'}}>O arquivo não é suportado.</Toast.Body>
-          </Toast>
-        </ToastContainer>
+        >
+          <Toast.Header style={{ background: '#ff6347', color: 'white' }} closeButton={false}>
+            <strong className="me-auto">Error</strong>
+            <small>agora</small>
+          </Toast.Header>
+          <Toast.Body style={{ background: '#ff6347', color: 'white' }}>O arquivo não é suportado.</Toast.Body>
+        </Toast>
+      </ToastContainer>
 
       <ToastContainer
-          className="p-3"
-          position={'bottom-end'}
-          style={{ zIndex: 10000}}>
-          <Toast
+        className="p-3"
+        position={'bottom-end'}
+        style={{ zIndex: 10000 }}>
+        <Toast
           onClose={() => setOpenFileRequiredError(false)} show={openFileRequiredError} delay={3000} autohide
-          >
-        <Toast.Header style={{background:'#ff6347', color:'white'}} closeButton={false}>
-              <strong className="me-auto">Error</strong>
-              <small>agora</small>
-            </Toast.Header>
-            <Toast.Body style={{background: '#ff6347', color:'white'}}>A seleção do arquivo é obrigatória.</Toast.Body>
-          </Toast>
-        </ToastContainer>
+        >
+          <Toast.Header style={{ background: '#ff6347', color: 'white' }} closeButton={false}>
+            <strong className="me-auto">Error</strong>
+            <small>agora</small>
+          </Toast.Header>
+          <Toast.Body style={{ background: '#ff6347', color: 'white' }}>A seleção do arquivo é obrigatória.</Toast.Body>
+        </Toast>
+      </ToastContainer>
 
       <Modal show={openDelete} onHide={handleDelete} >
         <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
@@ -233,9 +270,9 @@ function GerenciarFotos() {
 
       <Modal show={openUpload} onHide={handleModal} >
         <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
-        <h1 style={{color: 'white', width: '100%', fontWeight:500, textAlign:'left'}}>Upload de Imagem</h1>
+          <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Upload de Imagem</h1>
           {
-            image.file === null ? <><img src={Search} /> <h1 style={{color: 'white', fontSize: '18px', width: '100%', marginBottom: '5px', fontWeight:400, textAlign:'center'}}>Procure por uma imagem</h1></> : <img alt='' src={image.file} style={{ width: '100%', height: 'auto' }} accept="image/*" />
+            image.file === null ? <><img src={Search} /> <h1 style={{ color: 'white', fontSize: '18px', width: '100%', marginBottom: '5px', fontWeight: 400, textAlign: 'center' }}>Procure por uma imagem</h1></> : <img alt='' src={image.file} style={{ width: '100%', height: 'auto' }} accept="image/*" />
           }
           <div className='Upload'>
             <button className='ButtonModal' onClick={uploadPhoto}>Enviar</button>
@@ -248,12 +285,16 @@ function GerenciarFotos() {
               type='file'
               onChange={(event) => {
                 const file = event.target.files[0];
+                if(file === undefined) return
                 const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
                 if (!acceptedImageTypes.includes(file['type'])) {
                   setOpenErroFileType(true)
                   return;
                 }
                 if (checkImageSize()) {
+                  console.log(file)
+                  console.log(URL.createObjectURL(file))
+
                   setImage({
                     fileReal: file,
                     file: URL.createObjectURL(file)
@@ -270,9 +311,9 @@ function GerenciarFotos() {
       </Modal>
       <Modal show={openDelete} onHide={handleDelete} >
         <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
-        <h1 style={{color: 'white', width: '100%', fontWeight:500, textAlign:'left'}}>Deletar Imagem</h1>
+          <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Deletar Imagem</h1>
 
-          <img src={Trash} style={{width:'85%', margin:'0px auto', textAlign:'center'}}/>
+          <img src={Trash} style={{ width: '85%', margin: '0px auto', textAlign: 'center' }} />
           <h1 style={{
             color: 'white', fontSize: '25px', width: '100%', marginBottom: '5px',
           }}>Deseja mesmo excluir permanentemente essa foto?</h1>

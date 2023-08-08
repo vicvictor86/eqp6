@@ -4,8 +4,8 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { z } from 'zod';
 
-import { ShowPostsEvaluationsService } from 'services/postsEvaluations/ShowPostsEvaluationsService';
-import { ShowPostsEvaluationsByCommentService } from 'services/postsEvaluations/ShowPostsEvaluationsByCommentService';
+import { ShowPostsEvaluationsByCommentService } from '../services/postsEvaluations/ShowPostsEvaluationsByCommentService';
+import { ShowPostsEvaluationsService } from '../services/postsEvaluations/ShowPostsEvaluationsService';
 import { CreatePostEvaluationService } from '../services/postsEvaluations/CreatePostEvaluationService';
 
 const createPostEvaluationSchema = z.object({

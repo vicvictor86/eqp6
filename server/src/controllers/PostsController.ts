@@ -12,6 +12,7 @@ const createPostSchema = z.object({
   userId: z.string().uuid(),
   photoId: z.string(),
   description: z.string().max(1000),
+  filterUsed: z.string(),
 });
 
 const deletePostSchema = z.object({
@@ -19,13 +20,22 @@ const deletePostSchema = z.object({
   postId: z.string(),
 });
 
+const showPostSchema = z.object({
+  userId: z.string().uuid(),
+  limit: z.number().int().positive().default(10),
+  offset: z.number().int().nonnegative().default(0),
+});
+
 export class PostsController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const { userId, photoId, description } = createPostSchema.parse({
-      userId: request.user.id,
-      photoId: request.body.photoId,
-      description: request.body.description,
-    });
+    const { userId, photoId, description, filterUsed } = createPostSchema.parse(
+      {
+        userId: request.user.id,
+        photoId: request.body.photoId,
+        description: request.body.description,
+        filterUsed: request.body.filterUsed,
+      },
+    );
 
     const createPostService = container.resolve(CreatePostService);
 
@@ -33,17 +43,22 @@ export class PostsController {
       userId,
       photoId,
       description,
+      filterUsed,
     });
 
     return response.json(instanceToInstance(post));
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
-    const userId = request.user.id;
+    const { userId, limit, offset } = showPostSchema.parse({
+      userId: request.user.id,
+      limit: Number(request.query.limit),
+      offset: Number(request.query.offset),
+    });
 
     const showPostsService = container.resolve(ShowPostsService);
 
-    const posts = await showPostsService.execute(userId);
+    const posts = await showPostsService.execute({ userId, limit, offset });
 
     return response.json(posts);
   }

@@ -67,17 +67,23 @@ describe('CreatePhotoService', () => {
       userId: user.id,
       photoId: photos[0].id,
       description: 'Description Test',
+      filterUsed: 'none',
     });
 
     await createPostService.execute({
       userId: user.id,
       photoId: photos[0].id,
       description: 'Description Test 2',
+      filterUsed: 'none',
     });
 
-    const userPosts = await showPostsService.execute(user.id);
+    const userPosts = await showPostsService.execute({
+      userId: user.id,
+      limit: 10,
+      offset: 0,
+    });
 
-    expect(userPosts).toHaveLength(2);
+    expect(userPosts.posts).toHaveLength(2);
   });
 
   it('should be able to return 0 posts', async () => {
@@ -90,14 +96,25 @@ describe('CreatePhotoService', () => {
       confirmed: false,
     });
 
-    const userPosts = await showPostsService.execute(user.id);
+    const limit = 10;
+    const offset = 0;
 
-    expect(userPosts).toHaveLength(0);
+    const userPosts = await showPostsService.execute({
+      userId: user.id,
+      limit,
+      offset,
+    });
+
+    expect(userPosts.posts).toHaveLength(0);
   });
 
   it('should NOT be able to show a post from a non existing user', async () => {
     await expect(
-      showPostsService.execute('non-existing-user'),
+      showPostsService.execute({
+        userId: 'non-existing-user',
+        limit: 10,
+        offset: 0,
+      }),
     ).rejects.toBeInstanceOf(AppError);
   });
 });

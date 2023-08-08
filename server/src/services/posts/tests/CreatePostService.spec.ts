@@ -58,6 +58,7 @@ describe('CreatePostService', () => {
       userId: user.id,
       photoId: photo.id,
       description: 'Description Test',
+      filterUsed: 'none',
     });
 
     expect(post).toHaveProperty('id');
@@ -71,6 +72,7 @@ describe('CreatePostService', () => {
         userId: 'non-existing-user',
         photoId: 'photo-id',
         description: 'Description Test',
+        filterUsed: 'none',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -90,6 +92,7 @@ describe('CreatePostService', () => {
         userId: user.id,
         photoId: 'photo-id',
         description: 'Description Test',
+        filterUsed: 'none',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -124,6 +127,7 @@ describe('CreatePostService', () => {
         userId: user.id,
         photoId: photoFromOtherUser.id,
         description: 'Description Test',
+        filterUsed: 'none',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -150,6 +154,7 @@ describe('CreatePostService', () => {
         photoId: photo.id,
         description:
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in porttitor nibh, nec hendrerit massa. Integer sed maximus metus, vitae aliquam elit. Cras id convallis dui. Phasellus sit amet vehicula lacus. Suspendisse metus ante, elementum quis luctus nec, vehicula dictum mauris. Proin sit amet magna pretium diam aliquam bibendum. Praesent at neque nulla. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nam pretium risus nulla, non malesuada lectus varius a. In eget dolor in elit lobortis laoreet. Vivamus molestie, sapien nec tincidunt dapibus, neque enim efficitur ante, in vehicula quam nunc vitae ligula.Ut vitae fringilla orci. Mauris feugiat magna a dui auctor, sit amet tincidunt turpis lacinia. Integer eget sem pellentesque, malesuada felis sed, placerat ipsum. Proin vestibulum consequat purus, quis ultrices risus iaculis nec. Fusce iaculis semper nisl eget pellentesque. Praesent tincidunt, elit ut feugiat facilisis, metus purus euismod est, ut sagittis risus neque non purus. Suspendisse eu ullamcorper augue. In hac habitasse platea dictumst. Fusce quis nibh tellus. In volutpat malesuada dolor, nec accumsan nunc sollicitudin et. Integer in fringilla odio. Donec id congue magna, nec cursus libero. Nam fermentum ligula et pharetra interdum. Cras pharetra eleifend enim ac porttitor. Duis semper ultrices risus, eget convallis urna lobortis ut.        ',
+        filterUsed: 'none',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });

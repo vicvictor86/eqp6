@@ -1,13 +1,105 @@
-.PostDashBoard{
+.PostDashBoard {
     max-width: 600px;
     width: 100%;
     border: 2px solid white;
-    margin-left:200px;
+    margin-left: 200px;
 }
 
+
+
+.PostDescricao {
+    padding: 10px 0px;
+    font-size: 14px;
+    color: white;
+    margin-left: 50px;
+    width: calc(100% - 50px);
+}
+
+.PostHeader {
+    width: calc(100% - 50px);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 10px 0px 10px 50px;
+}
+
+.ModalMaior {
+    min-width: 800px;
+}
+
+.PhotoToPost {
+    min-width: 200px;
+    height: 200px;
+    margin: 10px;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.PhotoToPost:hover {
+    min-width: 220px;
+    height: 220px;
+    display: flex;
+}
+
+.FiltrosItens {
+    max-width: 100%;
+    overflow-x: auto;
+    display: flex;
+    flex-direction: row;
+    padding: 5px 0px;
+}
+
+.FiltroItem {
+    background-color: var(--color5);
+    border: none;
+    margin-left: 5px;
+    color: white;
+    border-radius: 40px;
+    padding: 0px 30px;
+    transition: 0.5s;
+}
+
+.Descricao {
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.Descricao:focus-visible {
+    border: none;
+    outline: none;
+}
+
+.Descricao::placeholder {
+    color: white;
+}
+
+.ImagePost {
+    width: 100%;
+}
+.ListViews {
+    position: relative;
+    top: 0px;
+    overflow: auto;
+    height: calc(100vh - 99px);
+}
 @media (max-width:994px) {
-    .PostDashBoard{
+    .PostDashBoard {
         margin-left: 0px;
         margin-bottom: 0px;
+    }
+    .ListViews {
+        height: calc(100vh - 166px);
+    }
+
+}
+
+
+@media (max-width:800px) {
+    .ModalMaior {
+        min-width: calc(100% - 60px);
     }
 }

@@ -14,14 +14,12 @@ function Menu() {
   const [imagem, setImage] = useState('')
   const [perfil, setPerfil] = useState('')
   const [logoutModal, setLogoutModal] = useState(false)
-  useEffect(() => {
+
+  const getData = () => {
     setPerfil(localStorage.getItem('username'))
     setImage(config.baseURL + '/files/avatar/' + localStorage.getItem('avatar'))
-
     isAuth(navigate)
-    console.log('etesg')
-
-  })
+  }
   const logout = () => {
     localStorage.removeItem('avatar')
     localStorage.removeItem('username')
@@ -30,15 +28,22 @@ function Menu() {
   }
   const returnBackground = () => {
     var part1 = "url("
-    var part2 =localStorage.getItem('avatar') === "null" || localStorage.getItem('avatar') === null || localStorage.getItem('avatar') === "" ? "" : imagem
+    var part2 = localStorage.getItem('avatar') === "null" || localStorage.getItem('avatar') === null || localStorage.getItem('avatar') === "" ? "" : imagem
     var part3 = ")  center/cover"
-    return  part1 + part2 + part3
+    return part1 + part2 + part3
   }
+
+  useEffect(() => {
+
+    getData()
+
+  },[])
+
   return (
     <>
       <div className="Menu">
         <span className='AppNameMenu'> <h1>Littlegram</h1> </span>
-        <div style={{ background : returnBackground(), backgroundPosition:  "center"}} className='ImagePerfilMenu'  >
+        <div style={{ background: returnBackground() }} className='ImagePerfilMenu'  >
         </div>
         <span className='PerfilMenu'>@{perfil}</span>
         <div className='ItensMenu'>
@@ -68,9 +73,13 @@ function Menu() {
           <img style={{ width: 30, height: 25 }} src={Image} alt='Gerenciar Imagens' />
 
         </div>
+        <div style={{ marginTop: -20 }} className='ItemMenuMobile'>
+          <div style={{ background: returnBackground(), width: 35, height: 35, border: 'solid 1px white' }} className='ImagePerfilMenu'  ></div>
+        </div>
         <div onClick={() => setLogoutModal(true)} className='ItemMenuMobile'>
           <img style={{ width: 30, height: 25 }} src={Logout} alt='logout' />
         </div>
+
       </div>
       <Modal show={logoutModal} onHide={() => setLogoutModal(false)} >
         <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
