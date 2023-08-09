@@ -10,6 +10,7 @@ import { checkImageSize } from '../validators'
 import Modal from 'react-bootstrap/Modal';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
+import { useNavigate } from 'react-router-dom';
 const instance = axios.create({
   baseURL: config.baseURL,
   headers: {
@@ -50,14 +51,15 @@ function data(date) {
 }
 
 function GerenciarFotos() {
+  const navigate = useNavigate()
   const [isFetchingPhotos, setIsFetchingPhotos] = useState(false);
 
-;
+
   const [offSetPhotos, setOffSetPhotos] = useState(0);
   // variaives extras
   const [selectedExclude, setSelectedExclude] = useState({})
   const [imageError, setImageError] = useState(false)
-  const [image, setImage] = useState({ file: null, })
+  const [image, setImage] = useState([])
   const [photos, setPhotos] = useState([])
 
   // variaveis para gerenciar abetura de modais
@@ -70,6 +72,7 @@ function GerenciarFotos() {
   // funcoes para gerenciar abetura de modais
 
   const handleModal = () => {
+    setImage([])
     setOpenUpload(openUpload ? false : true)
   }
 
@@ -83,21 +86,26 @@ function GerenciarFotos() {
 
   // funcoes de requisicao
   const uploadPhoto = () => {
-    if (!image.fileReal) {
+    console.log(image)
+    if (image === []) {
       handleFileRequiredError();
       return;
     }
     const form = new FormData();
-    form.append('photo', image.fileReal);
+    for (const key in image) {
 
-    axios.post(config.baseURL + '/photos/', form, {
+      form.append('photos', image[key].fileReal);
+
+    }
+
+    axios.post(config.baseURL + '/photos/multiples', form, {
       headers: { 'Content-Type': 'multipart/form-data', Authorization: 'Bearer ' + localStorage.getItem("token") }
     }).then((response) => {
 
       if (response.status === 200) {
         handleModal();
-        uploadPhotos()
-        setImage({});
+        setImage([]);
+        navigate(0)
       }
     }).catch((error) => {
       if (error.response) {
@@ -158,7 +166,7 @@ function GerenciarFotos() {
       setPhotos(photos.concat(response.data.photos));
 
       if (offSetPhotos + 1 >= response.data.totalPages || response.data.photos === []) return
-      setOffSetPhotos(offSetPhotos+ 1);
+      setOffSetPhotos(offSetPhotos + 1);
       setIsFetchingPhotos(false);
     }).catch((response) => {
       // console.log(response)
@@ -271,38 +279,51 @@ function GerenciarFotos() {
       <Modal show={openUpload} onHide={handleModal} >
         <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
           <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Upload de Imagem</h1>
+          <div style={{display:'flex', flexDirection:'row', overflow:'auto'}}>
           {
-            image.file === null ? <><img src={Search} /> <h1 style={{ color: 'white', fontSize: '18px', width: '100%', marginBottom: '5px', fontWeight: 400, textAlign: 'center' }}>Procure por uma imagem</h1></> : <img alt='' src={image.file} style={{ width: '100%', height: 'auto' }} accept="image/*" />
+            image.length <= 0? <><img src={Search} /> <h1 style={{ color: 'white', fontSize: '18px', width: '100%', marginBottom: '5px', fontWeight: 400, textAlign: 'center' }}>Procure por uma imagem</h1></> : image.map((element, index) => { return (<img alt='' src={element.file} style={{ width: 'auto', height: 350, margin:'auto 15px' }} accept='image/*' />)}) 
           }
+          </div>
+       
           <div className='Upload'>
             <button className='ButtonModal' onClick={uploadPhoto}>Enviar</button>
             <label htmlFor='imageInput' className='ButtonInputImage' style={{ color: imageError ? '#FF2E2E' : 'white' }} >Adicionar Imagem</label>
             <input
+              multiple={true}
               accept="image/png,image/jpeg,image/jpg"
               id='imageInput'
               className=''
               style={{ display: 'none' }}
               type='file'
               onChange={(event) => {
+                var array = []
                 const file = event.target.files[0];
-                if(file === undefined) return
-                const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
-                if (!acceptedImageTypes.includes(file['type'])) {
-                  setOpenErroFileType(true)
-                  return;
-                }
-                if (checkImageSize()) {
-                  console.log(file)
-                  console.log(URL.createObjectURL(file))
+                console.log(event.target.files)
+                var key = 0
+                for (; key < event.target.files.length; key++) {
+                  console.log(key)
+                  if (event.target.files[key] === undefined) return
 
-                  setImage({
-                    fileReal: file,
-                    file: URL.createObjectURL(file)
-                  })
-                  setPhotos(uploadPhotos())
-                } else {
-                  setErroSize(true)
+                  const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+                  if (!acceptedImageTypes.includes(String(event.target.files[key].type))) {
+                    setOpenErroFileType(true)
+                    return;
+                  }
+                  if (checkImageSize()) {
+                    array.push({
+                      fileReal: event.target.files[key],
+                      file: URL.createObjectURL(event.target.files[key])
+                    })
+
+                  } else {
+                    setErroSize(true)
+                    return
+                  }
+
                 }
+                console.log(array)
+                setImage(array)
+                // setPhotos(uploadPhotos())
               }}
             />
             <button onClick={handleModal} className='ButtonModal'>Fechar</button>
