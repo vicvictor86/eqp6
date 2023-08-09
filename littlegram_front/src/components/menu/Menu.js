@@ -24,6 +24,8 @@ function Menu() {
     localStorage.removeItem('avatar')
     localStorage.removeItem('username')
     localStorage.removeItem('token')
+    localStorage.removeItem('user_id')
+
     navigate('/')
   }
   const returnBackground = () => {
@@ -34,10 +36,10 @@ function Menu() {
   }
 
   useEffect(() => {
-
+    console.log(window.location.pathname)
     getData()
 
-  },[])
+  }, [])
 
   return (
     <>
@@ -55,6 +57,9 @@ function Menu() {
             window.location.pathname === '/photos' ? console.log('') : navigate('/photos')
           }} className={window.location.pathname === '/photos' ? 'ItemMenuActive' : 'ItemMenu'} >Gerenciar Imagens</div>
           <hr className='BarraMenu' />
+          <div onClick={() => {
+            window.location.pathname === '/profile/' + localStorage.getItem('user_id') ? console.log('') : navigate('/profile/' + localStorage.getItem('user_id'))
+          }} className={window.location.pathname === '/profile/' + localStorage.getItem('user_id') ? 'ItemMenuActive' : 'ItemMenu'} >Profile</div>
         </div>
         <hr style={{ position: 'absolute', bottom: 45 }} className='BarraMenu' />
         <div onClick={() => setLogoutModal(true)} className='LogoutMenu'>
@@ -74,7 +79,9 @@ function Menu() {
 
         </div>
         <div style={{ marginTop: -20 }} className='ItemMenuMobile'>
-          <div style={{ background: returnBackground(), width: 35, height: 35, border: 'solid 1px white' }} className='ImagePerfilMenu'  ></div>
+          <div onClick={() => {
+            navigate('/profile/' + localStorage.getItem('user_id'))
+          }} style={{ background: returnBackground(), width: 35, height: 35, border: 'solid 1px white' }} className='ImagePerfilMenu'  ></div>
         </div>
         <div onClick={() => setLogoutModal(true)} className='ItemMenuMobile'>
           <img style={{ width: 30, height: 25 }} src={Logout} alt='logout' />

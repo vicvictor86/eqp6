@@ -335,8 +335,7 @@ function GerenciarFotos() {
           <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Deletar Imagem</h1>
 
           <img src={Trash} style={{ width: '85%', margin: '0px auto', textAlign: 'center' }} />
-          <h1 style={{
-            color: 'white', fontSize: '25px', width: '100%', marginBottom: '5px',
+          <h1 style={{width:'100%',color: 'white', fontSize: '25px', width: '100%', marginBottom: '5px',
           }}>Deseja mesmo excluir permanentemente essa foto?</h1>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '20px' }}>
             <button className='ButtonModal' onClick={() => { delet(selectedExclude.path, selectedExclude.photoId) }}>Sim</button>

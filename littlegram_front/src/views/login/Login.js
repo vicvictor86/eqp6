@@ -65,6 +65,7 @@ function Login() {
       })
       .then(function (response) {
         if(response.status === 200){
+          console.log(response.data)
           if(response.data['user']['confirmed'] === false){
             setEsperandoConfirmError(true)
           }else{
@@ -73,6 +74,8 @@ function Login() {
             localStorage.setItem('username', response.data['user']['username'])
             localStorage.setItem('avatar', response.data['user']['avatar'])
             localStorage.setItem('token', response.data['token'])
+            localStorage.setItem('user_id', response.data['user']['id'])
+
             navigate("/home")
           }
           
