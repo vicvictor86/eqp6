@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { CreatePostService } from '../services/posts/CreatePostService';
 import { DeletePostService } from '../services/posts/DeletePostService';
 import { ShowPostsService } from '../services/posts/ShowPostsService';
+import { ShowPostsByUserIdService } from '../services/posts/ShowPostsByUserIdService';
 
 const createPostSchema = z.object({
   userId: z.string().uuid(),
@@ -59,6 +60,29 @@ export class PostsController {
     const showPostsService = container.resolve(ShowPostsService);
 
     const posts = await showPostsService.execute({ userId, limit, offset });
+
+    return response.json(posts);
+  }
+
+  public async showPostsByUserId(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {
+    const { userId, limit, offset } = showPostSchema.parse({
+      userId: request.params.userId,
+      limit: Number(request.query.limit),
+      offset: Number(request.query.offset),
+    });
+
+    const showPostsByUserIdService = container.resolve(
+      ShowPostsByUserIdService,
+    );
+
+    const posts = await showPostsByUserIdService.execute({
+      userId,
+      limit,
+      offset,
+    });
 
     return response.json(posts);
   }
