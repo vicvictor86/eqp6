@@ -1,5 +1,7 @@
 import './DashBoard.css';
 
+import Trash from '../../assets/imgs/trash.svg'
+
 import { useEffect, useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import Menu from '../../components/menu/Menu.js'
@@ -7,6 +9,8 @@ import config from '../../config';
 import axios from 'axios'
 import ImageFilter from 'react-image-filter';
 import { useNavigate } from 'react-router-dom';
+import TresPontos from '../../assets/imgs/tres-pontos.svg'
+
 function DashBoard() {
   // Controladores da requisição
   const [isFetchingPhotos, setIsFetchingPhotos] = useState(false);
@@ -26,6 +30,10 @@ function DashBoard() {
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedFilter, setSelectedFilter] = useState(0)
   const [descricao, setDescricao] = useState('')
+
+  // modal deletar post
+  const [selectedExclude, setSelectedExclude] = useState(null)
+  const [openDelete, setOpenDelete] = useState(false)
 
   const navigate = useNavigate()
 
@@ -97,6 +105,22 @@ function DashBoard() {
       getPhotos()
     }
   }
+  const deletePost = (postId) => {
+    console.log(postId)
+    axios.delete(config.baseURL + "/posts/?postId=" + postId, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('token'),
+      }
+    }).then((response) => {
+      console.log(response)
+      if (response.status === 200) {
+          setOpenDelete(openDelete ? false : true)
+          navigate(0)
+      }
+    }).catch((error)=>{
+      console.log(error)
+    })
+  }
 
   useEffect(() => {
     getPosts()
@@ -117,11 +141,16 @@ function DashBoard() {
           <div style={{ width: '100%', padding: 15, textAlign: 'center' }}><button onClick={() => { setOpenNewPost(true); getPhotos() }} className='ButtonPhoto'>Adicionar Post</button></div>
           <div className='ListViews' onScroll={handleScrollPosts} >
             {posts.length > 0 && posts.map((post, index) => (
-              <div key={index} className='DashPhoto' style={{paddingTop:0}}>
-                  <div className='PostHeader'>
-                  <div style={{ background: returnBackground(post.user.avatar), width: 40, height: 40, border: 'solid 1px white', margin:'auto 0px' }} className='ImagePerfilMenu'  ></div>
-                  <span style={{ color:'white', fontSize:18, fontWeight:500, margin: 'auto 10px'}}>{ '@'+post.user.username}</span>
+              <div key={index} className='DashPhoto' style={{ paddingTop: 0 }}>
+                <div className='PostHeader'>
+                  <div style={{ background: returnBackground(post.user.avatar), width: 40, height: 40, border: 'solid 1px white', margin: 'auto 0px' }} className='ImagePerfilMenu'  ></div>
+                  <span style={{ color: 'white', fontSize: 18, fontWeight: 500, margin: 'auto 10px' }}>{'@' + post.user.username}</span>
+                  <div style={{ width: 25, height: 30, position: 'absolute', right: 0, top: 10, display: post.user.id === localStorage.getItem('user_id') ? 'block' : 'none' }}><img style={{ width: '100%', cursor: 'pointer' }} src={TresPontos} onClick={() => {
+                    setSelectedExclude(post.id)
+                    setOpenDelete(true)
+                  }} />
                   </div>
+                </div>
 
                 <ImageFilter
                   style={{ marginLeft: 50 }}
@@ -186,7 +215,27 @@ function DashBoard() {
           </div>
 
         </Modal.Body>
-      </Modal></>
+      </Modal>
+      
+      <Modal show={openDelete} onHide={() => {
+        setOpenDelete(openDelete ? false : true)
+      }}>
+        <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
+          <h1 style={{width:'100%', color: 'white', fontSize: '25px', width: '510px', marginBottom: '5px',
+          }}>Deseja mesmo excluir permanentemente esse post?</h1>
+          <img src={Trash} />
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '20px' }}>
+            
+            <button className='ButtonModal' onClick={() => { deletePost(selectedExclude) }}>Sim</button>
+            <button className='ButtonModal' onClick={() => {
+              setOpenDelete(openDelete ? false : true)
+            }}>Não</button>
+          </div>
+        </Modal.Body>
+      </Modal>
+      
+      </>
+      
 
   );
 }
