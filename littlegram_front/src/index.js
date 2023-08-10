@@ -14,6 +14,7 @@ import DashBoard from './views/dashBoard/DashBoard';
 import GerenciarFotos from './views/gerenciarFotos/GerenciarFotos'
 import VerificandoEmail from './views/verificandoEmail/VerificandoEmail';
 import Profile from './views/profile/Profile';
+import PesquisarUsers from './views/pesquisarUsers/PesquisarUsers';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -39,7 +40,10 @@ const router = createBrowserRouter([
   {
     path : "/profile/:id",
     Component: Profile,
-    
+  },
+  {
+    path : "/search/users",
+    Component: PesquisarUsers,
   }
 ]);
 
