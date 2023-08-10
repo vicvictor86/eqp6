@@ -242,11 +242,14 @@ function Profile() {
         setOpenDelete(openDelete ? false : true)
       }}>
         <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
-          <h1 style={{width:'100%', color: 'white', fontSize: '25px', width: '510px', marginBottom: '5px',
-          }}>Deseja mesmo excluir permanentemente esse post?</h1>
+        <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Deletar Post</h1>
+
           <img src={Trash} />
+          <h1 style={{width:'100%', color: 'white', fontSize: '25px', marginBottom: '5px',
+          }}>Deseja mesmo excluir permanentemente esse post?</h1>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '20px' }}>
             
+         
             <button className='ButtonModal' onClick={() => { deletePost(selectedExclude) }}>Sim</button>
             <button className='ButtonModal' onClick={() => {
               setOpenDelete(openDelete ? false : true)
