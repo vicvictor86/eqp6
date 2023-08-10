@@ -40,7 +40,7 @@ function Profile() {
 
   function getPosts() {
     setIsFetchingPosts(true);
-    axios.get(config.baseURL + "/posts/user/?limit=10&offset=" + offSetPosts, {
+    axios.get(config.baseURL + "/posts/user/" + id +"?limit=10&offset=" + offSetPosts, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
@@ -52,6 +52,8 @@ function Profile() {
 
       setOffSetPosts(offSetPosts + 1); // Usando a função de atualização do estado para obter o valor mais recente de 'page'
       setIsFetchingPosts(false);
+    }).catch((error) => {
+      console.error(error)
     })
   }
 
