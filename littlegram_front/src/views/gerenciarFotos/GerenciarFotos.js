@@ -8,6 +8,8 @@ import Menu from '../../components/menu/Menu.js'
 import { useState, useEffect } from 'react';
 import { checkImageSize } from '../validators'
 import Modal from 'react-bootstrap/Modal';
+import ProgressBar from 'react-bootstrap/ProgressBar';
+
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 import { useNavigate } from 'react-router-dom';
@@ -51,9 +53,10 @@ function data(date) {
 }
 
 function GerenciarFotos() {
-  const navigate = useNavigate()
-  const [isFetchingPhotos, setIsFetchingPhotos] = useState(false);
 
+  const [isFetchingPhotos, setIsFetchingPhotos] = useState(false);
+  // Controlar upload
+  const [progress, setProgress] = useState(0)
 
   const [offSetPhotos, setOffSetPhotos] = useState(0);
   // variaives extras
@@ -86,37 +89,50 @@ function GerenciarFotos() {
 
   // funcoes de requisicao
   const uploadPhoto = () => {
-    console.log(image)
-    if (image === []) {
+    if (JSON.stringify(image) === JSON.stringify([])) {
       handleFileRequiredError();
-      return;
-    }
-    const form = new FormData();
-    for (const key in image) {
-
-      form.append('photos', image[key].fileReal);
-
-    }
-
-    axios.post(config.baseURL + '/photos/multiples', form, {
-      headers: { 'Content-Type': 'multipart/form-data', Authorization: 'Bearer ' + localStorage.getItem("token") }
-    }).then((response) => {
-
-      if (response.status === 200) {
-        handleModal();
-        setImage([]);
-        navigate(0)
+      return 
+    }else{
+      const form = new FormData();
+      for (const key in image) {
+  
+        form.append('photos', image[key].fileReal);
+  
       }
-    }).catch((error) => {
-      if (error.response) {
-        console.error('Error response:', error.response);
-      } else if (error.request) {
-        console.error('Error request:', error.request);
-      } else {
-        console.error('Error:', error.message);
-      }
-      console.error('Error config:', error.config);
-    });
+      setProgress(25)
+
+      axios.post(config.baseURL + '/photos/multiples', form, {
+        onUploadProgress: function(progressEvent) {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          setProgress(percentCompleted)
+        },
+        headers: { 'Content-Type': 'multipart/form-data', Authorization: 'Bearer ' + localStorage.getItem("token") }
+      }).then((response) => {
+  
+        if (response.status === 200) {
+          handleModal();
+          setImage([]);
+          // navigate(0)
+        }
+      }).catch((error) => {
+        if (error.response) {
+          console.error('Error response:', error.response);
+        } else if (error.request) {
+          console.error('Error request:', error.request);
+        } else {
+          console.error('Error:', error.message);
+        }
+        console.error('Error config:', error.config);
+      }).finally(() => {
+        setTimeout(() => {
+          setProgress(0)
+        }, 700);
+      });
+
+    }
+ 
   };
 
   const delet = (path, photoId) => {
@@ -138,11 +154,11 @@ function GerenciarFotos() {
   }
   const uploadPhotos = () => {
     instance.get('/photos/user/').then((response) => {
-      console.log(response.data)
-      for (const key in response.data) {
 
+      for (const key in response.data) {
         response.data[key].size = bytesToMegabytes(response.data[key].size)
       }
+      
       setPhotos(response.data)
     }).catch((response) => {
       if (response['response']['data']['message'] === ["No photos found for this user."]) {
@@ -150,6 +166,7 @@ function GerenciarFotos() {
       }
     })
   }
+
   const getPhotos = () => {
     setIsFetchingPhotos(true);
     axios.get(config.baseURL + "/photos/user/?limit=10&offset=" + offSetPhotos, {
@@ -157,8 +174,6 @@ function GerenciarFotos() {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     }).then((response) => {
-      console.log(response)
-
       for (const key in response.data.photos) {
         response.data.photos[key].size = bytesToMegabytes(response.data.photos[key].size)
       }
@@ -169,7 +184,6 @@ function GerenciarFotos() {
       setOffSetPhotos(offSetPhotos + 1);
       setIsFetchingPhotos(false);
     }).catch((response) => {
-      // console.log(response)
       // if (response['response']['data']['message'] === ["No photos found for this user."]) {
       //   setPhotos([])
       // }
@@ -216,6 +230,10 @@ function GerenciarFotos() {
 
 
 
+      </div>
+
+      <div style={{display: progress > 0 ? 'flex' : 'none', zIndex:100000000}} className='TelaDeProgresso'>
+            <ProgressBar className='BarraProgresso' now={progress} label={`${progress}%`} />
       </div>
 
       {/* toasts */}
@@ -281,7 +299,7 @@ function GerenciarFotos() {
           <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Upload de Imagem</h1>
           <div style={{display:'flex', flexDirection:'row', overflow:'auto'}}>
           {
-            image.length <= 0? <><img src={Search} /> <h1 style={{ color: 'white', fontSize: '18px', width: '100%', marginBottom: '5px', fontWeight: 400, textAlign: 'center' }}>Procure por uma imagem</h1></> : image.map((element, index) => { return (<img alt='' src={element.file} style={{ width: 'auto', height: 350, margin:'auto 15px' }} accept='image/*' />)}) 
+            image.length <= 0? <><img src={Search} /> <h1 style={{ color: 'white', fontSize: '18px', width: '100%', marginBottom: '5px', fontWeight: 400, textAlign: 'center' }}>Procure por uma imagem</h1></> : image.map((element, index) => { return (<img alt={index} key={index} src={element.file} style={{ width: 'auto', height: 350, margin:'auto 15px' }} accept='image/*' />)}) 
           }
           </div>
        
@@ -298,10 +316,8 @@ function GerenciarFotos() {
               onChange={(event) => {
                 var array = []
                 const file = event.target.files[0];
-                console.log(event.target.files)
                 var key = 0
                 for (; key < event.target.files.length; key++) {
-                  console.log(key)
                   if (event.target.files[key] === undefined) return
 
                   const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
@@ -321,9 +337,7 @@ function GerenciarFotos() {
                   }
 
                 }
-                console.log(array)
                 setImage(array)
-                // setPhotos(uploadPhotos())
               }}
             />
             <button onClick={handleModal} className='ButtonModal'>Fechar</button>

@@ -38,9 +38,7 @@ function Menu() {
   }
 
   useEffect(() => {
-    console.log(window.location.pathname)
     getData()
-
   }, [])
 
   return (
