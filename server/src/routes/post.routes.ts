@@ -26,6 +26,13 @@ postRouter.get(
   postController.show,
 );
 
+postRouter.get(
+  '/user/:userId',
+  ensureAuthenticated,
+  ensureEmailConfirmation.execute,
+  postController.showPostsByUserId,
+);
+
 postRouter.delete(
   '/',
   ensureAuthenticated,

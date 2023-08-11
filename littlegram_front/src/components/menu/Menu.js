@@ -2,6 +2,8 @@ import './Menu.css';
 import Logout from '../../assets/imgs/logout.svg'
 import Home from '../../assets/imgs/casa.svg'
 import Image from '../../assets/imgs/image.svg'
+import Lupa from '../../assets/imgs/lupa.svg'
+
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import config from '../../config'
@@ -24,6 +26,8 @@ function Menu() {
     localStorage.removeItem('avatar')
     localStorage.removeItem('username')
     localStorage.removeItem('token')
+    localStorage.removeItem('user_id')
+
     navigate('/')
   }
   const returnBackground = () => {
@@ -34,10 +38,8 @@ function Menu() {
   }
 
   useEffect(() => {
-
     getData()
-
-  },[])
+  }, [])
 
   return (
     <>
@@ -55,6 +57,15 @@ function Menu() {
             window.location.pathname === '/photos' ? console.log('') : navigate('/photos')
           }} className={window.location.pathname === '/photos' ? 'ItemMenuActive' : 'ItemMenu'} >Gerenciar Imagens</div>
           <hr className='BarraMenu' />
+          <div onClick={() => {
+            window.location.pathname === '/profile/' + localStorage.getItem('user_id') ? console.log('') : navigate('/profile/' + localStorage.getItem('user_id'))
+          }} className={window.location.pathname === '/profile/' + localStorage.getItem('user_id') ? 'ItemMenuActive' : 'ItemMenu'} >Profile</div>
+
+          <hr className='BarraMenu' />
+
+          <div onClick={() => {
+            window.location.pathname === '/search/users' ? console.log('') : navigate('/search/users')
+          }} className={window.location.pathname === '/search/users' ? 'ItemMenuActive' : 'ItemMenu'} >Procurar usuário</div>
         </div>
         <hr style={{ position: 'absolute', bottom: 45 }} className='BarraMenu' />
         <div onClick={() => setLogoutModal(true)} className='LogoutMenu'>
@@ -67,15 +78,25 @@ function Menu() {
         }} className='ItemMenuMobile'>
           <img style={{ width: 30, height: 25 }} src={Home} alt='Home' />
         </div>
+
         <div onClick={() => {
           window.location.pathname === '/photos' ? console.log('') : navigate('/photos')
         }} className='ItemMenuMobile'>
           <img style={{ width: 30, height: 25 }} src={Image} alt='Gerenciar Imagens' />
+        </div>
 
-        </div>
         <div style={{ marginTop: -20 }} className='ItemMenuMobile'>
-          <div style={{ background: returnBackground(), width: 35, height: 35, border: 'solid 1px white' }} className='ImagePerfilMenu'  ></div>
+          <div onClick={() => {
+            navigate('/profile/' + localStorage.getItem('user_id'))
+          }} style={{ background: returnBackground(), width: 35, height: 35, border: 'solid 1px white' }} className='ImagePerfilMenu'  ></div>
         </div>
+
+        <div onClick={() => {
+          window.location.pathname === '/search/users' ? console.log('') : navigate('/search/users')
+        }} className='ItemMenuMobile'>
+          <img style={{ width: 30, height: 30 }} src={Lupa} alt='Procurar Usuário' />
+        </div>
+
         <div onClick={() => setLogoutModal(true)} className='ItemMenuMobile'>
           <img style={{ width: 30, height: 25 }} src={Logout} alt='logout' />
         </div>

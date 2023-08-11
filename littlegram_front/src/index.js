@@ -13,6 +13,8 @@ import Register from './views/register/Register';
 import DashBoard from './views/dashBoard/DashBoard';
 import GerenciarFotos from './views/gerenciarFotos/GerenciarFotos'
 import VerificandoEmail from './views/verificandoEmail/VerificandoEmail';
+import Profile from './views/profile/Profile';
+import PesquisarUsers from './views/pesquisarUsers/PesquisarUsers';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -34,7 +36,14 @@ const router = createBrowserRouter([
   {
     path : "/confirm-account/:email/:token",
     Component: VerificandoEmail,
-    
+  },
+  {
+    path : "/profile/:id",
+    Component: Profile,
+  },
+  {
+    path : "/search/users",
+    Component: PesquisarUsers,
   }
 ]);
 

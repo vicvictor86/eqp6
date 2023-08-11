@@ -1,6 +1,5 @@
 
 .PostFotos{
-    display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
@@ -178,4 +177,21 @@
         margin-top: 50px;
 
        }
+}
+
+.TelaDeProgresso{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0px;
+    left: 0px;
+    background-color: #0000008a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.BarraProgresso{
+    width: 70%;
+    height: 35px;
+    border-radius: 25px;
 }

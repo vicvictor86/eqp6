@@ -1,0 +1,20 @@
+.UserItem{
+    display: flex;
+    padding: 10px;
+    border-bottom: 2px solid white;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+}
+.AvatarUser{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin-right: 14px;
+}
+.UserItem h3 {
+    margin: 0px;
+    font-weight: 400;
+}

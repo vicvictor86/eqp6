@@ -1,6 +1,4 @@
-import './DashBoard.css';
-
-import Trash from '../../assets/imgs/trash.svg'
+import './Profile.css';
 
 import { useEffect, useState } from 'react'
 import { Modal } from 'react-bootstrap'
@@ -8,10 +6,12 @@ import Menu from '../../components/menu/Menu.js'
 import config from '../../config';
 import axios from 'axios'
 import ImageFilter from 'react-image-filter';
-import { useNavigate } from 'react-router-dom';
 import TresPontos from '../../assets/imgs/tres-pontos.svg'
+import { useNavigate, useParams } from 'react-router-dom';
+import Trash from '../../assets/imgs/trash.svg'
+function Profile() {
+  const { id } = useParams();
 
-function DashBoard() {
   // Controladores da requisição
   const [isFetchingPhotos, setIsFetchingPhotos] = useState(false);
 
@@ -31,15 +31,16 @@ function DashBoard() {
   const [selectedFilter, setSelectedFilter] = useState(0)
   const [descricao, setDescricao] = useState('')
 
-  // modal deletar post
-  const [selectedExclude, setSelectedExclude] = useState(null)
+  // modal delete
   const [openDelete, setOpenDelete] = useState(false)
+
+  const [selectedExclude, setSelectedExclude] = useState(null)
 
   const navigate = useNavigate()
 
   function getPosts() {
     setIsFetchingPosts(true);
-    axios.get(config.baseURL + "/posts/user/?limit=10&offset=" + offSetPosts, {
+    axios.get(config.baseURL + "/posts/user/" + id +"?limit=10&offset=" + offSetPosts, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
@@ -51,6 +52,8 @@ function DashBoard() {
 
       setOffSetPosts(offSetPosts + 1); // Usando a função de atualização do estado para obter o valor mais recente de 'page'
       setIsFetchingPosts(false);
+    }).catch((error) => {
+      console.error(error)
     })
   }
 
@@ -105,6 +108,7 @@ function DashBoard() {
       getPhotos()
     }
   }
+
   const deletePost = (postId) => {
     console.log(postId)
     axios.delete(config.baseURL + "/posts/?postId=" + postId, {
@@ -121,7 +125,6 @@ function DashBoard() {
       console.log(error)
     })
   }
-
   useEffect(() => {
     getPosts()
   }, [])
@@ -143,13 +146,14 @@ function DashBoard() {
             {posts.length > 0 && posts.map((post, index) => (
               <div key={index} className='DashPhoto' style={{ paddingTop: 0 }}>
                 <div className='PostHeader'>
-                  <div style={{ background: returnBackground(post.user.avatar), width: 40, height: 40, border: 'solid 1px white', margin: 'auto 0px' }} className='ImagePerfilMenu'  ></div>
+                  <div style={{ background: returnBackground(post.user.avatar), width: 40, height: 40, border: 'solid 1px white', margin: 'auto 0px' }} className='ImagePerfilMenu'></div>
                   <span style={{ color: 'white', fontSize: 18, fontWeight: 500, margin: 'auto 10px' }}>{'@' + post.user.username}</span>
+
                   <div style={{ width: 25, height: 30, position: 'absolute', right: 0, top: 10, display: post.user.id === localStorage.getItem('user_id') ? 'block' : 'none' }}><img style={{ width: '100%', cursor: 'pointer' }} src={TresPontos} onClick={() => {
                     setSelectedExclude(post.id)
                     setOpenDelete(true)
-                  }} />
-                  </div>
+                  }} /></div>
+
                 </div>
 
                 <ImageFilter
@@ -167,6 +171,26 @@ function DashBoard() {
       </div>
 
       {/* Modais */}
+
+      <Modal dialogClassName='ModalMaior' show={openNewPost} onHide={() => {
+        setOpenNewPost(openNewPost ? false : true)
+      }}>
+        <Modal.Body onScroll={handleScrollPhotos} className='ModalMaior' style={{ backgroundColor: 'var(--color3)', maxHeight: '86vh', overflow: 'auto' }}>
+          <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Novo Post:</h1>
+          <h3 style={{ textAlign: 'left', color: 'white' }}>Selecione uma imagem</h3>
+          <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row', border: 'none' }} className='DashPhoto'>
+            {photos.length > 0 && photos.map((photo, index) => (
+              <div key={index} onClick={() => {
+                setSelectedImage(index)
+                setOpenNewPost(false)
+                setOpenFilter(true)
+              }} className='PhotoToPost' style={{ background: String('url(' + config.baseURL + "/files/photos/" + photo.path + ')' + 'center center / cover') }}>
+              </div>
+            ))}
+          </div>
+
+        </Modal.Body>
+      </Modal>
 
       <Modal dialogClassName='ModalMaior' show={openNewPost} onHide={() => {
         setOpenNewPost(openNewPost ? false : true)
@@ -216,7 +240,6 @@ function DashBoard() {
 
         </Modal.Body>
       </Modal>
-      
       <Modal show={openDelete} onHide={() => {
         setOpenDelete(openDelete ? false : true)
       }}>
@@ -236,11 +259,9 @@ function DashBoard() {
           </div>
         </Modal.Body>
       </Modal>
-      
-      </>
-      
+    </>
 
   );
 }
 
-export default DashBoard;
+export default Profile;
