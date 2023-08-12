@@ -20,24 +20,16 @@ class FakePostsRepository implements IPostsRepository {
     return findPost || null;
   }
 
-  public async findByUserId(userId: string): Promise<Post[] | null> {
+  public async findByUserId(userId: string): Promise<Post[]> {
     const findPosts = this.posts.filter(post => post.userId === userId);
-
-    if (findPosts.length === 0) {
-      return null;
-    }
 
     return findPosts;
   }
 
   public async findByUserIdPaginated(
     data: IShowByUserPaginatedDTO,
-  ): Promise<Post[] | null> {
+  ): Promise<Post[]> {
     const findPosts = this.posts.filter(post => post.userId === data.userId);
-
-    if (findPosts.length === 0) {
-      return null;
-    }
 
     const skip = data.offset * data.limit;
     const take = data.limit;

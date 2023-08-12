@@ -75,7 +75,7 @@ describe('DeletePostService', () => {
 
     const userPosts = await fakePostsRepository.findByUserId(user.id);
 
-    expect(userPosts).toBe(null);
+    expect(userPosts).toHaveLength(0);
   });
 
   it('should NOT be able to delete a post if user does not exist', async () => {

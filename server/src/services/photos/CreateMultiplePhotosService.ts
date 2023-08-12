@@ -10,13 +10,15 @@ import { IUsersRepository } from '@models/repositories/interfaces/IUserRepositor
 
 import { AppError } from '@shared/errors/AppError';
 
+interface RequestPhoto {
+  path: string;
+  size: number | null;
+}
+
 interface Request {
   userId: string;
 
-  photos: {
-    path: string;
-    size: number;
-  }[];
+  photos: RequestPhoto[] | null;
 }
 
 @injectable()
@@ -41,10 +43,6 @@ export class CreateMultiplePhotosService {
 
     if (!photos) {
       throw new AppError('Photos not found');
-    }
-
-    if (photos.length < 0) {
-      return [];
     }
 
     const newPhotosPromise = photos.map(async photo => {

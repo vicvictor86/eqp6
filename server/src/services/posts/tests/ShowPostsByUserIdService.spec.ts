@@ -6,7 +6,7 @@ import { AppError } from '@shared/errors/AppError';
 import { CreatePhotoService } from '../../photos/CreatePhotoService';
 
 import { FakeUsersRepository } from '../../../models/repositories/fakes/FakeUsersRepository';
-import { ShowPostsService } from '../ShowPostsService';
+import { ShowPostsByUserIdService } from '../ShowPostsByUserIdService';
 import { CreatePostService } from '../CreatePostService';
 
 let fakeUsersRepository: FakeUsersRepository;
@@ -16,9 +16,9 @@ let fakePostsRepository: FakePostsRepository;
 
 let createPhotoService: CreatePhotoService;
 let createPostService: CreatePostService;
-let showPostsService: ShowPostsService;
+let showPostsByUserIdService: ShowPostsByUserIdService;
 
-describe('CreatePhotoService', () => {
+describe('ShowPostByUserIdService', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
     fakeStorageProvider = new FakeStorageProvider();
@@ -35,7 +35,7 @@ describe('CreatePhotoService', () => {
       fakePhotosRepository,
       fakePostsRepository,
     );
-    showPostsService = new ShowPostsService(
+    showPostsByUserIdService = new ShowPostsByUserIdService(
       fakePostsRepository,
       fakeUsersRepository,
     );
@@ -77,7 +77,7 @@ describe('CreatePhotoService', () => {
       filterUsed: 'none',
     });
 
-    const userPosts = await showPostsService.execute({
+    const userPosts = await showPostsByUserIdService.execute({
       userId: user.id,
       limit: 10,
       offset: 0,
@@ -99,7 +99,7 @@ describe('CreatePhotoService', () => {
     const limit = 10;
     const offset = 0;
 
-    const userPosts = await showPostsService.execute({
+    const userPosts = await showPostsByUserIdService.execute({
       userId: user.id,
       limit,
       offset,
@@ -128,7 +128,7 @@ describe('CreatePhotoService', () => {
       filterUsed: 'none',
     });
 
-    const userPosts = await showPostsService.execute({
+    const userPosts = await showPostsByUserIdService.execute({
       userId: user.id,
       limit,
       offset,
@@ -139,7 +139,7 @@ describe('CreatePhotoService', () => {
 
   it('should NOT be able to show a post from a non existing user', async () => {
     await expect(
-      showPostsService.execute({
+      showPostsByUserIdService.execute({
         userId: 'non-existing-user',
         limit: 10,
         offset: 0,
