@@ -25,7 +25,10 @@ describe('CreatePhotoService', () => {
       fakePhotosRepository,
       fakeStorageProvider,
     );
-    showPhotoService = new ShowPhotoService(fakePhotosRepository);
+    showPhotoService = new ShowPhotoService(
+      fakeUsersRepository,
+      fakePhotosRepository,
+    );
   });
 
   it('should be able to show all user photos', async () => {
@@ -44,14 +47,22 @@ describe('CreatePhotoService', () => {
       byteImageSize: 100,
     });
 
-    const userPhotos = await showPhotoService.execute(user.id);
+    const userPhotos = await showPhotoService.execute({
+      userId: user.id,
+      limit: 10,
+      offset: 0,
+    });
 
-    expect(userPhotos).toHaveLength(1);
+    expect(userPhotos.photos).toHaveLength(1);
   });
 
   it('should NOT be able to show a photo from a non existing user', async () => {
     await expect(
-      showPhotoService.execute('non-existing-user'),
+      showPhotoService.execute({
+        userId: 'non-existing-user',
+        limit: 10,
+        offset: 0,
+      }),
     ).rejects.toBeInstanceOf(AppError);
   });
 });

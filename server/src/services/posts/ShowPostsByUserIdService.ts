@@ -1,8 +1,11 @@
 import { inject, injectable } from 'tsyringe';
-import { AppError } from '@shared/errors/AppError';
+
 import { IPostsRepository } from '@models/repositories/interfaces/IPostsRepository';
-import { Post } from '@models/entities/Post';
 import { IUsersRepository } from '@models/repositories/interfaces/IUserRepository';
+
+import { Post } from '@models/entities/Post';
+
+import { AppError } from '@shared/errors/AppError';
 
 interface Request {
   userId: string;
@@ -23,7 +26,7 @@ interface Response {
 }
 
 @injectable()
-export class ShowPostsService {
+export class ShowPostsByUserIdService {
   constructor(
     @inject('PostsRepository')
     private postsRepository: IPostsRepository,

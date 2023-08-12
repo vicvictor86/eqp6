@@ -56,7 +56,7 @@ describe('DeletePhotoService', () => {
 
     const userPhotos = await fakePhotosRepository.findByUserId(user.id);
 
-    expect(userPhotos).toBe(null);
+    expect(userPhotos).toHaveLength(0);
   });
 
   it('should NOT be able to delete a photo if user does not exist', async () => {

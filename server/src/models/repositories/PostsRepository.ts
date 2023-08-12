@@ -25,10 +25,24 @@ export const PostRepository: IPostsRepository = postRepository.extend({
     return post;
   },
 
-  async findByUserId(userId: string): Promise<Post[] | null> {
+  async findByUserId(userId: string): Promise<Post[]> {
     const post = await postRepository.find({
       where: {
         userId,
+      },
+    });
+    return post;
+  },
+
+  async findByUserIdPaginated({ userId, limit, offset }): Promise<Post[]> {
+    const post = await postRepository.find({
+      where: {
+        userId,
+      },
+      take: limit,
+      skip: offset,
+      order: {
+        createdAt: 'DESC',
       },
     });
     return post;
