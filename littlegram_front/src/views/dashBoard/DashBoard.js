@@ -35,6 +35,10 @@ function DashBoard() {
   const [selectedExclude, setSelectedExclude] = useState(null)
   const [openDelete, setOpenDelete] = useState(false)
 
+  //modal ver comentários
+  const [selectedViewComments, setSelectedViewComments] = useState(null)
+  const [openComments, setOpenComments] = useState(false)
+
   const navigate = useNavigate()
 
   function getPosts() {
@@ -160,6 +164,10 @@ function DashBoard() {
                   colorTwo={config.filtros[post.filterUsed].colorTwo}
                 />
                 <span className='PostDescricao' >{post.description}</span>
+                <div className='PostDescricao' onClick={() => {
+                  setOpenComments(true)
+                  setSelectedViewComments(post.id)}}>Ver os 122 comentários
+                </div>
               </div>
             ))}
           </div>
@@ -234,6 +242,42 @@ function DashBoard() {
               setOpenDelete(openDelete ? false : true)
             }}>Não</button>
           </div>
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={openComments} onHide={() => {
+        setOpenDelete(openComments ? false : true)
+      }}>
+        <Modal.Body style={{ backgroundColor: 'var(--color3)', width: '500px', marginLeftt: '10px'}}>
+          {/* <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '20px' }}> */}
+            {posts.length > 0 && posts.map((post, index) => (
+              post.id === selectedViewComments && (
+                <div className='ModalPost'>
+                  <div className='ModalImage'>
+                    <ImageFilter
+                      style={{ marginLeft: 50 }}
+                      image={config.baseURL + "/files/photos/" + post.photo.path}
+                      filter={config.filtros[post.filterUsed].filter} // see docs beneath
+                      colorOne={config.filtros[post.filterUsed].colorOne}
+                      colorTwo={config.filtros[post.filterUsed].colorTwo}
+                    />
+                  </div>
+                  <div style={{flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center'}}>
+                    <div className='ModalPostHeader'>
+                      <div style={{ background: returnBackground(post.user.avatar), width: 40, height: 40, border: 'solid 1px white', margin: 'auto 0px' }} className='ImagePerfilMenu'  ></div>
+                      <span style={{ color: 'white', fontSize: 18, fontWeight: 500}}>{'@' + post.user.username}</span>
+                    </div>
+                    <span className='PostDescricao' >{post.description}</span>
+                  </div>
+                </div>
+              )
+            ))}
+
+            <button className='ButtonModal' onClick={() => { deletePost(selectedExclude) }}>Sim</button>
+            <button className='ButtonModal' onClick={() => {
+              setOpenComments(openComments ? false : true)
+            }}>Não</button>
+          {/* </div> */}
         </Modal.Body>
       </Modal>
       

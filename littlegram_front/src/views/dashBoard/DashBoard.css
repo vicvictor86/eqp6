@@ -8,7 +8,7 @@
 
 
 .PostDescricao {
-    padding: 10px 0px;
+    padding: 7px 0px;
     font-size: 14px;
     color: white;
     margin-left: 50px;
@@ -87,6 +87,29 @@
     overflow: auto;
     height: calc(100vh - 99px);
 }
+
+.ModalPost {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.ModalImage {
+    display: flex;
+    justify-content: center;
+    /* overflow: hidden; */
+    
+}
+
+.ModalPostHeader {
+    position: relative;
+    width: calc(100% + 50px);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
 @media (max-width:994px) {
     .PostDashBoard {
         margin-left: 0px;
