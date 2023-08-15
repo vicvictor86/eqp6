@@ -88,10 +88,13 @@
     height: calc(100vh - 99px);
 }
 
+.Modal{
+    width: 100%;
+}
+
 .ModalPost {
     display: flex;
     flex-direction: row;
-    justify-content: center;
 }
 
 .ModalImage {
@@ -101,13 +104,52 @@
     
 }
 
+.ModalCommentsSide{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    /* align-items: center; */
+    padding-left: 1px;
+    width: 300%;
+}
+
 .ModalPostHeader {
     position: relative;
-    width: calc(100% + 50px);
+    width: calc(100%+10px);
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    padding: 5px;
+    border: 2px solid white;
+}
+
+.ModalDescription{
+    display: flex;
+    justify-content: start;
+    font-size: 14px;
+    color: white;
+    padding-left: 5px;
+    border-bottom: 2px solid white;
+    border-left: 2px solid white;
+    border-right: 2px solid white;
+}
+
+.ModalCommentsDiv{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    padding: 5px 0px 5px 5px;
+    border-bottom: 2px solid white;
+    border-left: 2px solid white;
+    border-right: 2px solid white;
+}
+
+.ModalComments{
+    border-bottom: 0px;
+    padding-bottom: 0px;
+    font-size: 14px;
+    color: white;
 }
 
 @media (max-width:994px) {

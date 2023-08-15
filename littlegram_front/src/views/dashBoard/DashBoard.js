@@ -10,6 +10,7 @@ import axios from 'axios'
 import ImageFilter from 'react-image-filter';
 import { useNavigate } from 'react-router-dom';
 import TresPontos from '../../assets/imgs/tres-pontos.svg'
+import X from '../../assets/imgs/x.svg'
 
 function DashBoard() {
   // Controladores da requisição
@@ -245,39 +246,41 @@ function DashBoard() {
         </Modal.Body>
       </Modal>
 
-      <Modal show={openComments} onHide={() => {
+      <Modal show={openComments} dialogClassName ='Modal' onHide={() => {
         setOpenDelete(openComments ? false : true)
       }}>
-        <Modal.Body style={{ backgroundColor: 'var(--color3)', width: '500px', marginLeftt: '10px'}}>
+        <Modal.Body style={{ backgroundColor: 'var(--color3)'}}>
           {/* <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '20px' }}> */}
-            {posts.length > 0 && posts.map((post, index) => (
-              post.id === selectedViewComments && (
-                <div className='ModalPost'>
-                  <div className='ModalImage'>
-                    <ImageFilter
-                      style={{ marginLeft: 50 }}
-                      image={config.baseURL + "/files/photos/" + post.photo.path}
-                      filter={config.filtros[post.filterUsed].filter} // see docs beneath
-                      colorOne={config.filtros[post.filterUsed].colorOne}
-                      colorTwo={config.filtros[post.filterUsed].colorTwo}
-                    />
+          <div style={{display: 'flex', justifyContent: 'start'}}>
+            <img style={{ width: '4%'}} src={X} onClick={() => {
+              setOpenComments(openComments ? false : true)
+            }}/>
+          </div>
+          {posts.length > 0 && posts.map((post, index) => (
+            post.id === selectedViewComments && (
+              <div className='ModalPost'>
+                <div className='ModalImage'>
+                  <ImageFilter
+                    image={config.baseURL + "/files/photos/" + post.photo.path}
+                    filter={config.filtros[post.filterUsed].filter} // see docs beneath
+                    colorOne={config.filtros[post.filterUsed].colorOne}
+                    colorTwo={config.filtros[post.filterUsed].colorTwo}
+                  />
+                </div>
+                <div className='ModalCommentsSide'>
+                  <div className='ModalPostHeader'>
+                    <div style={{ background: returnBackground(post.user.avatar), width: 40, height: 40, border: 'solid 1px white', margin: 'auto 0px' }} className='ImagePerfilMenu'  ></div>
+                    <span style={{ color: 'white', fontSize: 18, fontWeight: 500, paddingLeft: 2}}>{'@' + post.user.username}</span>
                   </div>
-                  <div style={{flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center'}}>
-                    <div className='ModalPostHeader'>
-                      <div style={{ background: returnBackground(post.user.avatar), width: 40, height: 40, border: 'solid 1px white', margin: 'auto 0px' }} className='ImagePerfilMenu'  ></div>
-                      <span style={{ color: 'white', fontSize: 18, fontWeight: 500}}>{'@' + post.user.username}</span>
-                    </div>
-                    <span className='PostDescricao' >{post.description}</span>
+                  <span className='ModalDescription'>{post.description}</span>
+                  <div className='ModalCommentsDiv'>
+                    <h1 className='ModalComments'>@Manel</h1>
+                    <h1 className='ModalComments'>Daora, muito brabo</h1>
                   </div>
                 </div>
-              )
-            ))}
-
-            <button className='ButtonModal' onClick={() => { deletePost(selectedExclude) }}>Sim</button>
-            <button className='ButtonModal' onClick={() => {
-              setOpenComments(openComments ? false : true)
-            }}>Não</button>
-          {/* </div> */}
+              </div>
+            )
+          ))}
         </Modal.Body>
       </Modal>
       
