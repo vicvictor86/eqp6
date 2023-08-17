@@ -10,6 +10,7 @@ import axios from 'axios'
 import ImageFilter from 'react-image-filter';
 import { useNavigate } from 'react-router-dom';
 import TresPontos from '../../assets/imgs/tres-pontos.svg'
+import like from '../../assets/imgs/like.svg'
 import X from '../../assets/imgs/x.svg'
 
 function DashBoard() {
@@ -159,11 +160,18 @@ function DashBoard() {
 
                 <ImageFilter
                   style={{ marginLeft: 50 }}
+                  /*pq krls isso ta batendo?*/
                   image={config.baseURL + "/files/photos/" + post.photo.path}
                   filter={config.filtros[post.filterUsed].filter} // see docs beneath
                   colorOne={config.filtros[post.filterUsed].colorOne}
                   colorTwo={config.filtros[post.filterUsed].colorTwo}
                 />
+                <div className='LikeDiv'>
+                  <img alt = 'like' className='LikeButtom' style={{marginBottom: '7px'}} src={like}/>
+                  <span className='ModalComments' style={{padding: '0px 5px 0px'}}>5 Like</span>
+                  <img alt = 'like' className = 'LikeButtom' style={{marginTop: '5px',rotate: '180deg'}} src={like}/>
+                  <span className='ModalComments' style={{padding: '0px 5px 0px'}}>0 Deslike</span>
+                </div>
                 <span className='PostDescricao' >{post.description}</span>
                 <div className='PostDescricao' onClick={() => {
                   setOpenComments(true)
@@ -245,14 +253,15 @@ function DashBoard() {
           </div>
         </Modal.Body>
       </Modal>
-
-      <Modal show={openComments} dialogClassName ='Modal' onHide={() => {
+      
+      {/*vw = tamanho da tela*/}
+      <Modal show={openComments} dialogClassName ='Modal' style = {{height: '75vh'}} size = 'xl' onHide={() => {
         setOpenDelete(openComments ? false : true)
       }}>
         <Modal.Body style={{ backgroundColor: 'var(--color3)'}}>
           {/* <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '20px' }}> */}
-          <div style={{display: 'flex', justifyContent: 'start'}}>
-            <img style={{ width: '4%'}} src={X} onClick={() => {
+          <div style={{display: 'flex', justifyContent: 'start', paddingBottom: '2px'}}>
+            <img alt = 'fechar' style={{ width: '20px', filter: 'invert(100%)'}} src={X} onClick={() => {
               setOpenComments(openComments ? false : true)
             }}/>
           </div>
@@ -265,17 +274,27 @@ function DashBoard() {
                     filter={config.filtros[post.filterUsed].filter} // see docs beneath
                     colorOne={config.filtros[post.filterUsed].colorOne}
                     colorTwo={config.filtros[post.filterUsed].colorTwo}
+                    style = {{width: '100%'}}
                   />
                 </div>
                 <div className='ModalCommentsSide'>
                   <div className='ModalPostHeader'>
                     <div style={{ background: returnBackground(post.user.avatar), width: 40, height: 40, border: 'solid 1px white', margin: 'auto 0px' }} className='ImagePerfilMenu'  ></div>
-                    <span style={{ color: 'white', fontSize: 18, fontWeight: 500, paddingLeft: 2}}>{'@' + post.user.username}</span>
+                    <span className='ModalUserName'>{'@' + post.user.username}</span>
                   </div>
                   <span className='ModalDescription'>{post.description}</span>
                   <div className='ModalCommentsDiv'>
                     <h1 className='ModalComments'>@Manel</h1>
-                    <h1 className='ModalComments'>Daora, muito brabo</h1>
+                    <div className='ModalCommentsBackSide'>
+                      <h1 className='ModalComments'>Daora, muito brabo</h1>
+                      <div className='ModalLikeDiv'>
+                        <img alt = 'like' className = 'ModalLikeButtom' src={like}/>
+                        <span className='ModalComments' style={{padding: '0px 5px 0px'}}>5</span>
+                        <img alt = 'like' className = 'ModalLikeButtom' style={{rotate: '180deg'}} src={like}/>
+                        <span className='ModalComments' style={{padding: '0px 5px 0px'}}>0</span>
+                      </div>
+                      
+                    </div>
                   </div>
                 </div>
               </div>
