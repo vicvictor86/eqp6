@@ -61,7 +61,7 @@ export class PostsController {
 
     const posts = await showPostsService.execute({ userId, limit, offset });
 
-    return response.json(posts);
+    return response.json(instanceToInstance(posts));
   }
 
   public async showPostsByUserId(
@@ -84,7 +84,7 @@ export class PostsController {
       offset,
     });
 
-    return response.json(posts);
+    return response.json(instanceToInstance(posts));
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
