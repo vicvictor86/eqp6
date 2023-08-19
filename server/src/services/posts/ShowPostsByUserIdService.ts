@@ -36,13 +36,6 @@ export class ShowPostsByUserIdService {
   ) {}
 
   public async execute({ userId, limit, offset }: Request): Promise<Response> {
-    const defaultResponse = {
-      posts: [],
-      totalPosts: 0,
-      totalPages: 1,
-      offset: 0,
-    } as Response;
-
     const user = await this.usersRepository.findById(userId);
 
     if (!user) {
@@ -50,10 +43,6 @@ export class ShowPostsByUserIdService {
     }
 
     const allPosts = await this.postsRepository.findByUserId(userId);
-
-    if (!allPosts) {
-      return defaultResponse;
-    }
 
     const totalPosts = allPosts.length;
     const totalPages = Math.ceil(totalPosts / limit);
@@ -65,10 +54,6 @@ export class ShowPostsByUserIdService {
       limit,
       offset: realOffset,
     });
-
-    if (!posts) {
-      return defaultResponse;
-    }
 
     const response = {
       posts,

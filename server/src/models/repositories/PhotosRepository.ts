@@ -26,7 +26,7 @@ export const PhotosRepository: IPhotosRepository = photosRepository.extend({
     return photo;
   },
 
-  async findByUserId(userId: string): Promise<Photo[] | null> {
+  async findByUserId(userId: string): Promise<Photo[]> {
     const photo = await photosRepository.find({
       where: {
         userId,
