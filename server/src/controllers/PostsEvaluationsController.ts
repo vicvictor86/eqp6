@@ -16,7 +16,7 @@ const createPostEvaluationSchema = z.object({
 
 const showPostsEvaluationsByCommentCommentSchema = z.object({
   postId: z.string().uuid(),
-  limit: z.number().int().positive().default(10),
+  limit: z.number().int().nonnegative().default(10),
   offset: z.number().int().nonnegative().default(0),
 });
 
