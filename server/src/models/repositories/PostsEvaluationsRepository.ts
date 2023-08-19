@@ -19,7 +19,7 @@ export const PostsEvaluationsRepository: IPostsEvaluationsRepository =
       return evaluation;
     },
 
-    async findByPostId(postId: string): Promise<PostEvaluation[] | null> {
+    async findByPostId(postId: string): Promise<PostEvaluation[]> {
       const evaluations = await postsEvaluationsRepository.find({
         where: {
           postId,
@@ -48,6 +48,24 @@ export const PostsEvaluationsRepository: IPostsEvaluationsRepository =
         },
       });
       return evaluation;
+    },
+
+    async findByPostIdPaginated({
+      postId,
+      limit,
+      offset,
+    }): Promise<PostEvaluation[]> {
+      const post = await postsEvaluationsRepository.find({
+        where: {
+          postId,
+        },
+        take: limit,
+        skip: offset,
+        order: {
+          createdAt: 'DESC',
+        },
+      });
+      return post;
     },
 
     async create(

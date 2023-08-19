@@ -2,6 +2,7 @@ import { v4 } from 'uuid';
 
 import { PostEvaluation } from '@models/entities/PostEvaluation';
 
+import { IShowByPostIdPaginatedDTO } from '@models/dtos/IShowByPostIdPaginatedDTO';
 import { IPostsEvaluationsRepository } from '../interfaces/IPostsEvaluationRepository';
 
 class FakePostsEvaluationRepository implements IPostsEvaluationsRepository {
@@ -15,12 +16,27 @@ class FakePostsEvaluationRepository implements IPostsEvaluationsRepository {
     return findPostEvaluation || null;
   }
 
-  public async findByPostId(postId: string): Promise<PostEvaluation[] | null> {
+  public async findByPostId(postId: string): Promise<PostEvaluation[]> {
     const findPostEvaluations = this.postsEvaluation.filter(
       postEvaluation => postEvaluation.postId === postId,
     );
 
-    return findPostEvaluations || null;
+    return findPostEvaluations;
+  }
+
+  public async findByPostIdPaginated(
+    data: IShowByPostIdPaginatedDTO,
+  ): Promise<PostEvaluation[]> {
+    const findPostsEvaluation = this.postsEvaluation.filter(
+      postEvaluation => postEvaluation.postId === data.postId,
+    );
+
+    const skip = data.offset * data.limit;
+    const take = data.limit;
+
+    const postsEvaluation = findPostsEvaluation.slice(skip, skip + take);
+
+    return postsEvaluation;
   }
 
   public async findByUserId(userId: string): Promise<PostEvaluation[] | null> {

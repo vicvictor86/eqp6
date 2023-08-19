@@ -26,7 +26,7 @@ postsEvaluationsRouter.get(
 );
 
 postsEvaluationsRouter.get(
-  '/post',
+  '/post/:postId',
   ensureAuthenticated,
   ensureEmailConfirmation.execute,
   postsEvaluationsController.showByPost,

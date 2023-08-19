@@ -16,6 +16,8 @@ const createCommentEvaluationSchema = z.object({
 
 const showCommentsEvaluationsByCommentCommentSchema = z.object({
   commentId: z.string().uuid(),
+  limit: z.number().int().positive().default(10),
+  offset: z.number().int().nonnegative().default(0),
 });
 
 export class CommentsEvaluationsController {
@@ -53,16 +55,23 @@ export class CommentsEvaluationsController {
     request: Request,
     response: Response,
   ): Promise<Response> {
-    const { commentId } = showCommentsEvaluationsByCommentCommentSchema.parse({
-      commentId: request.query.commentId,
-    });
+    const { commentId, limit, offset } =
+      showCommentsEvaluationsByCommentCommentSchema.parse({
+        commentId: request.params.commentId,
+        limit: Number(request.query.limit),
+        offset: Number(request.query.offset),
+      });
 
     const showCommentsEvaluationsByCommentService = container.resolve(
       ShowCommentsEvaluationsByCommentService,
     );
 
     const commentsEvaluations =
-      await showCommentsEvaluationsByCommentService.execute(commentId);
+      await showCommentsEvaluationsByCommentService.execute({
+        limit,
+        offset,
+        commentId,
+      });
 
     return response.json(commentsEvaluations);
   }

@@ -3,7 +3,23 @@ import { inject, injectable } from 'tsyringe';
 import { ICommentsEvaluationsRepository } from '@models/repositories/interfaces/ICommentsEvaluationRepository';
 import { CommentEvaluation } from '@models/entities/CommentEvaluation';
 
-import { AppError } from '@shared/errors/AppError';
+interface Request {
+  commentId: string;
+
+  limit: number;
+
+  offset: number;
+}
+
+interface Response {
+  commentsEvaluations: CommentEvaluation[];
+
+  totalCommentsEvaluations: number;
+
+  totalPages: number;
+
+  offset: number;
+}
 
 @injectable()
 export class ShowCommentsEvaluationsByCommentService {
@@ -12,14 +28,33 @@ export class ShowCommentsEvaluationsByCommentService {
     private commentsEvaluationsRepository: ICommentsEvaluationsRepository,
   ) {}
 
-  public async execute(commentId: string): Promise<CommentEvaluation[]> {
-    const commentsEvaluations =
+  public async execute({
+    limit,
+    offset,
+    commentId,
+  }: Request): Promise<Response> {
+    const allComments =
       await this.commentsEvaluationsRepository.findByCommentId(commentId);
 
-    if (!commentsEvaluations) {
-      throw new AppError('No commentsEvaluations found in this comment.');
-    }
+    const totalCommentsEvaluations = allComments.length;
+    const totalPages = Math.ceil(totalCommentsEvaluations / limit);
 
-    return commentsEvaluations;
+    const realOffset = offset * limit;
+
+    const commentsEvaluations =
+      await this.commentsEvaluationsRepository.findByCommentIdPaginated({
+        commentId,
+        limit,
+        offset: realOffset,
+      });
+
+    const response = {
+      commentsEvaluations,
+      totalCommentsEvaluations,
+      totalPages,
+      offset,
+    } as Response;
+
+    return response;
   }
 }

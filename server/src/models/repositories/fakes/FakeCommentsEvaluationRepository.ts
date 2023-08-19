@@ -1,3 +1,4 @@
+import { IShowByCommentIdPaginatedDTO } from '@models/dtos/IShowByCommentIdPaginatedDTO';
 import { CommentEvaluation } from '@models/entities/CommentEvaluation';
 import { v4 } from 'uuid';
 import { ICommentsEvaluationsRepository } from '../interfaces/ICommentsEvaluationRepository';
@@ -17,12 +18,27 @@ class FakeCommentsEvaluationRepository
 
   public async findByCommentId(
     commentId: string,
-  ): Promise<CommentEvaluation[] | null> {
+  ): Promise<CommentEvaluation[]> {
     const findCommentEvaluations = this.commentsEvaluations.filter(
       commentEvaluation => commentEvaluation.commentId === commentId,
     );
 
-    return findCommentEvaluations || null;
+    return findCommentEvaluations;
+  }
+
+  public async findByCommentIdPaginated(
+    data: IShowByCommentIdPaginatedDTO,
+  ): Promise<CommentEvaluation[]> {
+    const findCommentsEvaluation = this.commentsEvaluations.filter(
+      commentEvaluation => commentEvaluation.commentId === data.commentId,
+    );
+
+    const skip = data.offset * data.limit;
+    const take = data.limit;
+
+    const commentsEvaluation = findCommentsEvaluation.slice(skip, skip + take);
+
+    return commentsEvaluation;
   }
 
   public async findByUserId(
