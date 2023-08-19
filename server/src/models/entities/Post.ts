@@ -40,7 +40,7 @@ export class Post {
   @JoinColumn({ name: 'photo_id' })
   photo: Photo;
 
-  @OneToMany(() => Comment, comment => comment.post)
+  @OneToMany(() => Comment, comment => comment.post, { eager: true })
   comments: Comment[];
 
   @OneToMany(() => PostEvaluation, postEvaluation => postEvaluation.post, {
