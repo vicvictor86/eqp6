@@ -42,7 +42,9 @@ export class Post {
   @OneToMany(() => Comment, comment => comment.post)
   comments: Comment[];
 
-  @OneToMany(() => PostEvaluation, postEvaluation => postEvaluation.post)
+  @OneToMany(() => PostEvaluation, postEvaluation => postEvaluation.post, {
+    eager: true,
+  })
   evaluations: PostEvaluation[];
 
   @CreateDateColumn({ name: 'created_at' })
