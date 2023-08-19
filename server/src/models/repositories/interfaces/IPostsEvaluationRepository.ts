@@ -1,9 +1,13 @@
 import { ICreatePostsEvaluationDTO } from '@models/dtos/ICreatePostsEvaluationDTO';
+import { IShowByPostIdPaginatedDTO } from '@models/dtos/IShowByPostIdPaginatedDTO';
 import { PostEvaluation } from '@models/entities/PostEvaluation';
 
 export interface IPostsEvaluationsRepository {
   findById(id: string): Promise<PostEvaluation | null>;
-  findByPostId(postId: string): Promise<PostEvaluation[] | null>;
+  findByPostId(postId: string): Promise<PostEvaluation[]>;
+  findByPostIdPaginated(
+    data: IShowByPostIdPaginatedDTO,
+  ): Promise<PostEvaluation[]>;
   findByUserId(userId: string): Promise<PostEvaluation[] | null>;
   findByUserIdAndPostId(
     userId: string,

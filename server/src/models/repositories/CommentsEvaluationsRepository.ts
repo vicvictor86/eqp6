@@ -18,9 +18,7 @@ export const CommentsEvaluationsRepository: ICommentsEvaluationsRepository =
       return evaluation;
     },
 
-    async findByCommentId(
-      commentId: string,
-    ): Promise<CommentEvaluation[] | null> {
+    async findByCommentId(commentId: string): Promise<CommentEvaluation[]> {
       const evaluations = await commentsEvaluationsRepository.find({
         where: {
           commentId,
@@ -36,6 +34,24 @@ export const CommentsEvaluationsRepository: ICommentsEvaluationsRepository =
         },
       });
       return evaluations;
+    },
+
+    async findByCommentIdPaginated({
+      commentId,
+      limit,
+      offset,
+    }): Promise<CommentEvaluation[]> {
+      const post = await commentsEvaluationsRepository.find({
+        where: {
+          commentId,
+        },
+        take: limit,
+        skip: offset,
+        order: {
+          createdAt: 'DESC',
+        },
+      });
+      return post;
     },
 
     async findByUserIdAndCommentId(
