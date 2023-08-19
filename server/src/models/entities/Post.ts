@@ -66,14 +66,14 @@ export class Post {
     return this.evaluations.filter(evaluation => !evaluation.isLike).length;
   }
 
-  @Expose({ name: 'user_evaluation' })
-  getUserEvaluation(userId: string): boolean | null {
+  @Expose({ name: 'userEvaluation' })
+  getUserEvaluation(): boolean | null {
     if (!this.evaluations) {
       return null;
     }
 
     const userEvaluation = this.evaluations.find(
-      evaluation => evaluation.userId === userId,
+      evaluation => evaluation.userId === this.userId,
     );
 
     if (!userEvaluation) {
