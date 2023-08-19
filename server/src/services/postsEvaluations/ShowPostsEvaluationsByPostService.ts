@@ -44,6 +44,17 @@ export class ShowPostsEvaluationsByPostService {
 
     const allPosts = await this.postsEvaluationsRepository.findByPostId(postId);
 
+    if (limit === 0) {
+      const response = {
+        postsEvaluations: allPosts,
+        totalPostsEvaluations: allPosts.length,
+        totalPages: 1,
+        offset: 0,
+      } as Response;
+
+      return response;
+    }
+
     const totalPostsEvaluations = allPosts.length;
     const totalPages = Math.ceil(totalPostsEvaluations / limit);
 
