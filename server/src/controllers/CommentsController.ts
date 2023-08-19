@@ -52,7 +52,7 @@ export class CommentsController {
 
     const comments = await showCommentsService.execute(postId);
 
-    return response.json(comments);
+    return response.json(instanceToInstance(comments));
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
