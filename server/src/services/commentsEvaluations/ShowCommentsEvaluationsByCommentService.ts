@@ -1,7 +1,11 @@
 import { inject, injectable } from 'tsyringe';
 
 import { ICommentsEvaluationsRepository } from '@models/repositories/interfaces/ICommentsEvaluationRepository';
+import { ICommentsRepository } from '@models/repositories/interfaces/ICommentsRepository';
+
 import { CommentEvaluation } from '@models/entities/CommentEvaluation';
+
+import { AppError } from '@shared/errors/AppError';
 
 interface Request {
   commentId: string;
@@ -24,6 +28,9 @@ interface Response {
 @injectable()
 export class ShowCommentsEvaluationsByCommentService {
   constructor(
+    @inject('CommentsRepository')
+    private commentsRepository: ICommentsRepository,
+
     @inject('CommentsEvaluationsRepository')
     private commentsEvaluationsRepository: ICommentsEvaluationsRepository,
   ) {}
@@ -33,8 +40,25 @@ export class ShowCommentsEvaluationsByCommentService {
     offset,
     commentId,
   }: Request): Promise<Response> {
+    const commentExists = await this.commentsRepository.findById(commentId);
+
+    if (!commentExists) {
+      throw new AppError('Comment not found');
+    }
+
     const allComments =
       await this.commentsEvaluationsRepository.findByCommentId(commentId);
+
+    if (limit === 0) {
+      const response = {
+        commentsEvaluations: allComments,
+        totalCommentsEvaluations: allComments.length,
+        totalPages: 1,
+        offset: 0,
+      } as Response;
+
+      return response;
+    }
 
     const totalCommentsEvaluations = allComments.length;
     const totalPages = Math.ceil(totalCommentsEvaluations / limit);
