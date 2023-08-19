@@ -35,7 +35,7 @@ describe('ShowPostByUserIdService', () => {
     );
   });
 
-  it('should be able to show all posts evaluations', async () => {
+  it('should be able to show posts evaluations', async () => {
     const user = await fakeUsersRepository.create({
       realName: 'test',
       username: 'testUser',
@@ -95,6 +95,72 @@ describe('ShowPostByUserIdService', () => {
       await showPostsEvaluationsByPostService.execute({
         postId: post.id,
         limit: 10,
+        offset: 0,
+      });
+
+    expect(userPostsEvaluations.postsEvaluations).toHaveLength(2);
+  });
+
+  it('should be able to show all posts evaluations', async () => {
+    const user = await fakeUsersRepository.create({
+      realName: 'test',
+      username: 'testUser',
+      email: 'test@example.com',
+      password: '123456',
+      isAdmin: false,
+      confirmed: false,
+    });
+
+    const user2 = await fakeUsersRepository.create({
+      realName: 'test2',
+      username: 'testUser2',
+      email: 'test2@example.com',
+      password: '123456',
+      isAdmin: false,
+      confirmed: false,
+    });
+
+    await fakePhotosRepository.create({
+      userId: user.id,
+      path: 'photo.jpg',
+      size: 100,
+    });
+
+    await fakePhotosRepository.create({
+      userId: user2.id,
+      path: 'photo.jpg',
+      size: 100,
+    });
+
+    const photos = await fakePhotosRepository.findByUserId(user.id);
+
+    if (!photos) {
+      throw new AppError('Photos not found');
+    }
+
+    const post = await fakePostsRepository.create({
+      userId: user.id,
+      photoId: photos[0].id,
+      description: 'Description Test',
+      filterUsed: 'none',
+    });
+
+    await createPostEvaluationService.execute({
+      userId: user.id,
+      postId: post.id,
+      isLike: true,
+    });
+
+    await createPostEvaluationService.execute({
+      userId: user2.id,
+      postId: post.id,
+      isLike: false,
+    });
+
+    const userPostsEvaluations =
+      await showPostsEvaluationsByPostService.execute({
+        postId: post.id,
+        limit: 0,
         offset: 0,
       });
 

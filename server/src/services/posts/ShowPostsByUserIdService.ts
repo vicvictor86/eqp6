@@ -23,6 +23,12 @@ interface Response {
   totalPages: number;
 
   offset: number;
+
+  totalLikes: number;
+
+  totalDislikes: number;
+
+  userEvaluation: boolean;
 }
 
 @injectable()
@@ -55,11 +61,32 @@ export class ShowPostsByUserIdService {
       offset: realOffset,
     });
 
+    const totalLikes = posts.reduce((total, post) => {
+      return (
+        total + post.evaluations.filter(evaluation => evaluation.isLike).length
+      );
+    }, 0);
+
+    const totalDislikes = posts.reduce((total, post) => {
+      return (
+        total + post.evaluations.filter(evaluation => !evaluation.isLike).length
+      );
+    }, 0);
+
+    const userEvaluation =
+      posts
+        .find(post => post.userId === userId)
+        ?.evaluations.find(evaluation => evaluation.userId === userId)
+        ?.isLike || null;
+
     const response = {
       posts,
       totalPosts,
       totalPages,
       offset,
+      totalLikes,
+      totalDislikes,
+      userEvaluation,
     } as Response;
 
     return response;
