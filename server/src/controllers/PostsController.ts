@@ -1,9 +1,8 @@
 import { instanceToInstance } from 'class-transformer';
-import { Request, Response } from 'express';
 
 import { container } from 'tsyringe';
 import { z } from 'zod';
-
+import { Request, Response } from 'express';
 import { CreatePostService } from '../services/posts/CreatePostService';
 import { DeletePostService } from '../services/posts/DeletePostService';
 import { ShowPostsService } from '../services/posts/ShowPostsService';

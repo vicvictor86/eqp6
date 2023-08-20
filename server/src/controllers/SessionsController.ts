@@ -1,8 +1,7 @@
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { instanceToInstance } from 'class-transformer';
 import { z } from 'zod';
-
+import { Request, Response } from 'express';
 import { ConfirmEmailService } from '../services/users/ConfirmEmailService';
 import { AuthenticateUserService } from '../services/users/AuthenticateUserService';
 
