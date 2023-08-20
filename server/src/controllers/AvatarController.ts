@@ -1,8 +1,7 @@
 import { instanceToInstance } from 'class-transformer';
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { z } from 'zod';
-
+import { Request, Response } from 'express';
 import { UpdateUserAvatarService } from '../services/users/UpdateUserAvatarService';
 
 const updateUserAvatarSchema = z.object({

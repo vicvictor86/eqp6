@@ -1,9 +1,7 @@
 import { instanceToInstance } from 'class-transformer';
-import { Request, Response } from 'express';
-
 import { container } from 'tsyringe';
 import { z } from 'zod';
-
+import { Request, Response } from 'express';
 import { CreateCommentService } from '../services/comments/CreateCommentService';
 import { DeleteCommentService } from '../services/comments/DeleteCommentService';
 import { ShowCommentsService } from '../services/comments/ShowCommentsService';
@@ -46,11 +44,15 @@ export class CommentsController {
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
-    const { postId } = request.body;
-
+    const { limit, offset } = request.query;
+    const { postId } = request.params;
     const showCommentsService = container.resolve(ShowCommentsService);
 
-    const comments = await showCommentsService.execute(postId);
+    const comments = await showCommentsService.execute(
+      postId,
+      Number(limit),
+      Number(offset),
+    );
 
     return response.json(instanceToInstance(comments));
   }

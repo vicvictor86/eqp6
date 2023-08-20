@@ -1,8 +1,8 @@
 import { instanceToInstance } from 'class-transformer';
-import { Request, Response } from 'express';
 
 import { container } from 'tsyringe';
 import { z } from 'zod';
+import { Request, Response } from 'express';
 
 import { ShowPostsEvaluationsByPostService } from '../services/postsEvaluations/ShowPostsEvaluationsByPostService';
 import { ShowPostsEvaluationsService } from '../services/postsEvaluations/ShowPostsEvaluationsService';

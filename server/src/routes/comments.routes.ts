@@ -1,5 +1,5 @@
-import { Router } from 'express';
 import { container } from 'tsyringe';
+import { Router } from 'express';
 
 import { ensureAuthenticated } from '@shared/middlewares/ensureAuthenticate';
 import { EnsureEmailConfirmationMiddleware } from '@shared/middlewares/EnsureEmailConfirmationMiddleware';
@@ -19,7 +19,7 @@ commentsRouter.post(
 );
 
 commentsRouter.get(
-  '/post/',
+  '/post/:postId',
   ensureAuthenticated,
   ensureEmailConfirmation.execute,
   commentsController.show,

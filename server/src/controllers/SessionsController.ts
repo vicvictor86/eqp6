@@ -1,8 +1,7 @@
-import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { instanceToInstance } from 'class-transformer';
 import { z } from 'zod';
-
+import { Request, Response } from 'express';
 import { ConfirmEmailService } from '../services/users/ConfirmEmailService';
 import { AuthenticateUserService } from '../services/users/AuthenticateUserService';
 
@@ -10,7 +9,7 @@ const authenticateSchema = z.object({
   email: z.string().email(),
   password: z.string(),
 });
-
+// alteracoes feitas
 const emailConfirmationSchema = z.object({
   email: z.string().email(),
   token: z.string(),

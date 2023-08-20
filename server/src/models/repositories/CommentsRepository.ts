@@ -58,4 +58,19 @@ export const CommentsRepository: ICommentsRepository =
     async deleteByPost(postId: string): Promise<void> {
       commentsRepository.delete({ postId });
     },
+
+    findWithPagination(
+      postId: string,
+      limit = 10,
+      offset = 0,
+    ): Promise<Comment[]> {
+      return this.find({
+        where: { postId },
+        take: limit,
+        skip: offset,
+      });
+    },
+    async countByPostId(postId: string): Promise<number> {
+      return commentsRepository.count({ where: { postId } }); // Novo método
+    },
   });
