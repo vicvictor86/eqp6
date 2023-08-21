@@ -10,9 +10,16 @@ export class ShowUserService {
     private userRepository: IUsersRepository,
   ) {}
 
-  public async execute(): Promise<User[]> {
-    const users = await this.userRepository.all();
+  public async execute(limit = 10, offset = 0) {
+    const users = await this.userRepository.findWithPagination(limit, offset);
+    const totalUsers = await this.userRepository.count();
+    const totalPages = Math.ceil(totalUsers / limit);
 
-    return users;
+    return {
+      users,
+      totalUsers,
+      totalPages,
+      offset,
+    };
   }
 }

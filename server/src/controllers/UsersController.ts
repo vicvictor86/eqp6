@@ -1,8 +1,7 @@
-import { Request, Response } from 'express';
 import { instanceToInstance } from 'class-transformer';
 import { container } from 'tsyringe';
 import { z } from 'zod';
-
+import { Request, Response } from 'express';
 import { SendEmailVerificationService } from '../services/users/SendEmailVerificationService';
 import { AuthenticateUserService } from '../services/users/AuthenticateUserService';
 import { CreateUserService } from '../services/users/CreateUserService';
@@ -54,9 +53,11 @@ export class UsersController {
   }
 
   async show(request: Request, response: Response) {
+    const { limit, offset } = request.query;
+
     const showUserService = container.resolve(ShowUserService);
 
-    const users = await showUserService.execute();
+    const users = await showUserService.execute(Number(limit), Number(offset));
 
     return response.status(200).json(instanceToInstance(users));
   }
