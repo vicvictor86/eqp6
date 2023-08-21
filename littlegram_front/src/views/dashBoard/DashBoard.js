@@ -10,7 +10,8 @@ import axios from 'axios'
 import ImageFilter from 'react-image-filter';
 import { useNavigate } from 'react-router-dom';
 import TresPontos from '../../assets/imgs/tres-pontos.svg'
-import like from '../../assets/imgs/like.svg'
+import likeImg from '../../assets/imgs/like.svg'
+import fullLikeImg from '../../assets/imgs/fullLike.svg'
 import X from '../../assets/imgs/x.svg'
 
 function DashBoard() {
@@ -40,6 +41,10 @@ function DashBoard() {
   //modal ver comentários
   const [selectedViewComments, setSelectedViewComments] = useState(null)
   const [openComments, setOpenComments] = useState(false)
+
+  //modal para escrever o comentário
+  const [openAddComment, setOpenAddComment] = useState(false)
+  const [comment, setComment] = useState('')
 
   const navigate = useNavigate()
 
@@ -93,6 +98,41 @@ function DashBoard() {
     }).then((response) => {
       if (response.status === 200) {
         setOpenFilter(false)
+        navigate(0)
+      }
+    })
+  }
+
+  const createLike = (postId, likeV) => {
+    console.log(postId)
+    axios.post(config.baseURL + "/posts-evaluations/", {
+      isLike: likeV,
+      postId: postId
+    }, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then((response) => {
+      console.log(response)
+      if (response.status === 200) {
+        navigate(0)
+      }
+    }).catch((response) => {
+      console.log(response)
+    })
+  }
+
+  const createComment = (postId, comment) => {
+    axios.post(config.baseURL + "/comments/", {
+      text: comment,
+      postId: postId
+    }, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then((response) => {
+      console.log(response)
+      if (response.status === 200) {
         navigate(0)
       }
     })
@@ -166,16 +206,32 @@ function DashBoard() {
                   colorOne={config.filtros[post.filterUsed].colorOne}
                   colorTwo={config.filtros[post.filterUsed].colorTwo}
                 />
+
                 <div className='LikeDiv'>
-                  <img alt = 'like' className='LikeButtom' style={{marginBottom: '7px'}} src={like}/>
-                  <span className='ModalComments' style={{padding: '0px 5px 0px'}}>5 Like</span>
-                  <img alt = 'like' className = 'LikeButtom' style={{marginTop: '5px',rotate: '180deg'}} src={like}/>
-                  <span className='ModalComments' style={{padding: '0px 5px 0px'}}>0 Deslike</span>
+                  {console.log(post.userEvaluation)}
+                  {post.userEvaluation === true && (
+                    <img alt = 'like' className='LikeButtom' style={{marginBottom: '7px'}} src={fullLikeImg}/>
+                  )}
+                  {(post.userEvaluation === null || post.userEvaluation === false) && (
+                    <img alt = 'like' className='LikeButtom' style={{marginBottom: '7px'}} src={likeImg} onClick={() =>{
+                      createLike(post.id, true)
+                    }}/>
+                  )}
+                  <span className='ModalComments' style={{padding: '0px 5px 0px'}}>{post.likes} Likes</span>
+                  {post.userEvaluation === false && (
+                    <img alt = 'deslike' className = 'LikeButtom' style={{marginTop: '5px',rotate: '180deg'}} src={fullLikeImg}/>
+                  )}
+                  {(post.userEvaluation === null || post.userEvaluation === true) && (
+                    <img alt = 'deslike' className = 'LikeButtom' style={{marginTop: '5px',rotate: '180deg'}} src={likeImg} onClick={() =>{
+                      createLike(post.id, false)
+                    }}/>
+                  )}
+                  <span className='ModalComments' style={{padding: '0px 5px 0px'}}>{post.dislikes} Deslikes</span>
                 </div>
                 <span className='PostDescricao' >{post.description}</span>
                 <div className='PostDescricao' onClick={() => {
                   setOpenComments(true)
-                  setSelectedViewComments(post.id)}}>Ver os 122 comentários
+                  setSelectedViewComments(post.id)}}>Ver os comentários
                 </div>
               </div>
             ))}
@@ -255,8 +311,8 @@ function DashBoard() {
       </Modal>
       
       {/*vw = tamanho da tela*/}
-      <Modal show={openComments} dialogClassName ='Modal' style = {{height: '75vh'}} size = 'xl' onHide={() => {
-        setOpenDelete(openComments ? false : true)
+      <Modal show={openComments} dialogClassName ='Modal' style = {{height: '75vh', overflowY: "auto"}} size = 'xl' onHide={() => {
+        setOpenComments(openComments ? false : true)
       }}>
         <Modal.Body style={{ backgroundColor: 'var(--color3)'}}>
           {/* <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '20px' }}> */}
@@ -268,7 +324,9 @@ function DashBoard() {
           {posts.length > 0 && posts.map((post, index) => (
             post.id === selectedViewComments && (
               <div className='ModalPost'>
+                {console.log(post)}
                 <div className='ModalImage'>
+                  
                   <ImageFilter
                     image={config.baseURL + "/files/photos/" + post.photo.path}
                     filter={config.filtros[post.filterUsed].filter} // see docs beneath
@@ -283,18 +341,25 @@ function DashBoard() {
                     <span className='ModalUserName'>{'@' + post.user.username}</span>
                   </div>
                   <span className='ModalDescription'>{post.description}</span>
-                  <div className='ModalCommentsDiv'>
+                  <div className='ModalCommentsDiv' onScroll={{}}>
                     <h1 className='ModalComments'>@Manel</h1>
                     <div className='ModalCommentsBackSide'>
                       <h1 className='ModalComments'>Daora, muito brabo</h1>
                       <div className='ModalLikeDiv'>
-                        <img alt = 'like' className = 'ModalLikeButtom' src={like}/>
+                        <img alt = 'like' className='LikeButtom' style={{marginBottom: '7px'}} src={likeImg}/>
                         <span className='ModalComments' style={{padding: '0px 5px 0px'}}>5</span>
-                        <img alt = 'like' className = 'ModalLikeButtom' style={{rotate: '180deg'}} src={like}/>
+                        <img alt = 'deslike' className = 'LikeButtom' style={{marginTop: '5px',rotate: '180deg'}} src={likeImg}/>
                         <span className='ModalComments' style={{padding: '0px 5px 0px'}}>0</span>
                       </div>
-                      
                     </div>
+                  </div>
+                  <textarea name='comentario' className='CommentBox'  placeholder='Escreva um comentário' onChange={(event) => {
+                    setComment(event.target.value)
+                  }}></textarea>
+                  <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <button className='ButtonAddComment' onClick={() => {
+                      createComment(post.id, comment)
+                    }}>Adicionar comentário</button>
                   </div>
                 </div>
               </div>
