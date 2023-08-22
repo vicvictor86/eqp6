@@ -66,11 +66,15 @@ function Profile() {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     }).then((response) => {
+      console.log(response.data)
+      
       setPosts(posts.concat(response.data.posts));
-      if (offSetPosts + 1 >= response.data.totalPages || response.data.posts === []) return
 
+      if (offSetPosts + 1 >= response.data.totalPages || response.data.posts === []) return
       setOffSetPosts(offSetPosts + 1); // Usando a função de atualização do estado para obter o valor mais recente de 'page'
       setIsFetchingPosts(false);
+
+
     }).catch((error) => {
       if(error.response.status === 401){
         localStorage.removeItem('token')

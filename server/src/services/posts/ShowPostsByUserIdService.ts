@@ -55,8 +55,18 @@ export class ShowPostsByUserIdService {
       offset: realOffset,
     });
 
+    const postsFixed = posts.map(post => {
+      return {
+        ...post,
+        userEvaluation: post.getUserEvaluation(userId),
+        likes: post.getLikes(),
+        dislikes: post.getDislikes(),
+      } as Post;
+    });
+
+
     const response = {
-      posts,
+      posts:postsFixed,
       totalPosts,
       totalPages,
       offset,
