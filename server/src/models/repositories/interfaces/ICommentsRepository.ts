@@ -11,7 +11,7 @@ export interface ICommentsRepository {
     offset: number,
   ): Promise<Comment[]>;
 
-  countByPostId(postId: string): Promise<number>; // Novo método
+  countByPostId(postId: string): Promise<number>;
   all(): Promise<Comment[]>;
   create(data: ICreateCommentDTO): Promise<Comment>;
   save(comment: Comment): Promise<Comment>;

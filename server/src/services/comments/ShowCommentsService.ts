@@ -38,13 +38,16 @@ export class ShowCommentsService {
 
     const totalComments = await this.commentsRepository.countByPostId(postId);
 
-    const totalPages = Math.ceil(totalComments / limit);
+    const totalPosts = totalComments;
+    const totalPages = Math.ceil(totalPosts / limit);
+
+    const realOffset = offset * limit;
 
     return {
       comments,
       totalComments,
       totalPages,
-      offset,
+      offset: realOffset,
     };
   }
 }
