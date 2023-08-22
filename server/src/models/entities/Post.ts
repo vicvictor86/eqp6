@@ -9,7 +9,6 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { Expose } from 'class-transformer';
 import { Photo } from './Photo';
 import { User } from './User';
 import { Comment } from './Comment';
@@ -48,7 +47,8 @@ export class Post {
   })
   evaluations: PostEvaluation[];
 
-  @Expose({ name: 'likes' })
+  likes: number | null;
+
   getLikes(): number | null {
     if (!this.evaluations) {
       return null;
@@ -57,7 +57,8 @@ export class Post {
     return this.evaluations.filter(evaluation => evaluation.isLike).length;
   }
 
-  @Expose({ name: 'dislikes' })
+  dislikes: number | null;
+
   getDislikes(): number | null {
     if (!this.evaluations) {
       return null;
@@ -66,14 +67,15 @@ export class Post {
     return this.evaluations.filter(evaluation => !evaluation.isLike).length;
   }
 
-  @Expose({ name: 'userEvaluation' })
-  getUserEvaluation(): boolean | null {
+  userEvaluation: boolean | null;
+
+  getUserEvaluation(userId: string): boolean | null {
     if (!this.evaluations) {
       return null;
     }
 
     const userEvaluation = this.evaluations.find(
-      evaluation => evaluation.userId === this.userId,
+      evaluation => evaluation.userId === userId,
     );
 
     if (!userEvaluation) {
