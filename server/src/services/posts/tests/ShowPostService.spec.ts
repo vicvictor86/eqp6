@@ -35,10 +35,7 @@ describe('CreatePhotoService', () => {
       fakePhotosRepository,
       fakePostsRepository,
     );
-    showPostsService = new ShowPostsService(
-      fakePostsRepository,
-      fakeUsersRepository,
-    );
+    showPostsService = new ShowPostsService(fakePostsRepository);
   });
 
   it('should be able to show all user posts', async () => {
@@ -78,7 +75,6 @@ describe('CreatePhotoService', () => {
     });
 
     const userPosts = await showPostsService.execute({
-      userId: user.id,
       limit: 10,
       offset: 0,
     });
@@ -87,7 +83,7 @@ describe('CreatePhotoService', () => {
   });
 
   it('should be able to return 0 posts', async () => {
-    const user = await fakeUsersRepository.create({
+    await fakeUsersRepository.create({
       realName: 'test',
       username: 'testUser',
       email: 'test@example.com',
@@ -100,7 +96,6 @@ describe('CreatePhotoService', () => {
     const offset = 0;
 
     const userPosts = await showPostsService.execute({
-      userId: user.id,
       limit,
       offset,
     });
@@ -129,21 +124,10 @@ describe('CreatePhotoService', () => {
     });
 
     const userPosts = await showPostsService.execute({
-      userId: user.id,
       limit,
       offset,
     });
 
     expect(userPosts.posts).toHaveLength(0);
-  });
-
-  it('should NOT be able to show a post from a non existing user', async () => {
-    await expect(
-      showPostsService.execute({
-        userId: 'non-existing-user',
-        limit: 10,
-        offset: 0,
-      }),
-    ).rejects.toBeInstanceOf(AppError);
   });
 });

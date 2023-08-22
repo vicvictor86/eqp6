@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 import { ICreatePostDTO } from '@models/dtos/ICreatePostDTO';
 import { Post } from '@models/entities/Post';
 import { IShowByUserPaginatedDTO } from '@models/dtos/IShowByUserPaginatedDTO';
+import { IShowUserPaginatedDTO } from '@models/dtos/IShowUsersPaginatedDTO';
 import { IPostsRepository } from '../interfaces/IPostsRepository';
 
 class FakePostsRepository implements IPostsRepository {
@@ -59,6 +60,15 @@ class FakePostsRepository implements IPostsRepository {
 
   public async all(): Promise<Post[]> {
     return this.posts;
+  }
+
+  public async allPaginated(data: IShowUserPaginatedDTO): Promise<Post[]> {
+    const skip = data.offset * data.limit;
+    const take = data.limit;
+
+    const posts = this.posts.slice(skip, skip + take);
+
+    return posts;
   }
 
   public async delete(postId: string): Promise<void> {
