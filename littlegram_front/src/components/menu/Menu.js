@@ -3,6 +3,7 @@ import Logout from '../../assets/imgs/logout.svg'
 import Home from '../../assets/imgs/casa.svg'
 import Image from '../../assets/imgs/image.svg'
 import Lupa from '../../assets/imgs/lupa.svg'
+import UserDefault from '../../assets/imgs/user.svg'
 
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -32,7 +33,7 @@ function Menu() {
   }
   const returnBackground = () => {
     var part1 = "url("
-    var part2 = localStorage.getItem('avatar') === "null" || localStorage.getItem('avatar') === null || localStorage.getItem('avatar') === "" ? "" : imagem
+    var part2 = localStorage.getItem('avatar') === "null" ? UserDefault : imagem
     var part3 = ")  center/cover"
     return part1 + part2 + part3
   }
@@ -67,7 +68,7 @@ function Menu() {
             window.location.pathname === '/search/users' ? console.log('') : navigate('/search/users')
           }} className={window.location.pathname === '/search/users' ? 'ItemMenuActive' : 'ItemMenu'} >Procurar usuário</div>
         </div>
-        <hr style={{ position: 'absolute', bottom: 45 }} className='BarraMenu' />
+        <hr className='BarraMenu' />
         <div onClick={() => setLogoutModal(true)} className='LogoutMenu'>
           <img style={{ width: 30, height: 25 }} src={Logout} alt='logout' />          Logout
         </div>
