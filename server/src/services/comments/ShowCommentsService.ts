@@ -30,12 +30,6 @@ export class ShowCommentsService {
       throw new AppError('Post not found');
     }
 
-    const comments = await this.commentsRepository.findWithPagination(
-      postId,
-      limit,
-      offset,
-    );
-
     const totalComments = await this.commentsRepository.countByPostId(postId);
 
     const totalPosts = totalComments;
@@ -43,11 +37,17 @@ export class ShowCommentsService {
 
     const realOffset = offset * limit;
 
+    const comments = await this.commentsRepository.findWithPagination(
+      postId,
+      limit,
+      realOffset,
+    );
+
     return {
       comments,
       totalComments,
       totalPages,
-      offset: realOffset,
+      offset,
     };
   }
 }
