@@ -24,6 +24,19 @@ export class FakeUsersRepository implements IUsersRepository {
     return findUser || null;
   }
 
+  public async findWithPagination(
+    limit: number,
+    offset: number,
+  ): Promise<User[]> {
+    const users = this.users.slice(offset, offset + limit);
+
+    return users;
+  }
+
+  public async count(): Promise<number> {
+    return this.users.length;
+  }
+
   public async findByUsernameOrEmail(
     username: string,
     email: string,

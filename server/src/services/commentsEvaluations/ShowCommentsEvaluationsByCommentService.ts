@@ -29,7 +29,7 @@ interface Response {
 
   totalDislikes: number;
 
-  userEvaluation: boolean;
+  userEvaluation: boolean | null;
 
   offset: number;
 }
@@ -78,7 +78,7 @@ export class ShowCommentsEvaluationsByCommentService {
         totalLikes: allComments.filter(comment => comment.isLike).length,
         userEvaluation:
           allComments.find(comment => comment.userId === userId)?.isLike ||
-          false,
+          null,
       } as Response;
 
       return response;
@@ -104,7 +104,7 @@ export class ShowCommentsEvaluationsByCommentService {
       totalDislikes: allComments.filter(comment => !comment.isLike).length,
       totalLikes: allComments.filter(comment => comment.isLike).length,
       userEvaluation:
-        allComments.find(comment => comment.userId === userId)?.isLike || false,
+        allComments.find(comment => comment.userId === userId)?.isLike || null,
     } as Response;
 
     return response;

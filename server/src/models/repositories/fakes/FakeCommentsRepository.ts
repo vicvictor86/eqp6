@@ -29,6 +29,22 @@ class FakeCommentsRepository implements ICommentsRepository {
     return findPosts || null;
   }
 
+  public async findWithPagination(
+    postId: string,
+    limit: number,
+    offset: number,
+  ): Promise<Comment[]> {
+    const comments = this.comments.filter(comment => comment.postId === postId);
+
+    return comments.slice(offset, offset + limit);
+  }
+
+  public async countByPostId(postId: string): Promise<number> {
+    const comments = this.comments.filter(comment => comment.postId === postId);
+
+    return comments.length;
+  }
+
   public async create(commentData: ICreateCommentDTO): Promise<Comment> {
     const comment = new Comment();
 

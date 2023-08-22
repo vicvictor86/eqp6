@@ -31,8 +31,8 @@ describe('UpdateProfile', () => {
 
     const usersList = [user1, user2];
 
-    const users = await showUser.execute();
+    const usersPaginated = await showUser.execute();
 
-    expect(users).toEqual(usersList);
+    expect(usersPaginated.users).toEqual(usersList);
   });
 });
