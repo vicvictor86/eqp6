@@ -28,12 +28,12 @@ function PesquisarUsers() {
       }
     }).then((response) => {
       console.log(response.data)
-      setUsers(users.concat(response.data));
+      setUsers(users.concat(response.data.users));
 
-      // if (offSetUsers + 1 >= response.data.totalPages || response.data.posts === []) return
+      if (offSetUsers + 1 >= response.data.totalPages || response.data.users === []) return
 
-      // setOffSetUsers(offSetUsers + 1); // Usando a função de atualização do estado para obter o valor mais recente de 'page'
-      // setIsFetchingUsers(false);
+      setOffSetUsers(offSetUsers + 1); // Usando a função de atualização do estado para obter o valor mais recente de 'page'
+      setIsFetchingUsers(false);
     })
   }
 
