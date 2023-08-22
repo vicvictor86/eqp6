@@ -20,7 +20,7 @@ postRouter.post(
 );
 
 postRouter.get(
-  '/user/',
+  '/',
   ensureAuthenticated,
   ensureEmailConfirmation.execute,
   postController.show,
