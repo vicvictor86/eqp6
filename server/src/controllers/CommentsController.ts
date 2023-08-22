@@ -8,7 +8,7 @@ import { ShowCommentsService } from '../services/comments/ShowCommentsService';
 import { DeleteCommentsByPostService } from '../services/comments/DeleteCommentsByPostService';
 
 const createCommentSchema = z.object({
-  text: z.string().max(1000),
+  text: z.string().min(1).max(100),
   userId: z.string().uuid(),
   postId: z.string().uuid(),
 });
