@@ -63,6 +63,7 @@ describe('ShowCommentsService', () => {
     });
 
     const userComments = await showCommentsService.execute({
+      userId: user.id,
       postId: post.id,
       limit: 10,
       offset: 0,
@@ -72,8 +73,18 @@ describe('ShowCommentsService', () => {
   });
 
   it('should NOT be able to show comments from a non-existing post', async () => {
+    const user = await fakeUsersRepository.create({
+      realName: 'test',
+      username: 'testUser',
+      email: 'test@example.com',
+      password: '123456',
+      isAdmin: false,
+      confirmed: false,
+    });
+
     await expect(
       showCommentsService.execute({
+        userId: user.id,
         postId: 'non-existing-post',
         limit: 10,
         offset: 0,

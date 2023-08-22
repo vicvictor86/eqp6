@@ -75,6 +75,7 @@ describe('CreatePhotoService', () => {
     });
 
     const userPosts = await showPostsService.execute({
+      userId: user.id,
       limit: 10,
       offset: 0,
     });
@@ -83,7 +84,7 @@ describe('CreatePhotoService', () => {
   });
 
   it('should be able to return 0 posts', async () => {
-    await fakeUsersRepository.create({
+    const user = await fakeUsersRepository.create({
       realName: 'test',
       username: 'testUser',
       email: 'test@example.com',
@@ -96,6 +97,7 @@ describe('CreatePhotoService', () => {
     const offset = 0;
 
     const userPosts = await showPostsService.execute({
+      userId: user.id,
       limit,
       offset,
     });
@@ -124,6 +126,7 @@ describe('CreatePhotoService', () => {
     });
 
     const userPosts = await showPostsService.execute({
+      userId: user.id,
       limit,
       offset,
     });

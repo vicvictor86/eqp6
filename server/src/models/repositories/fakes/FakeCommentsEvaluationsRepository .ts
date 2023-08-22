@@ -3,6 +3,7 @@
 import { ICommentsEvaluationsRepository } from '@models/repositories/interfaces/ICommentsEvaluationRepository';
 import { ICreateCommentsEvaluationDTO } from '@models/dtos/ICreateCommentsEvaluationDTO';
 import { CommentEvaluation } from '@models/entities/CommentEvaluation';
+import { IShowByCommentIdPaginatedDTO } from '@models/dtos/IShowByCommentIdPaginatedDTO';
 
 export class FakeCommentsEvaluationsRepository implements ICommentsEvaluationsRepository {
   private commentsEvaluations: CommentEvaluation[] = [];
@@ -11,8 +12,18 @@ export class FakeCommentsEvaluationsRepository implements ICommentsEvaluationsRe
     return this.commentsEvaluations.find(evaluation => evaluation.id === id) || null;
   }
 
-  public async findByCommentId(commentId: string): Promise<CommentEvaluation[] | null> {
+  public async findByCommentId(commentId: string): Promise<CommentEvaluation[]> {
     return this.commentsEvaluations.filter(evaluation => evaluation.commentId === commentId) || null;
+  }
+
+  public async findByCommentIdPaginated(
+    data: IShowByCommentIdPaginatedDTO,
+  ): Promise<CommentEvaluation[]> {
+    const commentsEvaluations = this.commentsEvaluations.filter(
+      evaluation => evaluation.commentId === data.commentId,
+    );
+
+    return commentsEvaluations.slice(data.offset, data.offset + data.limit);
   }
 
   public async findByUserId(userId: string): Promise<CommentEvaluation[] | null> {
