@@ -86,7 +86,7 @@ function DashBoard() {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     }).then((response) => {
-
+      console.log(response.data.photos)
       if (offSetPhotos + 1 > response.data.totalPages || response.data.photos === []) return
 
       setOffSetPhotos(prevPage => prevPage + 1);
@@ -277,6 +277,12 @@ function DashBoard() {
     ];
     return datePost.getDate() + ' de ' + meses[datePost.getMonth()] + ' de ' + datePost.getFullYear() + ' às ' + datePost.getUTCHours()+ ':' + datePost.getUTCMinutes()+ ':'  + datePost.getUTCSeconds()
   }
+  const returnBackgroundImages = (url) => {
+    var part1 = "url("
+    var part2 = url
+    var part3 = ")  center/cover"
+    return part1 + part2 + part3
+  }
   return (
 
     <>
@@ -359,7 +365,7 @@ function DashBoard() {
                 setSelectedImage(index)
                 setOpenNewPost(false)
                 setOpenFilter(true)
-              }} className='PhotoToPost' style={{ background: String('url(' + config.baseURL + "/files/photos/" + photo.path + ')' + 'center center / cover') }}>
+              }} className='PhotoToPost' style={{ background: returnBackgroundImages( config.baseURL + "/files/photos/" + photo.path) }}>
               </div>
             ))}
           </div>

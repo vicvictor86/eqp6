@@ -53,7 +53,7 @@ function data(date) {
 }
 
 function GerenciarFotos() {
-
+  const navigate = useNavigate()
   const [isFetchingPhotos, setIsFetchingPhotos] = useState(false);
   // Controlar upload
   const [progress, setProgress] = useState(0)
@@ -114,7 +114,7 @@ function GerenciarFotos() {
         if (response.status === 200) {
           handleModal();
           setImage([]);
-          // navigate(0)
+          navigate(0)
         }
       }).catch((error) => {
         if (error.response) {
@@ -146,8 +146,9 @@ function GerenciarFotos() {
     ).then((response) => {
 
       if (response.status === 200) {
-        handleDelete()
-        uploadPhotos()
+        // handleDelete()
+        // uploadPhotos()
+        navigate(0)
       }
 
     })
@@ -300,7 +301,7 @@ function GerenciarFotos() {
       <Modal show={openUpload} onHide={handleModal} >
         <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
           <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Upload de Imagem</h1>
-          <div style={{display:'flex', flexDirection:'row', overflow:'auto'}}>
+          <div style={ image.length > 0 ? {display:'flex', flexDirection:'row', overflow:'auto'}: {} }>
           {
             image.length <= 0? <><img src={Search} /> <h1 style={{ color: 'white', fontSize: '18px', width: '100%', marginBottom: '5px', fontWeight: 400, textAlign: 'center' }}>Procure por uma imagem</h1></> : image.map((element, index) => { return (<img alt={index} key={index} src={element.file} style={{ width: 'auto', height: 350, margin:'auto 15px' }} accept='image/*' />)}) 
           }
