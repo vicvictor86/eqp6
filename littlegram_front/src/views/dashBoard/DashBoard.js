@@ -176,6 +176,7 @@ function DashBoard() {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     }).then((response) => {
+      console.log(response.data)
       if (response.status === 200) {
         if (offsetComment + 1 > response.data.totalPages || response.data.comments === []) return
 
@@ -187,6 +188,8 @@ function DashBoard() {
   }
 
   const deleteComment = (postId, commentId) => {
+    console.log(commentId)
+    console.log(postId)
     axios.delete(config.baseURL + "/comments/?postId=" + postId + "&commentId=" + commentId, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -195,6 +198,8 @@ function DashBoard() {
       if (response.status === 200) {
         navigate(0)
       }
+    }).catch((error) => {
+      console.log(error)
     })
   }
 
@@ -487,10 +492,10 @@ function DashBoard() {
                               )}
 
                               <span className='ModalComments' style={{ padding: '0px 5px 0px' }}>{comment.dislikes}</span>
-                              <img alt='trash' className='TrashButtom' src={lixo} onClick={() => {
+                              {localStorage.getItem('user_id') === comment.user.id && <img alt='trash' className='TrashButtom' src={lixo} onClick={() => {
                                 setCommentIdDel(comment.id);
                                 setOpenDeleteComment(true);
-                              }} />
+                              }} />}
                             </div>
                           </div>
                         </div>

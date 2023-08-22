@@ -182,6 +182,7 @@ function Profile() {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     }).then((response) => {
+      console.log(response.data)
       if (response.status === 200) {
         if (offsetComment + 1 > response.data.totalPages || response.data.comments === []) return
 
@@ -503,10 +504,11 @@ function Profile() {
                                 }} />
                               )}
                               <span className='ModalComments' style={{ padding: '0px 5px 0px' }}>{comment.dislikes}</span>
-                              <img alt='trash' className='TrashButtom' src={lixo} onClick={() => {
+                              
+                              {localStorage.getItem('user_id') === comment.user.id && <img alt='trash' className='TrashButtom' src={lixo} onClick={() => {
                                 setCommentIdDel(comment.id);
                                 setOpenDeleteComment(true);
-                              }} />
+                              }} />}
                             </div>
                           </div>
                         </div>
