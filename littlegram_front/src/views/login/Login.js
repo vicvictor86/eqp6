@@ -115,7 +115,7 @@ function Login() {
           <label className='LabelPadrao' style={{ color: esperandoConfirmError ? '#FF2E2E' : 'white', display:  esperandoConfirmError ? 'block' : 'none', margin: 'auto', marginBottom: 15 }} >esperando confirmar o email</label>
 
 
-          <button className='Button' onClick={logar}>Avançar</button>
+          <button id = 'advance' className='Button' onClick={logar}>Avançar</button>
 
           <div className='ToRegistro'>
             não tem uma conta? <Link to="/register">Registre-se</Link>
