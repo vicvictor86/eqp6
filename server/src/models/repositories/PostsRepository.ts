@@ -61,7 +61,25 @@ export const PostRepository: IPostsRepository = postRepository.extend({
   },
 
   async all(): Promise<Post[]> {
-    return postRepository.find();
+    const posts = await postRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    return posts;
+  },
+
+  async allPaginated({ limit, offset }): Promise<Post[]> {
+    const posts = await postRepository.find({
+      take: limit,
+      skip: offset,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    return posts;
   },
 
   async delete(photoId: string): Promise<void> {
