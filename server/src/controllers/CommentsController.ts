@@ -25,6 +25,7 @@ const deleteCommentByPostSchema = z.object({
 });
 
 const showCommentsSchema = z.object({
+  userId: z.string().uuid(),
   postId: z.string().uuid(),
   limit: z.number().int().nonnegative().default(10),
   offset: z.number().int().nonnegative().default(0),
@@ -50,7 +51,8 @@ export class CommentsController {
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
-    const { postId, limit, offset } = showCommentsSchema.parse({
+    const { userId, postId, limit, offset } = showCommentsSchema.parse({
+      userId: request.user.id,
       postId: request.params.postId,
       limit: Number(request.query.limit),
       offset: Number(request.query.offset),
@@ -59,6 +61,7 @@ export class CommentsController {
     const showCommentsService = container.resolve(ShowCommentsService);
 
     const comments = await showCommentsService.execute({
+      userId,
       postId,
       limit: Number(limit),
       offset: Number(offset),
