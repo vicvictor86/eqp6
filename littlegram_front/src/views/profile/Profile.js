@@ -61,14 +61,12 @@ function Profile() {
 
   function getPosts() {
     setIsFetchingPosts(true);
-    axios.get(config.baseURL + "/posts/user/" + id +"?limit=10&offset=" + offSetPosts, {
+    axios.get(config.baseURL + "/posts/user/" + id + "?limit=10&offset=" + offSetPosts, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     }).then((response) => {
-      console.log(response.data)
       setPosts(posts.concat(response.data.posts));
-      console.log(offSetPosts)
       if (offSetPosts + 1 >= response.data.totalPages || response.data.posts === []) return
 
       setOffSetPosts(offSetPosts + 1); // Usando a função de atualização do estado para obter o valor mais recente de 'page'
@@ -92,7 +90,6 @@ function Profile() {
       setIsFetchingPhotos(false);
       setPhotos(photos.concat(response.data.photos));
     }).catch((response) => {
-      console.log(response)
       if (response['response']['data']['message'] === ["No photos found for this user."]) {
         setPhotos([])
       }
@@ -117,7 +114,6 @@ function Profile() {
   }
 
   const createLike = (postId, likeV) => {
-    console.log(postId)
     axios.post(config.baseURL + "/posts-evaluations/", {
       isLike: likeV,
       postId: postId
@@ -126,12 +122,10 @@ function Profile() {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     }).then((response) => {
-      console.log(response)
       if (response.status === 200) {
         navigate(0)
       }
     }).catch((response) => {
-      console.log(response)
     })
   }
 
@@ -144,12 +138,10 @@ function Profile() {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     }).then((response) => {
-      console.log(response)
       if (response.status === 200) {
         navigate(0)
       }
     }).catch((response) => {
-      console.log(response)
     })
   }
 
@@ -162,7 +154,6 @@ function Profile() {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     }).then((response) => {
-      console.log(response)
       if (response.status === 200) {
         navigate(0)
       }
@@ -177,7 +168,6 @@ function Profile() {
       }
     }).then((response) => {
       if (response.status === 200) {
-        console.log(response.data)
         if (offsetComment + 1 > response.data.totalPages || response.data.comments === []) return
 
         setOffsetComment(prevPage => prevPage + 1);
@@ -193,7 +183,6 @@ function Profile() {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     }).then((response) => {
-      console.log(response)
       if (response.status === 200) {
         navigate(0)
       }
@@ -210,7 +199,6 @@ function Profile() {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     }).then((response) => {
-      console.log(response)
       if (response.status === 200) {
         navigate(0)
       }
@@ -232,26 +220,23 @@ function Profile() {
   }
 
   // Quando o scroll de comentários se move
-const handleScrollComments = (event, postId) => {
-  if (event.target.scrollTop + event.target.clientHeight >= event.target.scrollHeight - 100 && !isFetchingComments) {
-    getComments(postId)
+  const handleScrollComments = (event, postId) => {
+    if (event.target.scrollTop + event.target.clientHeight >= event.target.scrollHeight - 100 && !isFetchingComments) {
+      getComments(postId)
+    }
   }
-}
 
   const deletePost = (postId) => {
-    console.log(postId)
     axios.delete(config.baseURL + "/posts/?postId=" + postId, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('token'),
       }
     }).then((response) => {
-      console.log(response)
       if (response.status === 200) {
-          setOpenDelete(openDelete ? false : true)
-          navigate(0)
+        setOpenDelete(openDelete ? false : true)
+        navigate(0)
       }
-    }).catch((error)=>{
-      console.log(error)
+    }).catch((error) => {
     })
   }
   useEffect(() => {
@@ -264,6 +249,24 @@ const handleScrollComments = (event, postId) => {
     var part3 = ")  center/cover"
     return part1 + part2 + part3
   }
+  const returnData = (date) => {
+    var datePost = new Date(date)
+    const meses = [
+      'janeiro',
+      'fevereiro',
+      'março',
+      'abril',
+      'maio',
+      'junho',
+      'julho',
+      'agosto',
+      'setembro',
+      'outubro',
+      'novembro',
+      'dezembro',
+    ];
+    return datePost.getDate() + ' de ' + meses[datePost.getMonth()] + ' de ' + datePost.getFullYear() + ' às ' + datePost.getUTCHours()+ ':' + datePost.getUTCMinutes()+ ':'  + datePost.getUTCSeconds()
+  }
   return (
 
     <>
@@ -274,56 +277,59 @@ const handleScrollComments = (event, postId) => {
           <div className='ListViews' onScroll={handleScrollPosts} >
             {posts.length > 0 && posts.map((post, index) => (
               <div key={index} className='DashPhoto' style={{ paddingTop: 0 }}>
-              <div className='PostHeader'>
-                <div style={{cursor:'pointer', display:'flex'}} onClick={() => {navigate('/profile/' + post.user.id)}}>
-                <div style={{ background: returnBackground(post.user.avatar), width: 40, height: 40, border: 'solid 1px white', margin: 'auto 0px' }} className='ImagePerfilMenu'  ></div>
-                <span style={{ color: 'white', fontSize: 18, fontWeight: 500, margin: 'auto 10px' }}>{'@' + post.user.username}</span>
+                <div className='PostHeader'>
+                  <div style={{ cursor: 'pointer', display: 'flex' }} onClick={() => { navigate('/profile/' + post.user.id) }}>
+                    <div style={{ background: returnBackground(post.user.avatar), width: 40, height: 40, border: 'solid 1px white', margin: 'auto 0px' }} className='ImagePerfilMenu'  ></div>
+                    <span style={{ color: 'white', fontSize: 18, fontWeight: 500, margin: 'auto 10px' }}>{'@' + post.user.username}</span>
+                  </div>
+                  <div style={{ width: 25, height: 30, position: 'absolute', right: 0, top: 10, display: post.user.id === localStorage.getItem('user_id') ? 'block' : 'none' }}><img style={{ width: '100%', cursor: 'pointer' }} src={TresPontos} onClick={() => {
+                    setSelectedExclude(post.id);
+                    setOpenModal3Pontos(true);
+                  }} />
+                  </div>
                 </div>
-                <div style={{ width: 25, height: 30, position: 'absolute', right: 0, top: 10, display: post.user.id === localStorage.getItem('user_id') ? 'block' : 'none' }}><img style={{ width: '100%', cursor: 'pointer' }} src={TresPontos} onClick={() => {
-                  setSelectedExclude(post.id);
-                  setOpenModal3Pontos(true);
-                }} />
+
+                <ImageFilter
+                  style={{ marginLeft: 50 }}
+                  /*pq krls isso ta batendo?*/
+                  image={config.baseURL + "/files/photos/" + post.photo.path}
+                  filter={config.filtros[post.filterUsed].filter} // see docs beneath
+                  colorOne={config.filtros[post.filterUsed].colorOne}
+                  colorTwo={config.filtros[post.filterUsed].colorTwo}
+                />
+
+                <div className='LikeDiv'>
+                  {post.userEvaluation === true && (
+                    <img alt='like' className='LikeButtom' style={{ marginBottom: '7px' }} src={fullLikeImg} />
+                  )}
+                  {(post.userEvaluation === null || post.userEvaluation === false) && (
+                    <img alt='like' className='LikeButtom' style={{ marginBottom: '7px' }} src={likeImg} onClick={() => {
+                      createLike(post.id, true)
+                    }} />
+                  )}
+                  <span className='ModalComments' style={{ padding: '0px 5px 0px' }}>{post.likes} likes</span>
+                  {post.userEvaluation === false && (
+                    <img alt='deslike' className='LikeButtom' style={{ rotate: '180deg' }} src={fullLikeImg} />
+                  )}
+                  {(post.userEvaluation === null || post.userEvaluation === true) && (
+                    <img alt='deslike' className='LikeButtom' style={{ rotate: '180deg' }} src={likeImg} onClick={() => {
+                      createLike(post.id, false)
+                    }} />
+                  )}
+                  <span className='ModalComments' style={{ padding: '0px 5px 0px' }}>{post.dislikes} deslikes</span>
+                </div>
+                <span className='PostDescricao' >{post.description}</span>
+                <div className='PostDescricao'>
+                  <span className='PostDescricaoLetra' onClick={(event) => {
+                    setOpenComments(true)
+                    setSelectedViewComments(post.id)
+                    getComments(post.id)
+                  }}>ver os comentários</span>
+
+                <span style={{cursor:'auto'}} className='PostDescricaoLetra'>{returnData(post.createdAt)}</span>
+
                 </div>
               </div>
-
-              <ImageFilter
-                style={{ marginLeft: 50 }}
-                /*pq krls isso ta batendo?*/
-                image={config.baseURL + "/files/photos/" + post.photo.path}
-                filter={config.filtros[post.filterUsed].filter} // see docs beneath
-                colorOne={config.filtros[post.filterUsed].colorOne}
-                colorTwo={config.filtros[post.filterUsed].colorTwo}
-              />
-
-              <div className='LikeDiv'>
-                {post.userEvaluation === true && (
-                  <img alt = 'like' className='LikeButtom' style={{marginBottom: '7px'}} src={fullLikeImg}/>
-                )}
-                {(post.userEvaluation === null || post.userEvaluation === false) && (
-                  <img alt = 'like' className='LikeButtom' style={{marginBottom: '7px'}} src={likeImg} onClick={() =>{
-                    createLike(post.id, true)
-                  }}/>
-                )}
-                <span className='ModalComments' style={{padding: '0px 5px 0px'}}>{post.likes} Likes</span>
-                {post.userEvaluation === false && (
-                  <img alt = 'deslike' className = 'LikeButtom' style={{rotate: '180deg'}} src={fullLikeImg}/>
-                )}
-                {(post.userEvaluation === null || post.userEvaluation === true) && (
-                  <img alt = 'deslike' className = 'LikeButtom' style={{rotate: '180deg'}} src={likeImg} onClick={() =>{
-                    createLike(post.id, false)
-                  }}/>
-                )}
-                <span className='ModalComments' style={{padding: '0px 5px 0px'}}>{post.dislikes} Deslikes</span>
-              </div>
-              <span className='PostDescricao' >{post.description}</span>
-              <div className='PostDescricao'>
-                <span className='PostDescricaoLetra' onClick={(event) => {
-                  setOpenComments(true)
-                  setSelectedViewComments(post.id)
-                  getComments(post.id)
-                }}>Ver os comentários</span>
-              </div>
-            </div>
             ))}
           </div>
         </div>
@@ -403,14 +409,15 @@ const handleScrollComments = (event, postId) => {
         setOpenDelete(openDelete ? false : true)
       }}>
         <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
-        <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Deletar Post</h1>
+          <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Deletar Post</h1>
 
           <img src={Trash} />
-          <h1 style={{width:'100%', color: 'white', fontSize: '25px', marginBottom: '5px',
+          <h1 style={{
+            width: '100%', color: 'white', fontSize: '25px', marginBottom: '5px',
           }}>Deseja mesmo excluir permanentemente esse post?</h1>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '20px' }}>
-            
-         
+
+
             <button className='ButtonModal' onClick={() => { deletePost(selectedExclude) }}>Sim</button>
             <button className='ButtonModal' onClick={() => {
               setOpenDelete(openDelete ? false : true)
@@ -419,31 +426,31 @@ const handleScrollComments = (event, postId) => {
         </Modal.Body>
       </Modal>
 
-      <Modal show={openComments} dialogClassName ='Modal' style = {{ overflowY: "auto"}} size = 'xl' onHide={() => {
+      <Modal show={openComments} dialogClassName='Modal' style={{ overflowY: "auto" }} size='xl' onHide={() => {
         setOpenComments(openComments ? false : true)
         setComments([])
         setOffsetComment(0)
         setIsFetchingComments(false)
         setCommentPost('')
       }}>
-        <Modal.Body style={{ backgroundColor: 'var(--color3)'}}>
+        <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
           <div className='FecharModal'>
-            <img alt = 'fechar' style={{ width: '20px', filter: 'invert(100%)'}} src={X} onClick={() => {
+            <img alt='fechar' style={{ width: '20px', filter: 'invert(100%)' }} src={X} onClick={() => {
               setOpenComments(openComments ? false : true)
-            }}/>
+            }} />
           </div>
           {posts.length > 0 && posts.map((post, index) => (
             post.id === selectedViewComments && (
-              <div className='ModalPost'>
+              <div key={index} className='ModalPost'>
                 <div className='ModalImage'>
-                  
+
                   <ImageFilter
-                     id='ImagePostDetail'
+                    id='ImagePostDetail'
                     image={config.baseURL + "/files/photos/" + post.photo.path}
                     filter={config.filtros[post.filterUsed].filter} // see docs beneath
                     colorOne={config.filtros[post.filterUsed].colorOne}
                     colorTwo={config.filtros[post.filterUsed].colorTwo}
-                    style = {{width: '100%'}}
+                    style={{ width: '100%' }}
                   />
                 </div>
                 <div className='ModalCommentsSide'>
@@ -457,43 +464,44 @@ const handleScrollComments = (event, postId) => {
                   }}>
                     {comments.length > 0 && comments.map((comment, index) => (
                       comment.postId === post.id && (
-                        <div className='ModalCommentsDiv'>
+                        <div key={index} className='ModalCommentsDiv'>
                           <h1 className='ModalComments'>@{comment.user.username}</h1>
                           <div className='ModalCommentsBackSide'>
                             <h1 className='ModalComments'>{comment.text}</h1>
                             <div className='ModalLikeDiv'>
-                                <img alt='trash' className='TrashButtom' src={lixo} onClick={() => {
-                                  setCommentIdDel(comment.id);
-                                  setOpenDeleteComment(true);
-                                }}/>
-                                {comment.userEvaluation === true && (
-                                  <img alt = 'like' className='LikeButtom' style={{marginBottom: '7px'}} src={fullLikeImg}/>
-                                )}
-                                {(comment.userEvaluation === null || comment.userEvaluation === false) && (
-                                  <img alt = 'like' className='LikeButtom' style={{marginBottom: '7px'}} src={likeImg} onClick={() =>{
-                                    createCommentLike(comment.id, true)
-                                  }}/>
-                                )}
-                                <span className='ModalComments' style={{padding: '0px 5px 0px'}}>{comment.likes}</span>
-                                {comment.userEvaluation === false && (
-                                  <img alt = 'deslike' className = 'LikeButtom' style={{rotate: '180deg'}} src={fullLikeImg}/>
-                                )}
-                                {(comment.userEvaluation === null || comment.userEvaluation === true) && (
-                                  <img alt = 'deslike' className = 'LikeButtom' style={{rotate: '180deg'}} src={likeImg} onClick={() =>{
-                                    createCommentLike(comment.id, false)
-                                  }}/>
-                                )}
-                                <span className='ModalComments' style={{padding: '0px 5px 0px'}}>{comment.dislikes}</span>
+
+                              {comment.userEvaluation === true && (
+                                <img alt='like' className='LikeButtom' style={{ marginBottom: '7px' }} src={fullLikeImg} />
+                              )}
+                              {(comment.userEvaluation === null || comment.userEvaluation === false) && (
+                                <img alt='like' className='LikeButtom' style={{ marginBottom: '7px' }} src={likeImg} onClick={() => {
+                                  createCommentLike(comment.id, true)
+                                }} />
+                              )}
+                              <span className='ModalComments' style={{ padding: '0px 5px 0px' }}>{comment.likes}</span>
+                              {comment.userEvaluation === false && (
+                                <img alt='deslike' className='LikeButtom' style={{ rotate: '180deg' }} src={fullLikeImg} />
+                              )}
+                              {(comment.userEvaluation === null || comment.userEvaluation === true) && (
+                                <img alt='deslike' className='LikeButtom' style={{ rotate: '180deg' }} src={likeImg} onClick={() => {
+                                  createCommentLike(comment.id, false)
+                                }} />
+                              )}
+                              <span className='ModalComments' style={{ padding: '0px 5px 0px' }}>{comment.dislikes}</span>
+                              <img alt='trash' className='TrashButtom' src={lixo} onClick={() => {
+                                setCommentIdDel(comment.id);
+                                setOpenDeleteComment(true);
+                              }} />
                             </div>
                           </div>
                         </div>
                       )
                     ))}
                   </div>
-                  <textarea name='comentario' className='CommentBox'  placeholder='Escreva um comentário' onChange={(event) => {
+                  <textarea name='comentario' className='CommentBox' placeholder='Escreva um comentário' onChange={(event) => {
                     setCommentPost(event.target.value)
                   }}></textarea>
-                  <div style={{display: 'flex', justifyContent: 'center'}}>
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <button className='ButtonAddComment' onClick={() => {
                       validComment(commentPost) === false ? createComment(post.id, commentPost) : console.log();
                     }}>Adicionar comentário</button>
@@ -509,14 +517,15 @@ const handleScrollComments = (event, postId) => {
         setOpenDelete(openDeleteComment ? false : true)
       }}>
         <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
-        <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Deletar comentário</h1>
+          <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Deletar comentário</h1>
 
           <img src={Trash} />
-          <h1 style={{width:'100%', color: 'white', fontSize: '25px', marginBottom: '5px',
+          <h1 style={{
+            width: '100%', color: 'white', fontSize: '25px', marginBottom: '5px',
           }}>Deseja mesmo excluir permanentemente esse comentário?</h1>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '20px' }}>
-            <button className='ButtonModal' onClick={() => { 
-              deleteComment( selectedViewComments, commentIdDel) 
+            <button className='ButtonModal' onClick={() => {
+              deleteComment(selectedViewComments, commentIdDel)
               setOpenDeleteComment(openDeleteComment ? false : true)
             }}>Sim</button>
             <button className='ButtonModal' onClick={() => {
@@ -545,14 +554,15 @@ const handleScrollComments = (event, postId) => {
         setOpenDeleteAllComment(openDeleteAllComment ? false : true)
       }}>
         <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
-        <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Deletar todos os comentário?</h1>
+          <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Deletar todos os comentário?</h1>
 
           <img src={Trash} />
-          <h1 style={{width:'100%', color: 'white', fontSize: '25px', marginBottom: '5px',
+          <h1 style={{
+            width: '100%', color: 'white', fontSize: '25px', marginBottom: '5px',
           }}>Deseja mesmo excluir permanentemente todos os comentários desse post?</h1>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '20px' }}>
-            <button className='ButtonModal' onClick={() => { 
-              deleteAllComment(selectedExclude) 
+            <button className='ButtonModal' onClick={() => {
+              deleteAllComment(selectedExclude)
               setOpenDeleteAllComment(openDeleteAllComment ? false : true)
             }}>Sim</button>
             <button className='ButtonModal' onClick={() => {

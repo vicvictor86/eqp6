@@ -13,6 +13,9 @@
     color: white;
     margin-left: 50px;
     width: calc(100% - 50px);
+    display: flex;
+    justify-content: space-between;
+
 }
 
 .PostDescricaoLetra{
@@ -126,8 +129,9 @@
 }
 
 .TrashButtom{
-    width: 20px;
-    padding-right: 3px;
+    cursor: pointer;
+    width: 23px;
+    margin-bottom: 5px;
     filter: invert(100%);
 }
 
@@ -327,4 +331,9 @@
 }
 .ModalPost ::-webkit-scrollbar-thumb {
     background-color: var(--color5);
+}
+@media (max-width: 576px) {
+    .modal.show .modal-dialog {
+        margin: 0px;
+    }
 }

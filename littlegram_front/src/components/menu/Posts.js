@@ -19,17 +19,11 @@ function Posts({ postsData , activeScroll = true }) {
                 }
             })
                 .then((response) => {
-                    console.log(response)
-                    console.log(response.data)
-                    console.log(response.data)
-
                     var array = posts
                     for (const key in response.data) {
                         array.push(response.data[key])
                     }
                     setPage(prevPage => prevPage + 1); // Usando a função de atualização do estado para obter o valor mais recente de 'page'
-
-                    console.log(posts)
                     if (response.data.length === 0) return
                     setIsFetching(() => false);
                     setPost(() => array);

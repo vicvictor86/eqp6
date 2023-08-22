@@ -27,7 +27,6 @@ function PesquisarUsers() {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     }).then((response) => {
-      console.log(response.data)
       setUsers(users.concat(response.data.users));
 
       if (offSetUsers + 1 >= response.data.totalPages || response.data.users === []) return
