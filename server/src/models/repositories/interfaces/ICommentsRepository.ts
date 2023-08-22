@@ -7,8 +7,8 @@ export interface ICommentsRepository {
   findByUserId(userId: string): Promise<Comment[] | null>;
   findWithPagination(
     postId: string,
-    limit?: number,
-    offset?: number,
+    limit: number,
+    offset: number,
   ): Promise<Comment[]>;
 
   countByPostId(postId: string): Promise<number>; // Novo método

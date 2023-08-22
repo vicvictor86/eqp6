@@ -13,6 +13,7 @@ import TresPontos from '../../assets/imgs/tres-pontos.svg'
 import likeImg from '../../assets/imgs/like.svg'
 import fullLikeImg from '../../assets/imgs/fullLike.svg'
 import X from '../../assets/imgs/x.svg'
+import lixo from '../../assets/imgs/lixo.svg'
 
 function DashBoard() {
   // Controladores da requisição
@@ -42,9 +43,17 @@ function DashBoard() {
   const [selectedViewComments, setSelectedViewComments] = useState(null)
   const [openComments, setOpenComments] = useState(false)
 
-  //modal para escrever o comentário
-  const [openAddComment, setOpenAddComment] = useState(false)
-  const [comment, setComment] = useState('')
+  //modal para o comentário
+  const [isFetchingComments, setIsFetchingComments] = useState(false);
+  const [commentPost, setCommentPost] = useState('');
+  const [offsetComment, setOffsetComment] = useState(0);
+  const [comments, setComments] = useState([]);
+  const [openDeleteComment, setOpenDeleteComment] = useState(false);
+  const [commentIdDel, setCommentIdDel] = useState('');
+  const [openDeleteAllComment, setOpenDeleteAllComment] = useState(false);
+
+  //modal 3 pontos
+  const [openModal3Pontos, setOpenModal3Pontos] = useState(false);
 
   const navigate = useNavigate()
 
@@ -122,11 +131,73 @@ function DashBoard() {
     })
   }
 
+  const createCommentLike = (Id, likeV) => {
+    axios.post(config.baseURL + "/comments-evaluations/", {
+      isLike: likeV,
+      commentId: Id
+    }, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then((response) => {
+      console.log(response)
+      if (response.status === 200) {
+        navigate(0)
+      }
+    }).catch((response) => {
+      console.log(response)
+    })
+  }
+
   const createComment = (postId, comment) => {
     axios.post(config.baseURL + "/comments/", {
       text: comment,
       postId: postId
     }, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then((response) => {
+      console.log(response)
+      if (response.status === 200) {
+        navigate(0)
+      }
+    })
+  }
+
+  const getComments = (postId) => {
+    setIsFetchingComments(true);
+    axios.get(config.baseURL + "/comments/post/" + postId + "?limit=10&offset=" + offsetComment, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then((response) => {
+      console.log(response)
+      if (response.status === 200) {
+        if (offSetPhotos + 1 > response.data.totalPages || response.data.photos === []) return
+
+        setOffsetComment(prevPage => prevPage + 1);
+        setIsFetchingComments(false);
+        setComments(comments.concat(response.data.comments));
+      }
+    })
+  }
+
+  const deleteComment = (postId, commentId) => {
+    axios.delete(config.baseURL + "/comments/?postId=" + postId + "&commentId=" + commentId, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      }
+    }).then((response) => {
+      console.log(response)
+      if (response.status === 200) {
+        navigate(0)
+      }
+    })
+  }
+
+  const deleteAllComment = (postId) => {
+    axios.delete(config.baseURL + "/comments/post/?postId=" + postId, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
@@ -151,6 +222,14 @@ function DashBoard() {
       getPhotos()
     }
   }
+
+// Quando o scroll de comentários se move
+const handleScrollComments = (event, postId) => {
+  if (event.target.scrollTop + event.target.clientHeight >= event.target.scrollHeight - 100 && !isFetchingComments) {
+    getComments(postId)
+  }
+}
+
   const deletePost = (postId) => {
     console.log(postId)
     axios.delete(config.baseURL + "/posts/?postId=" + postId, {
@@ -166,6 +245,10 @@ function DashBoard() {
     }).catch((error)=>{
       console.log(error)
     })
+  }
+
+  const validComment = (comment) => {
+    return comment.trim() === '';
   }
 
   useEffect(() => {
@@ -192,8 +275,8 @@ function DashBoard() {
                   <div style={{ background: returnBackground(post.user.avatar), width: 40, height: 40, border: 'solid 1px white', margin: 'auto 0px' }} className='ImagePerfilMenu'  ></div>
                   <span style={{ color: 'white', fontSize: 18, fontWeight: 500, margin: 'auto 10px' }}>{'@' + post.user.username}</span>
                   <div style={{ width: 25, height: 30, position: 'absolute', right: 0, top: 10, display: post.user.id === localStorage.getItem('user_id') ? 'block' : 'none' }}><img style={{ width: '100%', cursor: 'pointer' }} src={TresPontos} onClick={() => {
-                    setSelectedExclude(post.id)
-                    setOpenDelete(true)
+                    setSelectedExclude(post.id);
+                    setOpenModal3Pontos(true);
                   }} />
                   </div>
                 </div>
@@ -208,7 +291,6 @@ function DashBoard() {
                 />
 
                 <div className='LikeDiv'>
-                  {console.log(post.userEvaluation)}
                   {post.userEvaluation === true && (
                     <img alt = 'like' className='LikeButtom' style={{marginBottom: '7px'}} src={fullLikeImg}/>
                   )}
@@ -229,9 +311,12 @@ function DashBoard() {
                   <span className='ModalComments' style={{padding: '0px 5px 0px'}}>{post.dislikes} Deslikes</span>
                 </div>
                 <span className='PostDescricao' >{post.description}</span>
-                <div className='PostDescricao' onClick={() => {
-                  setOpenComments(true)
-                  setSelectedViewComments(post.id)}}>Ver os comentários
+                <div className='PostDescricao'>
+                  <span className='PostDescricaoLetra' onClick={(event) => {
+                    setOpenComments(true)
+                    setSelectedViewComments(post.id)
+                    getComments(post.id)
+                  }}>Ver os comentários</span>
                 </div>
               </div>
             ))}
@@ -311,8 +396,12 @@ function DashBoard() {
       </Modal>
       
       {/*vw = tamanho da tela*/}
-      <Modal show={openComments} dialogClassName ='Modal' style = {{height: '75vh', overflowY: "auto"}} size = 'xl' onHide={() => {
+      <Modal show={openComments} dialogClassName ='Modal' style = {{ overflowY: "auto"}} size = 'xl' onHide={() => {
         setOpenComments(openComments ? false : true)
+        setComments([])
+        setOffsetComment(0)
+        setIsFetchingComments(false)
+        setCommentPost('')
       }}>
         <Modal.Body style={{ backgroundColor: 'var(--color3)'}}>
           {/* <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '20px' }}> */}
@@ -341,24 +430,51 @@ function DashBoard() {
                     <span className='ModalUserName'>{'@' + post.user.username}</span>
                   </div>
                   <span className='ModalDescription'>{post.description}</span>
-                  <div className='ModalCommentsDiv' onScroll={{}}>
-                    <h1 className='ModalComments'>@Manel</h1>
-                    <div className='ModalCommentsBackSide'>
-                      <h1 className='ModalComments'>Daora, muito brabo</h1>
-                      <div className='ModalLikeDiv'>
-                        <img alt = 'like' className='LikeButtom' style={{marginBottom: '7px'}} src={likeImg}/>
-                        <span className='ModalComments' style={{padding: '0px 5px 0px'}}>5</span>
-                        <img alt = 'deslike' className = 'LikeButtom' style={{marginTop: '5px',rotate: '180deg'}} src={likeImg}/>
-                        <span className='ModalComments' style={{padding: '0px 5px 0px'}}>0</span>
-                      </div>
-                    </div>
+                  <div onScroll={(event) => {
+                    handleScrollComments(event, post.id)
+                  }}>
+                    {comments.length > 0 && comments.map((comment, index) => (
+                      comment.postId === post.id && (
+                        <div className='ModalCommentsDiv'>
+                          <h1 className='ModalComments'>@{comment.user.username}</h1>
+                          <div className='ModalCommentsBackSide'>
+                            <h1 className='ModalComments'>{comment.text}</h1>
+                            <div className='ModalLikeDiv'>
+                              {console.log(comment.userEvaluation)}
+                                <img alt='trash' className='TrashButtom' src={lixo} onClick={() => {
+                                  setCommentIdDel(comment.id);
+                                  setOpenDeleteComment(true);
+                                }}/>
+                                {comment.userEvaluation === true && (
+                                  <img alt = 'like' className='LikeButtom' style={{marginBottom: '7px'}} src={fullLikeImg}/>
+                                )}
+                                {(comment.userEvaluation === null || comment.userEvaluation === false) && (
+                                  <img alt = 'like' className='LikeButtom' style={{marginBottom: '7px'}} src={likeImg} onClick={() =>{
+                                    createCommentLike(comment.id, true)
+                                  }}/>
+                                )}
+                                <span className='ModalComments' style={{padding: '0px 5px 0px'}}>{comment.likes}</span>
+                                {comment.userEvaluation === false && (
+                                  <img alt = 'deslike' className = 'LikeButtom' style={{marginTop: '5px',rotate: '180deg'}} src={fullLikeImg}/>
+                                )}
+                                {(comment.userEvaluation === null || comment.userEvaluation === true) && (
+                                  <img alt = 'deslike' className = 'LikeButtom' style={{marginTop: '5px',rotate: '180deg'}} src={likeImg} onClick={() =>{
+                                    createCommentLike(comment.id, false)
+                                  }}/>
+                                )}
+                                <span className='ModalComments' style={{padding: '0px 5px 0px'}}>{comment.dislikes}</span>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    ))}
                   </div>
                   <textarea name='comentario' className='CommentBox'  placeholder='Escreva um comentário' onChange={(event) => {
-                    setComment(event.target.value)
+                    setCommentPost(event.target.value)
                   }}></textarea>
                   <div style={{display: 'flex', justifyContent: 'center'}}>
                     <button className='ButtonAddComment' onClick={() => {
-                      createComment(post.id, comment)
+                      validComment(commentPost) === false ? createComment(post.id, commentPost) : console.log();
                     }}>Adicionar comentário</button>
                   </div>
                 </div>
@@ -367,7 +483,64 @@ function DashBoard() {
           ))}
         </Modal.Body>
       </Modal>
-      
+
+      <Modal show={openDeleteComment} onHide={() => {
+        setOpenDelete(openDeleteComment ? false : true)
+      }}>
+        <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
+        <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Deletar comentário</h1>
+
+          <img src={Trash} />
+          <h1 style={{width:'100%', color: 'white', fontSize: '25px', marginBottom: '5px',
+          }}>Deseja mesmo excluir permanentemente esse comentário?</h1>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '20px' }}>
+            <button className='ButtonModal' onClick={() => { 
+              deleteComment( selectedViewComments, commentIdDel) 
+              setOpenDeleteComment(openDeleteComment ? false : true)
+            }}>Sim</button>
+            <button className='ButtonModal' onClick={() => {
+              setOpenDeleteComment(openDeleteComment ? false : true)
+            }}>Não</button>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={openModal3Pontos} onHide={() => {
+        setOpenModal3Pontos(openModal3Pontos ? false : true)
+      }}>
+        <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
+          <div className='Modal3Pontos'>
+            <span className='BlockModal3Pontos' onClick={() => {
+              setOpenDelete(true)
+            }}>Deletar Post</span>
+            <span className='BlockModal3Pontos' onClick={() => {
+              setOpenDeleteAllComment(true)
+            }}>Deletar todos os comentários</span>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={openDeleteAllComment} onHide={() => {
+        setOpenDeleteAllComment(openDeleteAllComment ? false : true)
+      }}>
+        <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
+        <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Deletar todos os comentário?</h1>
+
+          <img src={Trash} />
+          <h1 style={{width:'100%', color: 'white', fontSize: '25px', marginBottom: '5px',
+          }}>Deseja mesmo excluir permanentemente todos os comentários desse post?</h1>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', marginTop: '20px' }}>
+            <button className='ButtonModal' onClick={() => { 
+              deleteAllComment(selectedExclude) 
+              setOpenDeleteAllComment(openDeleteAllComment ? false : true)
+            }}>Sim</button>
+            <button className='ButtonModal' onClick={() => {
+              setOpenDeleteAllComment(openDeleteAllComment ? false : true)
+            }}>Não</button>
+          </div>
+        </Modal.Body>
+      </Modal>
+
       </>
       
 
