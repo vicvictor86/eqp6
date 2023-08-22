@@ -183,10 +183,13 @@ function GerenciarFotos() {
       if (offSetPhotos + 1 >= response.data.totalPages || response.data.photos === []) return
       setOffSetPhotos(offSetPhotos + 1);
       setIsFetchingPhotos(false);
-    }).catch((response) => {
-      // if (response['response']['data']['message'] === ["No photos found for this user."]) {
-      //   setPhotos([])
-      // }
+    }).catch((error) => {
+      if( error.response.status === 401){
+        localStorage.removeItem('token')
+        localStorage.removeItem('user_id')
+        localStorage.removeItem('username')
+        localStorage.removeItem('avatar')
+      }
     })
   }
   // Quando o scrool de photos se move

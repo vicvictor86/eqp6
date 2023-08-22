@@ -69,6 +69,13 @@ function DashBoard() {
 
       setOffSetPosts(offSetPosts + 1); // Usando a função de atualização do estado para obter o valor mais recente de 'page'
       setIsFetchingPosts(false);
+    }).catch((error) => {
+      if(error.response.status === 401){
+        localStorage.removeItem('token')
+        localStorage.removeItem('user_id')
+        localStorage.removeItem('username')
+        localStorage.removeItem('avatar')
+      }
     })
   }
 
@@ -85,9 +92,15 @@ function DashBoard() {
       setOffSetPhotos(prevPage => prevPage + 1);
       setIsFetchingPhotos(false);
       setPhotos(photos.concat(response.data.photos));
-    }).catch((response) => {
-      if (response['response']['data']['message'] === ["No photos found for this user."]) {
+    }).catch((error) => {
+      if (error['response']['data']['message'] === ["No photos found for this user."]) {
         setPhotos([])
+      }
+      if(error.response.status === 401){
+        localStorage.removeItem('token')
+        localStorage.removeItem('user_id')
+        localStorage.removeItem('username')
+        localStorage.removeItem('avatar')
       }
     })
   }
