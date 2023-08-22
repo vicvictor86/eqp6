@@ -134,37 +134,37 @@ function Register() {
 
           {/* Nome */}
           <label className='LabelPadrao' style={{ color: nomeError ? '#FF2E2E' : 'white' }} >nome</label>
-          <input maxLength={256} className='InputPadrao' style={{ marginBottom: nomeError ? 5 : 15, border: nomeError ? '#FF2E2E 2px solid' : 'white 2px solid', background: nomeError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} type='text' value={nome} onChange={(event) => {
+          <input id='name' maxLength={256} className='InputPadrao' style={{ marginBottom: nomeError ? 5 : 15, border: nomeError ? '#FF2E2E 2px solid' : 'white 2px solid', background: nomeError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} type='text' value={nome} onChange={(event) => {
             setNome(event.target.value);
           }} />
           {/* Sobrenome */}
           <label className='LabelPadrao' style={{ color: sobreNomeError ? '#FF2E2E' : 'white' }} >sobrenome</label>
-          <input maxLength={256} className='InputPadrao' style={{ marginBottom: sobreNomeError ? 5 : 15, border: sobreNomeError ? '#FF2E2E 2px solid' : 'white 2px solid', background: sobreNomeError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} type='text' value={sobrenome} onChange={(event) => {
+          <input id='lastName' maxLength={256} className='InputPadrao' style={{ marginBottom: sobreNomeError ? 5 : 15, border: sobreNomeError ? '#FF2E2E 2px solid' : 'white 2px solid', background: sobreNomeError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} type='text' value={sobrenome} onChange={(event) => {
             setSobrenome(event.target.value);
           }} />
           {/* Email */}
           <label className='LabelPadrao' style={{ color: emailError ? '#FF2E2E' : 'white' }} >email</label>
-          <input maxLength={256} className='InputPadrao' style={{ marginBottom: emailError ? 5 : 15, border: emailError ? '#FF2E2E 2px solid' : 'white 2px solid', background: emailError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} typeof='text' value={email} onChange={(event) => {
+          <input id='email' maxLength={256} className='InputPadrao' style={{ marginBottom: emailError ? 5 : 15, border: emailError ? '#FF2E2E 2px solid' : 'white 2px solid', background: emailError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} typeof='text' value={email} onChange={(event) => {
             setEmail(event.target.value);
           }} />
           {/* Username */}
           <label className='LabelPadrao' style={{ color: usernameError ? '#FF2E2E' : 'white' }} >username</label>
-          <input maxLength={256} className='InputPadrao' style={{ marginBottom: usernameError ? 5 : 15, border: usernameError ? '#FF2E2E 2px solid' : 'white 2px solid', background: usernameError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} typeof='text' value={username} onChange={(event) => {
+          <input id='username' maxLength={256} className='InputPadrao' style={{ marginBottom: usernameError ? 5 : 15, border: usernameError ? '#FF2E2E 2px solid' : 'white 2px solid', background: usernameError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} typeof='text' value={username} onChange={(event) => {
             setUsername(event.target.value);
           }} />
           {/* Senha */}
-          <label className='LabelPadrao' style={{ color: confirmSenhaError || senhaError ? '#FF2E2E' : 'white' }} >senha</label>
-          <input maxLength={200} className='InputPadrao' style={{ marginBottom: confirmSenhaError || senhaError ? 5 : 15, border: confirmSenhaError || senhaError ? '#FF2E2E 2px solid' : 'white 2px solid', background: confirmSenhaError || senhaError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} type='password' value={senha} onChange={(event) => {
+          <label  className='LabelPadrao' style={{ color: confirmSenhaError || senhaError ? '#FF2E2E' : 'white' }} >senha</label>
+          <input id='password' maxLength={200} className='InputPadrao' style={{ marginBottom: confirmSenhaError || senhaError ? 5 : 15, border: confirmSenhaError || senhaError ? '#FF2E2E 2px solid' : 'white 2px solid', background: confirmSenhaError || senhaError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} type='password' value={senha} onChange={(event) => {
             setSenha(event.target.value);
           }} />
           {/* Confirmar Senha */}
           <label className='LabelPadrao' style={{ color: confirmSenhaError || senhaError ? '#FF2E2E' : 'white' }} >confirmar senha</label>
-          <input maxLength={200} className='InputPadrao' style={{ marginBottom: confirmSenhaError || senhaError ? 15 : 15, border: confirmSenhaError || senhaError ? '#FF2E2E 2px solid' : 'white 2px solid', background: confirmSenhaError || senhaError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} type='password' value={confirm_senha} onChange={(event) => {
+          <input id='confirmPassword' maxLength={200} className='InputPadrao' style={{ marginBottom: confirmSenhaError || senhaError ? 15 : 15, border: confirmSenhaError || senhaError ? '#FF2E2E 2px solid' : 'white 2px solid', background: confirmSenhaError || senhaError ? 'linear-gradient(0deg, rgba(255, 46, 46, 0.20) 0%, rgba(255, 46, 46, 0.20) 100%), #AF70FD' : 'transparent' }} type='password' value={confirm_senha} onChange={(event) => {
             setConfSenha(event.target.value);
           }} />
           <label className='LabelPadrao' style={{ color: cadastradoError ? '#FF2E2E' : 'white', display: cadastradoError ? 'block' : 'none', margin: 'auto', marginBottom: 15 }} >email ou username já cadastrado</label>
 
-          <button className='ButtonRegis' onClick={registrar}>Avançar</button>
+          <button id='advance' className='ButtonRegis' onClick={registrar}>Avançar</button>
 
         </div>
         <div className='ToRegistroRegis'>
