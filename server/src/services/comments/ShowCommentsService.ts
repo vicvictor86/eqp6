@@ -3,9 +3,13 @@ import { inject, injectable } from 'tsyringe';
 import { ICommentsRepository } from '@models/repositories/interfaces/ICommentsRepository';
 import { IPostsRepository } from '@models/repositories/interfaces/IPostsRepository';
 
+import { Comment } from '@models/entities/Comment';
+
 import { AppError } from '@shared/errors/AppError';
 
 interface Request {
+  userId: string;
+
   postId: string;
 
   limit: number;
@@ -23,7 +27,7 @@ export class ShowCommentsService {
     private postsRepository: IPostsRepository,
   ) {}
 
-  public async execute({ postId, limit, offset }: Request) {
+  public async execute({ userId, postId, limit, offset }: Request) {
     const post = await this.postsRepository.findById(postId);
 
     if (!post) {
@@ -43,8 +47,17 @@ export class ShowCommentsService {
       realOffset,
     );
 
+    const commentsFixed = comments.map(comment => {
+      return {
+        ...comment,
+        userEvaluation: comment.getUserEvaluation(userId),
+        likes: comment.getLikes(),
+        dislikes: comment.getDislikes(),
+      } as Comment;
+    });
+
     return {
-      comments,
+      comments: commentsFixed,
       totalComments,
       totalPages,
       offset,

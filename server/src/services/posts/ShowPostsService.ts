@@ -4,6 +4,8 @@ import { Post } from '@models/entities/Post';
 import { IPostsRepository } from '@models/repositories/interfaces/IPostsRepository';
 
 interface Request {
+  userId: string;
+
   limit: number;
 
   offset: number;
@@ -26,7 +28,7 @@ export class ShowPostsService {
     private postsRepository: IPostsRepository,
   ) {}
 
-  public async execute({ limit, offset }: Request): Promise<Response> {
+  public async execute({ userId, limit, offset }: Request): Promise<Response> {
     const allPosts = await this.postsRepository.all();
 
     const totalPosts = allPosts.length;
@@ -39,8 +41,17 @@ export class ShowPostsService {
       offset: realOffset,
     });
 
+    const postsFixed = posts.map(post => {
+      return {
+        ...post,
+        userEvaluation: post.getUserEvaluation(userId),
+        likes: post.getLikes(),
+        dislikes: post.getDislikes(),
+      } as Post;
+    });
+
     const response = {
-      posts,
+      posts: postsFixed,
       totalPosts,
       totalPages,
       offset,
