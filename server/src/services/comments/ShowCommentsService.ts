@@ -1,8 +1,17 @@
 import { inject, injectable } from 'tsyringe';
-import { AppError } from '@shared/errors/AppError';
+
 import { ICommentsRepository } from '@models/repositories/interfaces/ICommentsRepository';
-import { Comment } from '@models/entities/Comment';
 import { IPostsRepository } from '@models/repositories/interfaces/IPostsRepository';
+
+import { AppError } from '@shared/errors/AppError';
+
+interface Request {
+  postId: string;
+
+  limit: number;
+
+  offset: number;
+}
 
 @injectable()
 export class ShowCommentsService {
@@ -14,20 +23,19 @@ export class ShowCommentsService {
     private postsRepository: IPostsRepository,
   ) {}
 
-  public async execute(postId: string, limit = 10, offset = 0) {
+  public async execute({ postId, limit, offset }: Request) {
     const post = await this.postsRepository.findById(postId);
 
     if (!post) {
       throw new AppError('Post not found');
     }
+
     const comments = await this.commentsRepository.findWithPagination(
       postId,
       limit,
       offset,
     );
-    if (!comments) {
-      throw new AppError('No comments found for this user.');
-    }
+
     const totalComments = await this.commentsRepository.countByPostId(postId);
 
     const totalPages = Math.ceil(totalComments / limit);

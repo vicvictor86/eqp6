@@ -13,15 +13,21 @@ const createCommentSchema = z.object({
   postId: z.string().uuid(),
 });
 
-const deletePhotoSchema = z.object({
+const deleteCommentSchema = z.object({
   userId: z.string().uuid(),
   commentId: z.string().uuid(),
   postId: z.string().uuid(),
 });
 
-const deletePhotoByPostSchema = z.object({
+const deleteCommentByPostSchema = z.object({
   userId: z.string().uuid(),
   postId: z.string().uuid(),
+});
+
+const showCommentsSchema = z.object({
+  postId: z.string().uuid(),
+  limit: z.number().int().nonnegative().default(10),
+  offset: z.number().int().nonnegative().default(0),
 });
 
 export class CommentsController {
@@ -44,21 +50,25 @@ export class CommentsController {
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
-    const { limit, offset } = request.query;
-    const { postId } = request.params;
+    const { postId, limit, offset } = showCommentsSchema.parse({
+      postId: request.params.postId,
+      limit: Number(request.query.limit),
+      offset: Number(request.query.offset),
+    });
+
     const showCommentsService = container.resolve(ShowCommentsService);
 
-    const comments = await showCommentsService.execute(
+    const comments = await showCommentsService.execute({
       postId,
-      Number(limit),
-      Number(offset),
-    );
+      limit: Number(limit),
+      offset: Number(offset),
+    });
 
     return response.json(instanceToInstance(comments));
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
-    const { userId, commentId, postId } = deletePhotoSchema.parse({
+    const { userId, commentId, postId } = deleteCommentSchema.parse({
       userId: request.user.id,
       commentId: request.query.commentId,
       postId: request.query.postId,
@@ -79,7 +89,7 @@ export class CommentsController {
     request: Request,
     response: Response,
   ): Promise<Response> {
-    const { userId, postId } = deletePhotoByPostSchema.parse({
+    const { userId, postId } = deleteCommentByPostSchema.parse({
       userId: request.user.id,
       postId: request.query.postId,
     });

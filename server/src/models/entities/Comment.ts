@@ -25,7 +25,7 @@ export class Comment {
   @Column({ name: 'user_id' })
   userId: string;
 
-  @ManyToOne(() => User, user => user.comments)
+  @ManyToOne(() => User, user => user.comments, { eager: true })
   @JoinColumn({ name: 'user_id' })
   user: User;
 

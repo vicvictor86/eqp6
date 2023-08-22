@@ -22,7 +22,7 @@ const deletePostSchema = z.object({
 
 const showPostSchema = z.object({
   userId: z.string().uuid(),
-  limit: z.number().int().positive().default(10),
+  limit: z.number().int().nonnegative().default(10),
   offset: z.number().int().nonnegative().default(0),
 });
 

@@ -31,6 +31,7 @@ describe('ShowCommentsEvaluationByCommentService', () => {
 
     showCommentsEvaluationsByCommentService =
       new ShowCommentsEvaluationsByCommentService(
+        fakeUsersRepository,
         fakeCommentsRepository,
         fakeCommentsEvaluationsRepository,
       );
@@ -82,6 +83,7 @@ describe('ShowCommentsEvaluationByCommentService', () => {
 
     const userCommentsEvaluations =
       await showCommentsEvaluationsByCommentService.execute({
+        userId: user.id,
         commentId: comment.id,
         limit: 10,
         offset: 0,
@@ -136,6 +138,7 @@ describe('ShowCommentsEvaluationByCommentService', () => {
 
     const userCommentsEvaluations =
       await showCommentsEvaluationsByCommentService.execute({
+        userId: user.id,
         commentId: comment.id,
         limit: 0,
         offset: 0,
@@ -144,7 +147,7 @@ describe('ShowCommentsEvaluationByCommentService', () => {
     expect(userCommentsEvaluations.commentsEvaluations).toHaveLength(2);
   });
 
-  it('should be able to return 0 comments', async () => {
+  it('should be able to return 0 comments evaluations', async () => {
     const user = await fakeUsersRepository.create({
       realName: 'test',
       username: 'testUser',
@@ -172,12 +175,56 @@ describe('ShowCommentsEvaluationByCommentService', () => {
 
     const commentsEvaluations =
       await showCommentsEvaluationsByCommentService.execute({
+        userId: user.id,
         commentId: comment.id,
         limit,
         offset,
       });
 
     expect(commentsEvaluations.commentsEvaluations).toHaveLength(0);
+  });
+
+  it('should be able to return 0 comments evaluations', async () => {
+    const user = await fakeUsersRepository.create({
+      realName: 'test',
+      username: 'testUser',
+      email: 'test@example.com',
+      password: '123456',
+      isAdmin: false,
+      confirmed: false,
+    });
+
+    await fakeUsersRepository.create({
+      realName: 'test2',
+      username: 'testUser2',
+      email: 'test2@example.com',
+      password: '123456',
+      isAdmin: false,
+      confirmed: false,
+    });
+
+    const post = await fakePostsRepository.create({
+      userId: user.id,
+      photoId: 'photoId',
+      description: 'Description Test',
+      filterUsed: 'none',
+    });
+
+    const comment = await fakeCommentsRepository.create({
+      text: 'This is a test comment',
+      userId: user.id,
+      postId: post.id,
+    });
+
+    const userCommentsEvaluations =
+      await showCommentsEvaluationsByCommentService.execute({
+        userId: user.id,
+        commentId: comment.id,
+        limit: 0,
+        offset: 0,
+      });
+
+    expect(userCommentsEvaluations.commentsEvaluations).toHaveLength(0);
   });
 
   it('should be able to return 0 comments from a offset too big', async () => {
@@ -217,6 +264,7 @@ describe('ShowCommentsEvaluationByCommentService', () => {
     });
 
     const comments = await showCommentsEvaluationsByCommentService.execute({
+      userId: user.id,
       commentId: comment.id,
       limit: 10,
       offset: 2,
@@ -226,8 +274,31 @@ describe('ShowCommentsEvaluationByCommentService', () => {
   });
 
   it('should NOT be able to show a comment evaluation from a non existing comment', async () => {
+    const user = await fakeUsersRepository.create({
+      realName: 'test',
+      username: 'testUser',
+      email: 'test@test.com',
+      confirmed: true,
+      isAdmin: false,
+      password: '123456',
+      avatar: 'avatar.jpg',
+      bio: 'test bio',
+    });
+
     await expect(
       showCommentsEvaluationsByCommentService.execute({
+        userId: user.id,
+        commentId: 'non-existing-comment',
+        limit: 10,
+        offset: 0,
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should NOT be able to show a comment evaluation from a non existing comment', async () => {
+    await expect(
+      showCommentsEvaluationsByCommentService.execute({
+        userId: 'non-existing-user',
         commentId: 'non-existing-comment',
         limit: 10,
         offset: 0,
