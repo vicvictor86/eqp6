@@ -298,7 +298,7 @@ function GerenciarFotos() {
         </Modal.Body>
       </Modal>
 
-      <Modal show={openUpload} onHide={handleModal} >
+      <Modal id='ModalGerenciamentoFotos' show={openUpload} onHide={handleModal} >
         <Modal.Body style={{ backgroundColor: 'var(--color3)' }}>
           <h1 style={{ color: 'white', width: '100%', fontWeight: 500, textAlign: 'left' }}>Upload de Imagem</h1>
           <div style={ image.length > 0 ? {display:'flex', flexDirection:'row', overflow:'auto'}: {} }>

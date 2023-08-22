@@ -329,9 +329,6 @@
     }
 
 }
-.ModalPost ::-webkit-scrollbar-thumb {
-    background-color: var(--color5);
-}
 @media (max-width: 576px) {
     .modal.show .modal-dialog {
         margin: 0px;
