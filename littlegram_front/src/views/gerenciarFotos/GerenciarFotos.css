@@ -1,12 +1,11 @@
 
 .PostFotos{
-    display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     max-width: 600px;
     width: 100%;
-    height: 89%;
+    height: 100%;
     border: 2px solid white;
     margin-left: 200px;
     overflow: auto;
@@ -21,14 +20,14 @@
 }
 
 .DashPhoto{
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
     border-bottom: 2px solid white;
-    padding-bottom: 15px;
-    padding-top: 15px;
+    padding:15px 10px
 }
 
 .CellPhoto{
@@ -78,6 +77,8 @@
     border-radius: 32px;
     border: none;
     padding: 29px;
+    max-width: 265px;
+    margin: auto;
 }
 
 .ButtonDelete{
@@ -105,12 +106,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px;
+    width: 100%;
+    max-width: 100px;
     height: 50px;
     color: white;
-    font-size: 23px;
+    font-size: 1.5rem;
     font-style: normal;
-    font-weight: 440;
+    font-weight: 500;
     line-height: normal;
     border-radius: 40px;
     border: none;
@@ -125,16 +127,16 @@
     width: 230px;
     height: 50px;
     color: white;
-    font-size: 23px;
+    font-size: 1.4rem;
     font-style: normal;
-    font-weight: 440;
+    font-weight: 500;
     line-height: normal;
     border-radius: 40px;
     border: none;
     padding: 15px;
   }
 
-.Image{
+.PostFotos .Image{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -150,3 +152,46 @@
     border-radius: 20px;
     background-color: var(--color3);
   }
+  .modal-content {
+    border-radius: 20px !important;
+    margin-top: 70px;
+
+   }
+   .modal-body {
+    padding: 20px;
+    border-radius: 19px !important;
+    text-align: center;
+
+   }
+   
+   .modal-body h1 {
+    text-align: left;
+   }
+
+   @media (max-width:556px) {
+    .ButtonModal, .ButtonInputImage{
+        font-size: 1rem;
+    }
+    .modal-content {
+        border-radius: 20px !important;
+        margin-top: 50px;
+
+       }
+}
+
+.TelaDeProgresso{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0px;
+    left: 0px;
+    background-color: #0000008a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.BarraProgresso{
+    width: 70%;
+    height: 35px;
+    border-radius: 25px;
+}

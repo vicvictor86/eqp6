@@ -13,6 +13,8 @@ interface Request {
   photoId: string;
 
   description: string;
+
+  filterUsed: string;
 }
 
 @injectable()
@@ -32,6 +34,7 @@ export class CreatePostService {
     photoId,
     userId,
     description,
+    filterUsed,
   }: Request): Promise<Post> {
     const user = await this.usersRepository.findById(userId);
 
@@ -59,6 +62,7 @@ export class CreatePostService {
       userId,
       photoId,
       description,
+      filterUsed,
     });
 
     return newPost;

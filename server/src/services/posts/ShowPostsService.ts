@@ -1,8 +1,7 @@
 import { inject, injectable } from 'tsyringe';
-import { AppError } from '@shared/errors/AppError';
-import { IPostsRepository } from '@models/repositories/interfaces/IPostsRepository';
+
 import { Post } from '@models/entities/Post';
-import { IUsersRepository } from '@models/repositories/interfaces/IUserRepository';
+import { IPostsRepository } from '@models/repositories/interfaces/IPostsRepository';
 
 interface Request {
   userId: string;
@@ -27,48 +26,32 @@ export class ShowPostsService {
   constructor(
     @inject('PostsRepository')
     private postsRepository: IPostsRepository,
-
-    @inject('UsersRepository')
-    private usersRepository: IUsersRepository,
   ) {}
 
   public async execute({ userId, limit, offset }: Request): Promise<Response> {
-    const defaultResponse = {
-      posts: [],
-      totalPosts: 0,
-      totalPages: 1,
-      offset: 0,
-    } as Response;
-
-    const user = await this.usersRepository.findById(userId);
-
-    if (!user) {
-      throw new AppError('User not found');
-    }
-
-    const allPosts = await this.postsRepository.findByUserId(userId);
-
-    if (!allPosts) {
-      return defaultResponse;
-    }
+    const allPosts = await this.postsRepository.all();
 
     const totalPosts = allPosts.length;
     const totalPages = Math.ceil(totalPosts / limit);
 
     const realOffset = offset * limit;
 
-    const posts = await this.postsRepository.findByUserIdPaginated({
-      userId,
+    const posts = await this.postsRepository.allPaginated({
       limit,
       offset: realOffset,
     });
 
-    if (!posts) {
-      return defaultResponse;
-    }
+    const postsFixed = posts.map(post => {
+      return {
+        ...post,
+        userEvaluation: post.getUserEvaluation(userId),
+        likes: post.getLikes(),
+        dislikes: post.getDislikes(),
+      } as Post;
+    });
 
     const response = {
-      posts,
+      posts: postsFixed,
       totalPosts,
       totalPages,
       offset,

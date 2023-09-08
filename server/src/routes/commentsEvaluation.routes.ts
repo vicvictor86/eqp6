@@ -26,7 +26,7 @@ commentsEvaluationsRouter.get(
 );
 
 commentsEvaluationsRouter.get(
-  '/comment',
+  '/comment/:commentId',
   ensureAuthenticated,
   ensureEmailConfirmation.execute,
   commentsEvaluationsController.showByComment,

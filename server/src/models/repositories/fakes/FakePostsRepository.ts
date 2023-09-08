@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 import { ICreatePostDTO } from '@models/dtos/ICreatePostDTO';
 import { Post } from '@models/entities/Post';
 import { IShowByUserPaginatedDTO } from '@models/dtos/IShowByUserPaginatedDTO';
+import { IShowUserPaginatedDTO } from '@models/dtos/IShowUsersPaginatedDTO';
 import { IPostsRepository } from '../interfaces/IPostsRepository';
 
 class FakePostsRepository implements IPostsRepository {
@@ -20,24 +21,16 @@ class FakePostsRepository implements IPostsRepository {
     return findPost || null;
   }
 
-  public async findByUserId(userId: string): Promise<Post[] | null> {
+  public async findByUserId(userId: string): Promise<Post[]> {
     const findPosts = this.posts.filter(post => post.userId === userId);
-
-    if (findPosts.length === 0) {
-      return null;
-    }
 
     return findPosts;
   }
 
   public async findByUserIdPaginated(
     data: IShowByUserPaginatedDTO,
-  ): Promise<Post[] | null> {
+  ): Promise<Post[]> {
     const findPosts = this.posts.filter(post => post.userId === data.userId);
-
-    if (findPosts.length === 0) {
-      return null;
-    }
 
     const skip = data.offset * data.limit;
     const take = data.limit;
@@ -67,6 +60,15 @@ class FakePostsRepository implements IPostsRepository {
 
   public async all(): Promise<Post[]> {
     return this.posts;
+  }
+
+  public async allPaginated(data: IShowUserPaginatedDTO): Promise<Post[]> {
+    const skip = data.offset * data.limit;
+    const take = data.limit;
+
+    const posts = this.posts.slice(skip, skip + take);
+
+    return posts;
   }
 
   public async delete(postId: string): Promise<void> {

@@ -36,13 +36,6 @@ export class ShowPhotoService {
   ) {}
 
   public async execute({ userId, offset, limit }: Request): Promise<Response> {
-    const defaultResponse = {
-      photos: [],
-      totalPhotos: 0,
-      totalPages: 1,
-      offset: 0,
-    } as Response;
-
     const user = await this.usersRepository.findById(userId);
 
     if (!user) {
@@ -50,10 +43,6 @@ export class ShowPhotoService {
     }
 
     const allPhotos = await this.photosRepository.findByUserId(userId);
-
-    if (!allPhotos) {
-      return defaultResponse;
-    }
 
     const totalPhotos = allPhotos.length;
     const totalPages = Math.ceil(totalPhotos / limit);
@@ -65,10 +54,6 @@ export class ShowPhotoService {
       limit,
       offset: realOffset,
     });
-
-    if (!photos) {
-      return defaultResponse;
-    }
 
     const response = {
       photos,

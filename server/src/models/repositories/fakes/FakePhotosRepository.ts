@@ -18,12 +18,8 @@ export class FakePhotosRepository implements IPhotosRepository {
     return findPhoto || null;
   }
 
-  public async findByUserId(userId: string): Promise<Photo[] | null> {
+  public async findByUserId(userId: string): Promise<Photo[]> {
     const findPhotos = this.photos.filter(photo => photo.userId === userId);
-
-    if (findPhotos.length === 0) {
-      return null;
-    }
 
     return findPhotos || null;
   }
@@ -36,14 +32,10 @@ export class FakePhotosRepository implements IPhotosRepository {
 
   public async findByUserIdPaginated(
     data: IShowByUserPaginatedDTO,
-  ): Promise<Photo[] | null> {
+  ): Promise<Photo[]> {
     const findPhotos = this.photos.filter(
       photo => photo.userId === data.userId,
     );
-
-    if (findPhotos.length === 0) {
-      return null;
-    }
 
     const skip = data.offset * data.limit;
     const take = data.limit;

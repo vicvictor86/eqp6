@@ -64,7 +64,6 @@ function Login() {
         password: senha
       })
       .then(function (response) {
-        console.log(response.data)
         if(response.status === 200){
           if(response.data['user']['confirmed'] === false){
             setEsperandoConfirmError(true)
@@ -74,13 +73,14 @@ function Login() {
             localStorage.setItem('username', response.data['user']['username'])
             localStorage.setItem('avatar', response.data['user']['avatar'])
             localStorage.setItem('token', response.data['token'])
+            localStorage.setItem('user_id', response.data['user']['id'])
+
             navigate("/home")
           }
           
         }
       })
       .catch(function (error) {
-        console.log(error);
         if(error.response.data['message'] == "Email or password incorrect"){
           setUserInvalid(true)
         }
@@ -115,7 +115,7 @@ function Login() {
           <label className='LabelPadrao' style={{ color: esperandoConfirmError ? '#FF2E2E' : 'white', display:  esperandoConfirmError ? 'block' : 'none', margin: 'auto', marginBottom: 15 }} >esperando confirmar o email</label>
 
 
-          <button className='Button' onClick={logar}>Avançar</button>
+          <button id = 'advance' className='Button' onClick={logar}>Avançar</button>
 
           <div className='ToRegistro'>
             não tem uma conta? <Link to="/register">Registre-se</Link>

@@ -1,29 +1,34 @@
 import { instanceToInstance } from 'class-transformer';
-import { Request, Response } from 'express';
-
 import { container } from 'tsyringe';
 import { z } from 'zod';
-
+import { Request, Response } from 'express';
 import { CreateCommentService } from '../services/comments/CreateCommentService';
 import { DeleteCommentService } from '../services/comments/DeleteCommentService';
 import { ShowCommentsService } from '../services/comments/ShowCommentsService';
 import { DeleteCommentsByPostService } from '../services/comments/DeleteCommentsByPostService';
 
 const createCommentSchema = z.object({
-  text: z.string().max(1000),
+  text: z.string().min(1).max(100),
   userId: z.string().uuid(),
   postId: z.string().uuid(),
 });
 
-const deletePhotoSchema = z.object({
+const deleteCommentSchema = z.object({
   userId: z.string().uuid(),
   commentId: z.string().uuid(),
   postId: z.string().uuid(),
 });
 
-const deletePhotoByPostSchema = z.object({
+const deleteCommentByPostSchema = z.object({
   userId: z.string().uuid(),
   postId: z.string().uuid(),
+});
+
+const showCommentsSchema = z.object({
+  userId: z.string().uuid(),
+  postId: z.string().uuid(),
+  limit: z.number().int().nonnegative().default(10),
+  offset: z.number().int().nonnegative().default(0),
 });
 
 export class CommentsController {
@@ -46,17 +51,27 @@ export class CommentsController {
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
-    const { postId } = request.body;
+    const { userId, postId, limit, offset } = showCommentsSchema.parse({
+      userId: request.user.id,
+      postId: request.params.postId,
+      limit: Number(request.query.limit),
+      offset: Number(request.query.offset),
+    });
 
     const showCommentsService = container.resolve(ShowCommentsService);
 
-    const comments = await showCommentsService.execute(postId);
+    const comments = await showCommentsService.execute({
+      userId,
+      postId,
+      limit: Number(limit),
+      offset: Number(offset),
+    });
 
-    return response.json(comments);
+    return response.json(instanceToInstance(comments));
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
-    const { userId, commentId, postId } = deletePhotoSchema.parse({
+    const { userId, commentId, postId } = deleteCommentSchema.parse({
       userId: request.user.id,
       commentId: request.query.commentId,
       postId: request.query.postId,
@@ -77,7 +92,7 @@ export class CommentsController {
     request: Request,
     response: Response,
   ): Promise<Response> {
-    const { userId, postId } = deletePhotoByPostSchema.parse({
+    const { userId, postId } = deleteCommentByPostSchema.parse({
       userId: request.user.id,
       postId: request.query.postId,
     });

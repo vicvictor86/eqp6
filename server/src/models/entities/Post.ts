@@ -22,6 +22,9 @@ export class Post {
   @Column()
   description: string;
 
+  @Column({ name: 'filter_used' })
+  filterUsed: string;
+
   @Column({ name: 'user_id' })
   userId: string;
 
@@ -36,11 +39,51 @@ export class Post {
   @JoinColumn({ name: 'photo_id' })
   photo: Photo;
 
-  @OneToMany(() => Comment, comment => comment.post)
+  @OneToMany(() => Comment, comment => comment.post, { eager: true })
   comments: Comment[];
 
-  @OneToMany(() => PostEvaluation, postEvaluation => postEvaluation.post)
+  @OneToMany(() => PostEvaluation, postEvaluation => postEvaluation.post, {
+    eager: true,
+  })
   evaluations: PostEvaluation[];
+
+  likes: number | null;
+
+  getLikes(): number | null {
+    if (!this.evaluations) {
+      return null;
+    }
+
+    return this.evaluations.filter(evaluation => evaluation.isLike).length;
+  }
+
+  dislikes: number | null;
+
+  getDislikes(): number | null {
+    if (!this.evaluations) {
+      return null;
+    }
+
+    return this.evaluations.filter(evaluation => !evaluation.isLike).length;
+  }
+
+  userEvaluation: boolean | null;
+
+  getUserEvaluation(userId: string): boolean | null {
+    if (!this.evaluations) {
+      return null;
+    }
+
+    const userEvaluation = this.evaluations.find(
+      evaluation => evaluation.userId === userId,
+    );
+
+    if (!userEvaluation) {
+      return null;
+    }
+
+    return userEvaluation.isLike;
+  }
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

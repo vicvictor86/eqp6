@@ -4,4 +4,6 @@ export interface ICreatePostDTO {
   photoId: string;
 
   description: string;
+
+  filterUsed: string;
 }

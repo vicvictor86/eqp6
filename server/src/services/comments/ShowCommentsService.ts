@@ -1,22 +1,66 @@
 import { inject, injectable } from 'tsyringe';
-import { AppError } from '@shared/errors/AppError';
+
 import { ICommentsRepository } from '@models/repositories/interfaces/ICommentsRepository';
+import { IPostsRepository } from '@models/repositories/interfaces/IPostsRepository';
+
 import { Comment } from '@models/entities/Comment';
+
+import { AppError } from '@shared/errors/AppError';
+
+interface Request {
+  userId: string;
+
+  postId: string;
+
+  limit: number;
+
+  offset: number;
+}
 
 @injectable()
 export class ShowCommentsService {
   constructor(
     @inject('CommentsRepository')
     private commentsRepository: ICommentsRepository,
+
+    @inject('PostsRepository')
+    private postsRepository: IPostsRepository,
   ) {}
 
-  public async execute(postId: string): Promise<Comment[]> {
-    const comments = await this.commentsRepository.findByPostId(postId);
+  public async execute({ userId, postId, limit, offset }: Request) {
+    const post = await this.postsRepository.findById(postId);
 
-    if (!comments) {
-      throw new AppError('No comments found for this user.');
+    if (!post) {
+      throw new AppError('Post not found');
     }
 
-    return comments;
+    const totalComments = await this.commentsRepository.countByPostId(postId);
+
+    const totalPosts = totalComments;
+    const totalPages = Math.ceil(totalPosts / limit);
+
+    const realOffset = offset * limit;
+
+    const comments = await this.commentsRepository.findWithPagination(
+      postId,
+      limit,
+      realOffset,
+    );
+
+    const commentsFixed = comments.map(comment => {
+      return {
+        ...comment,
+        userEvaluation: comment.getUserEvaluation(userId),
+        likes: comment.getLikes(),
+        dislikes: comment.getDislikes(),
+      } as Comment;
+    });
+
+    return {
+      comments: commentsFixed,
+      totalComments,
+      totalPages,
+      offset,
+    };
   }
 }

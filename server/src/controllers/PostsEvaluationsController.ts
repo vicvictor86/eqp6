@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { z } from 'zod';
 
-import { ShowPostsEvaluationsByCommentService } from '../services/postsEvaluations/ShowPostsEvaluationsByCommentService';
+import { ShowPostsEvaluationsByPostService } from '../services/postsEvaluations/ShowPostsEvaluationsByPostService';
 import { ShowPostsEvaluationsService } from '../services/postsEvaluations/ShowPostsEvaluationsService';
 import { CreatePostEvaluationService } from '../services/postsEvaluations/CreatePostEvaluationService';
 
@@ -16,6 +16,8 @@ const createPostEvaluationSchema = z.object({
 
 const showPostsEvaluationsByCommentCommentSchema = z.object({
   postId: z.string().uuid(),
+  limit: z.number().int().nonnegative().default(10),
+  offset: z.number().int().nonnegative().default(0),
 });
 
 export class PostsEvaluationsController {
@@ -53,16 +55,20 @@ export class PostsEvaluationsController {
     request: Request,
     response: Response,
   ): Promise<Response> {
-    const { postId } = showPostsEvaluationsByCommentCommentSchema.parse({
-      postId: request.query.postId,
-    });
+    const { postId, limit, offset } =
+      showPostsEvaluationsByCommentCommentSchema.parse({
+        postId: request.params.postId,
+        limit: Number(request.query.limit),
+        offset: Number(request.query.offset),
+      });
 
-    const showPostsEvaluationsByCommentService = container.resolve(
-      ShowPostsEvaluationsByCommentService,
+    const showPostsEvaluationsByPostService = container.resolve(
+      ShowPostsEvaluationsByPostService,
     );
 
-    const commentsEvaluations =
-      await showPostsEvaluationsByCommentService.execute(postId);
+    const commentsEvaluations = await showPostsEvaluationsByPostService.execute(
+      { limit, offset, postId },
+    );
 
     return response.json(commentsEvaluations);
   }
